@@ -166,7 +166,6 @@
         function renderMembers(list) {
             const container = document.getElementById('memberList');
             container.innerHTML = list.map(m => {
-                const tagLink = `clashofclans://api/player?tag=${m.tag.replace('#', '')}`;
                 return `
                 <div class="flex items-center gap-3 p-3 bg-[#252525] border border-transparent rounded-lg">
                     <img src="${getTHImage(m.townHallLevel)}" class="th-icon">
@@ -183,7 +182,7 @@
                     </div>
                     <div class="text-right">
                         <p class="text-xs font-bold text-[#d4af37]">${m.trophies.toLocaleString()}</p>
-                        <a href="${tagLink}" class="text-[8px] bg-[#333] px-2 py-1 rounded text-gray-300 font-bold uppercase border border-gray-600 block mt-2 text-center">Open in Clash of Clans</a>
+                        <p class="text-[8px] text-gray-600 uppercase font-bold tracking-tighter">Trophies</p>
                     </div>
                 </div>`;
             }).join('');
