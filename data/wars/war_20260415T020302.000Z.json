@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 9,
-        "stars": 21,
-        "destructionPercentage": 28.0,
+        "attacks": 10,
+        "stars": 24,
+        "destructionPercentage": 32.0,
         "members": [
             {
                 "tag": "#9C229UGJ",
@@ -98,6 +98,16 @@
                 "name": "Beat my Wifi",
                 "townhallLevel": 18,
                 "mapPosition": 12,
+                "attacks": [
+                    {
+                        "attackerTag": "#UUC9PCQ",
+                        "defenderTag": "#8YJR2UPQJ",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 11,
+                        "duration": 114
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -411,7 +421,15 @@
                 "name": "BURAK",
                 "townhallLevel": 18,
                 "mapPosition": 13,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#UUC9PCQ",
+                    "defenderTag": "#8YJR2UPQJ",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 11,
+                    "duration": 114
+                }
             },
             {
                 "tag": "#Q9YRL80C",
