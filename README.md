@@ -9,8 +9,9 @@ A tactical dashboard for tracking Clash of Clans performance. This project uses 
 ## Setup Instructions
 
 ### 1. API Credentials
+Note: We are using the [RoyalAPI](https://docs.royaleapi.com/proxy.html) proxy but you still need the API token from Clash of Clans.
 * Register for an account at [developer.clashofclans.com](https://developer.clashofclans.com).
-* Create a new API key. Note: We are using the [RoyalAPI](https://docs.royaleapi.com/proxy.html) proxy but you still need the API token from Clash of Clans.
+* Create a new API key. 
 * Copy your API Token.
 
 ### 2. GitHub Secrets Configuration
