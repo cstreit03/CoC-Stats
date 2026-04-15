@@ -15,7 +15,7 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 41,
+        "attacks": 45,
         "stars": 75,
         "destructionPercentage": 100.0,
         "members": [
@@ -32,6 +32,14 @@
                         "destructionPercentage": 96,
                         "order": 7,
                         "duration": 132
+                    },
+                    {
+                        "attackerTag": "#9C229UGJ",
+                        "defenderTag": "#JCQ9U90J",
+                        "stars": 2,
+                        "destructionPercentage": 87,
+                        "order": 67,
+                        "duration": 102
                     }
                 ],
                 "opponentAttacks": 1,
@@ -413,6 +421,24 @@
                 "name": "King Hova",
                 "townhallLevel": 17,
                 "mapPosition": 17,
+                "attacks": [
+                    {
+                        "attackerTag": "#QC92VLPP",
+                        "defenderTag": "#GCRU0UVGC",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 63,
+                        "duration": 70
+                    },
+                    {
+                        "attackerTag": "#QC92VLPP",
+                        "defenderTag": "#YYCGQCGYU",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 64,
+                        "duration": 138
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#800YJV9GJ",
@@ -479,7 +505,15 @@
                         "duration": 135
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#G99L2ULL",
+                    "defenderTag": "#V0GYVCJ9",
+                    "stars": 2,
+                    "destructionPercentage": 94,
+                    "order": 65,
+                    "duration": 180
+                }
             },
             {
                 "tag": "#L2PQ9QLUC",
@@ -494,6 +528,14 @@
                         "destructionPercentage": 100,
                         "order": 46,
                         "duration": 132
+                    },
+                    {
+                        "attackerTag": "#L2PQ9QLUC",
+                        "defenderTag": "#Q9YRL80C",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 66,
+                        "duration": 136
                     }
                 ],
                 "opponentAttacks": 1,
@@ -731,9 +773,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/WhcMzvg-pVxhZCfRdzVohNGFxTYUrzvtvS65SCRlgTc.png"
         },
         "clanLevel": 29,
-        "attacks": 21,
-        "stars": 42,
-        "destructionPercentage": 59.24,
+        "attacks": 22,
+        "stars": 44,
+        "destructionPercentage": 63.0,
         "members": [
             {
                 "tag": "#G8UQUCRG",
@@ -763,6 +805,14 @@
                         "destructionPercentage": 80,
                         "order": 1,
                         "duration": 161
+                    },
+                    {
+                        "attackerTag": "#G99L2ULL",
+                        "defenderTag": "#V0GYVCJ9",
+                        "stars": 2,
+                        "destructionPercentage": 94,
+                        "order": 65,
+                        "duration": 180
                     }
                 ],
                 "opponentAttacks": 3,
@@ -838,7 +888,7 @@
                         "duration": 111
                     }
                 ],
-                "opponentAttacks": 2,
+                "opponentAttacks": 3,
                 "bestOpponentAttack": {
                     "attackerTag": "#2PULPGL90",
                     "defenderTag": "#JCQ9U90J",
@@ -898,7 +948,7 @@
                 "name": "BOSS G.",
                 "townhallLevel": 16,
                 "mapPosition": 18,
-                "opponentAttacks": 4,
+                "opponentAttacks": 5,
                 "bestOpponentAttack": {
                     "attackerTag": "#99VJ2VVPQ",
                     "defenderTag": "#YYCGQCGYU",
@@ -964,7 +1014,7 @@
                         "duration": 141
                     }
                 ],
-                "opponentAttacks": 5,
+                "opponentAttacks": 6,
                 "bestOpponentAttack": {
                     "attackerTag": "#2PULPGL90",
                     "defenderTag": "#Q9YRL80C",
@@ -1294,7 +1344,7 @@
                 "name": "joe",
                 "townhallLevel": 12,
                 "mapPosition": 25,
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#9PU22U8Y",
                     "defenderTag": "#GCRU0UVGC",
