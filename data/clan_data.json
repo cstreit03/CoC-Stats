@@ -15,8 +15,8 @@
         "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
     },
     "clanLevel": 32,
-    "clanPoints": 125505,
-    "clanBuilderBasePoints": 42127,
+    "clanPoints": 125446,
+    "clanBuilderBasePoints": 42129,
     "clanCapitalPoints": 4387,
     "capitalLeague": {
         "id": 85000019,
@@ -110,12 +110,12 @@
                     "large": "https://api-assets.clashofclans.com/leaguetiers/326/BvEu_UE53UzADvTRiU9AdyOrlvb1RqvBmMau_uX6xm0.png"
                 }
             },
-            "trophies": 4981,
+            "trophies": 4935,
             "builderBaseTrophies": 3245,
             "clanRank": 2,
             "previousClanRank": 2,
-            "donations": 4740,
-            "donationsReceived": 4322,
+            "donations": 4755,
+            "donationsReceived": 4411,
             "playerHouse": {
                 "elements": [
                     {
@@ -163,12 +163,12 @@
                     "large": "https://api-assets.clashofclans.com/leaguetiers/326/BvEu_UE53UzADvTRiU9AdyOrlvb1RqvBmMau_uX6xm0.png"
                 }
             },
-            "trophies": 4859,
-            "builderBaseTrophies": 4299,
+            "trophies": 4846,
+            "builderBaseTrophies": 4305,
             "clanRank": 3,
             "previousClanRank": 3,
             "donations": 675,
-            "donationsReceived": 1506,
+            "donationsReceived": 1616,
             "playerHouse": {
                 "elements": [
                     {
@@ -248,6 +248,60 @@
             }
         },
         {
+            "tag": "#2P8LYJCUR",
+            "name": "nofreelunch",
+            "role": "admin",
+            "townHallLevel": 18,
+            "expLevel": 243,
+            "league": {
+                "id": 29000022,
+                "name": "Legend League",
+                "iconUrls": {
+                    "small": "https://api-assets.clashofclans.com/leagues/72/R2zmhyqQ0_lKcDR5EyghXCxgyC9mm_mVMIjAbmGoZtw.png",
+                    "tiny": "https://api-assets.clashofclans.com/leagues/36/R2zmhyqQ0_lKcDR5EyghXCxgyC9mm_mVMIjAbmGoZtw.png",
+                    "medium": "https://api-assets.clashofclans.com/leagues/288/R2zmhyqQ0_lKcDR5EyghXCxgyC9mm_mVMIjAbmGoZtw.png"
+                }
+            },
+            "leagueTier": {
+                "id": 105000033,
+                "name": "Electro League 33",
+                "iconUrls": {
+                    "small": "https://api-assets.clashofclans.com/leaguetiers/125/VFqkaQimExWtSmIf9PC8WEpj4Vd58oLjPWyZqfVb5VE.png",
+                    "large": "https://api-assets.clashofclans.com/leaguetiers/326/VFqkaQimExWtSmIf9PC8WEpj4Vd58oLjPWyZqfVb5VE.png"
+                }
+            },
+            "trophies": 296,
+            "builderBaseTrophies": 4722,
+            "clanRank": 5,
+            "previousClanRank": 6,
+            "donations": 5510,
+            "donationsReceived": 9127,
+            "playerHouse": {
+                "elements": [
+                    {
+                        "type": "ground",
+                        "id": 82000002
+                    },
+                    {
+                        "type": "walls",
+                        "id": 82000052
+                    },
+                    {
+                        "type": "roof",
+                        "id": 82000027
+                    },
+                    {
+                        "type": "decoration",
+                        "id": 82000063
+                    }
+                ]
+            },
+            "builderBaseLeague": {
+                "id": 44000033,
+                "name": "Platinum League II"
+            }
+        },
+        {
             "tag": "#9C229UGJ",
             "name": "Chase",
             "role": "leader",
@@ -269,9 +323,9 @@
                     "large": "https://api-assets.clashofclans.com/leaguetiers/326/VFqkaQimExWtSmIf9PC8WEpj4Vd58oLjPWyZqfVb5VE.png"
                 }
             },
-            "trophies": 261,
+            "trophies": 276,
             "builderBaseTrophies": 5000,
-            "clanRank": 5,
+            "clanRank": 6,
             "previousClanRank": 5,
             "donations": 7810,
             "donationsReceived": 11531,
@@ -298,60 +352,6 @@
             "builderBaseLeague": {
                 "id": 44000035,
                 "name": "Emerald League III"
-            }
-        },
-        {
-            "tag": "#2P8LYJCUR",
-            "name": "nofreelunch",
-            "role": "admin",
-            "townHallLevel": 18,
-            "expLevel": 243,
-            "league": {
-                "id": 29000022,
-                "name": "Legend League",
-                "iconUrls": {
-                    "small": "https://api-assets.clashofclans.com/leagues/72/R2zmhyqQ0_lKcDR5EyghXCxgyC9mm_mVMIjAbmGoZtw.png",
-                    "tiny": "https://api-assets.clashofclans.com/leagues/36/R2zmhyqQ0_lKcDR5EyghXCxgyC9mm_mVMIjAbmGoZtw.png",
-                    "medium": "https://api-assets.clashofclans.com/leagues/288/R2zmhyqQ0_lKcDR5EyghXCxgyC9mm_mVMIjAbmGoZtw.png"
-                }
-            },
-            "leagueTier": {
-                "id": 105000033,
-                "name": "Electro League 33",
-                "iconUrls": {
-                    "small": "https://api-assets.clashofclans.com/leaguetiers/125/VFqkaQimExWtSmIf9PC8WEpj4Vd58oLjPWyZqfVb5VE.png",
-                    "large": "https://api-assets.clashofclans.com/leaguetiers/326/VFqkaQimExWtSmIf9PC8WEpj4Vd58oLjPWyZqfVb5VE.png"
-                }
-            },
-            "trophies": 238,
-            "builderBaseTrophies": 4722,
-            "clanRank": 6,
-            "previousClanRank": 6,
-            "donations": 5421,
-            "donationsReceived": 9097,
-            "playerHouse": {
-                "elements": [
-                    {
-                        "type": "ground",
-                        "id": 82000002
-                    },
-                    {
-                        "type": "walls",
-                        "id": 82000052
-                    },
-                    {
-                        "type": "roof",
-                        "id": 82000027
-                    },
-                    {
-                        "type": "decoration",
-                        "id": 82000063
-                    }
-                ]
-            },
-            "builderBaseLeague": {
-                "id": 44000033,
-                "name": "Platinum League II"
             }
         },
         {
@@ -1012,11 +1012,11 @@
                     "large": "https://api-assets.clashofclans.com/leaguetiers/326/DIMeRH3N4lrNObA3zAmk_eUin8nvNeLR89qYznnA--s.png"
                 }
             },
-            "trophies": 43,
+            "trophies": 56,
             "builderBaseTrophies": 4896,
             "clanRank": 19,
             "previousClanRank": 19,
-            "donations": 3588,
+            "donations": 3643,
             "donationsReceived": 4571,
             "playerHouse": {
                 "elements": [
@@ -1123,7 +1123,7 @@
             "builderBaseTrophies": 4455,
             "clanRank": 21,
             "previousClanRank": 21,
-            "donations": 305,
+            "donations": 345,
             "donationsReceived": 2173,
             "playerHouse": {
                 "elements": [
@@ -1708,7 +1708,7 @@
             "builderBaseTrophies": 2574,
             "clanRank": 32,
             "previousClanRank": 33,
-            "donations": 1394,
+            "donations": 1424,
             "donationsReceived": 1778,
             "playerHouse": {
                 "elements": [
