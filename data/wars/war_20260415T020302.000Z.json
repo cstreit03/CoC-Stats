@@ -15,15 +15,25 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 5,
-        "stars": 14,
-        "destructionPercentage": 19.24,
+        "attacks": 9,
+        "stars": 21,
+        "destructionPercentage": 28.0,
         "members": [
             {
                 "tag": "#9C229UGJ",
                 "name": "Chase",
                 "townhallLevel": 18,
                 "mapPosition": 3,
+                "attacks": [
+                    {
+                        "attackerTag": "#9C229UGJ",
+                        "defenderTag": "#Y8V9YJYJ",
+                        "stars": 2,
+                        "destructionPercentage": 96,
+                        "order": 7,
+                        "duration": 132
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -162,6 +172,14 @@
                         "destructionPercentage": 100,
                         "order": 6,
                         "duration": 109
+                    },
+                    {
+                        "attackerTag": "#9G92CY9L",
+                        "defenderTag": "#Y8V9YJYJ",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 8,
+                        "duration": 155
                     }
                 ],
                 "opponentAttacks": 0
@@ -248,6 +266,24 @@
                 "name": "nofreelunch",
                 "townhallLevel": 18,
                 "mapPosition": 13,
+                "attacks": [
+                    {
+                        "attackerTag": "#2P8LYJCUR",
+                        "defenderTag": "#GVUU8P0R",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 9,
+                        "duration": 96
+                    },
+                    {
+                        "attackerTag": "#2P8LYJCUR",
+                        "defenderTag": "#G8UQUCRG",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 10,
+                        "duration": 120
+                    }
+                ],
                 "opponentAttacks": 0
             }
         ]
@@ -270,14 +306,14 @@
                 "name": "Jaxer830",
                 "townhallLevel": 18,
                 "mapPosition": 12,
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#YQYVJ92C",
+                    "attackerTag": "#2P8LYJCUR",
                     "defenderTag": "#G8UQUCRG",
-                    "stars": 2,
-                    "destructionPercentage": 81,
-                    "order": 3,
-                    "duration": 151
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 10,
+                    "duration": 120
                 }
             },
             {
@@ -353,7 +389,15 @@
                 "name": "jrds",
                 "townhallLevel": 18,
                 "mapPosition": 14,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2P8LYJCUR",
+                    "defenderTag": "#GVUU8P0R",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 9,
+                    "duration": 96
+                }
             },
             {
                 "tag": "#YYCGQCGYU",
@@ -425,7 +469,15 @@
                 "name": "gelo",
                 "townhallLevel": 18,
                 "mapPosition": 4,
-                "opponentAttacks": 0
+                "opponentAttacks": 2,
+                "bestOpponentAttack": {
+                    "attackerTag": "#9G92CY9L",
+                    "defenderTag": "#Y8V9YJYJ",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 8,
+                    "duration": 155
+                }
             },
             {
                 "tag": "#L00LG9G",
