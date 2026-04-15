@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoC War Stats</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -9,36 +10,47 @@
         body { background: #121212; color: #e5e5e5; font-family: 'Inter', sans-serif; }
         .medieval { font-family: 'Cinzel', serif; }
         .panel { background: #1e1e1e; border: 1px solid #333; border-radius: 12px; }
-        .th-icon { width: 48px; height: 48px; object-fit: contain; }
+        .th-icon { width: 44px; height: 44px; object-fit: contain; }
         .gold { color: #d4af37; }
-        .btn-role { font-size: 10px; font-weight: bold; border: 1px solid #444; border-radius: 6px; padding: 4px 10px; transition: 0.2s; cursor: pointer; }
+        
+        .tab-btn { flex: 1; text-align: center; padding: 14px; font-size: 12px; font-weight: bold; color: #666; border-bottom: 2px solid #222; transition: 0.3s; background: #1a1a1a; cursor: pointer; }
+        .tab-btn.active { color: #d4af37; border-bottom-color: #d4af37; background: #222; }
+
+        @media (max-width: 1023px) {
+            .mobile-hidden { display: none !important; }
+        }
+
+        .btn-role { font-size: 10px; font-weight: bold; border: 1px solid #444; border-radius: 6px; padding: 6px 12px; cursor: pointer; color: #777; background: transparent; }
         .btn-role.active { border-color: #d4af37; color: #d4af37; background: rgba(212, 175, 55, 0.1); }
-        .stat-label { font-size: 9px; color: #777; text-transform: uppercase; font-weight: bold; }
-        .stat-value { font-size: 11px; font-weight: 600; color: #ccc; }
-        .btn-profile { background: #2a2a2a; border: 1px solid #444; color: #aaa; font-size: 9px; padding: 4px 8px; border-radius: 4px; transition: 0.2s; text-decoration: none; }
-        .btn-profile:hover { background: #333; border-color: #d4af37; color: #d4af37; }
+        .stat-label { font-size: 8px; color: #777; text-transform: uppercase; font-weight: bold; }
+        .stat-value { font-size: 10px; font-weight: 600; color: #ccc; }
     </style>
 </head>
-<body class="p-6 md:p-10">
+<body class="p-4 md:p-10">
 
-    <div class="max-w-7xl mx-auto mb-12 flex flex-col items-center text-center">
-        <h1 id="pageTitle" class="text-5xl font-bold gold medieval uppercase tracking-tighter">Dashboard</h1>
-        <div class="h-1 w-20 bg-[#d4af37] mt-3"></div>
+    <div class="max-w-7xl mx-auto mb-6 flex flex-col items-center text-center">
+        <h1 id="pageTitle" class="text-3xl md:text-5xl font-bold gold medieval uppercase tracking-tighter">Dashboard</h1>
+        <div class="h-1 w-16 bg-[#d4af37] mt-2"></div>
+    </div>
+
+    <div class="flex lg:hidden mb-6 rounded-t-lg overflow-hidden border border-[#333]">
+        <button id="tab-members" onclick="switchView('members')" class="tab-btn active medieval uppercase tracking-widest">Members</button>
+        <button id="tab-war" onclick="switchView('war')" class="tab-btn medieval uppercase tracking-widest">War</button>
     </div>
 
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <div class="lg:col-span-5">
-            <div class="panel p-6">
+        <div id="section-members" class="lg:col-span-6">
+            <div class="panel p-4 md:p-6">
                 <div class="flex flex-col gap-4 mb-6">
                     <div class="flex justify-between items-center">
-                        <div class="flex items-baseline gap-3">
-                            <h2 class="medieval text-xl font-bold">Members</h2>
-                            <span id="memberCount" class="text-xs font-mono text-gray-500">0 / 50</span>
+                        <div class="flex items-baseline gap-2">
+                            <h2 class="medieval text-lg font-bold">Members</h2>
+                            <span id="memberCount" class="text-[10px] font-mono text-gray-500">0 / 50</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="text-[10px] font-bold text-gray-500 uppercase">Sort By:</span>
-                            <select id="sortBy" onchange="updateDisplay()" class="bg-[#252525] border border-gray-700 text-[10px] p-1.5 rounded outline-none focus:border-[#d4af37]">
+                            <span class="hidden sm:inline text-[10px] font-bold text-gray-500 uppercase">Sort:</span>
+                            <select id="sortBy" onchange="updateDisplay()" class="bg-[#252525] border border-gray-700 text-[10px] p-1.5 rounded text-gray-300">
                                 <option value="trophies" selected>Trophies</option>
                                 <option value="townHallLevel">Town Hall</option>
                                 <option value="expLevel">XP Level</option>
@@ -53,17 +65,18 @@
                         <button onclick="setRoleFilter('leader', this)" class="btn-role">LEADER</button>
                         <button onclick="setRoleFilter('coLeader', this)" class="btn-role">CO-LEADER</button>
                         <button onclick="setRoleFilter('admin', this)" class="btn-role">ELDER</button>
+                        <button onclick="setRoleFilter('member', this)" class="btn-role">MEMBER</button>
                     </div>
                 </div>
                 <div id="memberList" class="space-y-2"></div>
             </div>
         </div>
 
-        <div class="lg:col-span-7">
-            <div class="panel p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="medieval text-xl font-bold">War Performance</h2>
-                    <select id="warSelect" onchange="loadWar(this.value)" class="bg-[#252525] border border-gray-700 text-xs p-2 rounded outline-none focus:border-[#d4af37]">
+        <div id="section-war" class="lg:col-span-6 mobile-hidden">
+            <div class="panel p-4 md:p-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <h2 class="medieval text-lg font-bold">War Performance</h2>
+                    <select id="warSelect" onchange="loadWar(this.value)" class="w-full sm:w-auto bg-[#252525] border border-gray-700 text-[10px] p-2 rounded">
                         <option value="">Select War Log...</option>
                     </select>
                 </div>
@@ -71,16 +84,16 @@
                 <div id="warSummary" class="hidden grid grid-cols-2 gap-4 mb-6 p-4 bg-[#252525] rounded-xl border border-dashed border-gray-700">
                     <div class="text-center">
                         <p class="stat-label">Total Stars</p>
-                        <p id="totalStars" class="text-2xl font-bold gold">0</p>
+                        <p id="totalStars" class="text-xl font-bold gold">0</p>
                     </div>
                     <div class="text-center border-l border-gray-800">
                         <p class="stat-label">Total Destruction</p>
-                        <p id="totalDestruction" class="text-2xl font-bold text-blue-400">0%</p>
+                        <p id="totalDestruction" class="text-xl font-bold text-blue-400">0%</p>
                     </div>
                 </div>
 
                 <div id="warResults" class="space-y-3">
-                    <p class="text-center text-gray-600 italic py-20 font-light">Select a log to view battlefield data.</p>
+                    <p class="text-center text-gray-600 italic py-20 font-light text-sm">Select a log to view battlefield data.</p>
                 </div>
             </div>
         </div>
@@ -94,12 +107,30 @@
         let allMembers = [];
         let currentRoleFilter = 'all';
 
+        function switchView(view) {
+            const membersSection = document.getElementById('section-members');
+            const warSection = document.getElementById('section-war');
+            const membersTab = document.getElementById('tab-members');
+            const warTab = document.getElementById('tab-war');
+
+            if (view === 'members') {
+                membersSection.classList.remove('mobile-hidden');
+                warSection.classList.add('mobile-hidden');
+                membersTab.classList.add('active');
+                warTab.classList.remove('active');
+            } else {
+                warSection.classList.remove('mobile-hidden');
+                membersSection.classList.add('mobile-hidden');
+                warTab.classList.add('active');
+                membersTab.classList.remove('active');
+            }
+        }
+
         async function init() {
             try {
                 const clanRes = await fetch('data/clan_data.json');
                 const clanData = await clanRes.json();
                 allMembers = clanData.memberList || [];
-                document.title = `${clanData.name} | CoC War Stats`;
                 document.getElementById('pageTitle').innerText = clanData.name;
                 updateDisplay();
 
@@ -114,7 +145,7 @@
                         select.appendChild(opt);
                     });
                 }
-            } catch (e) { console.error("Error loading data."); }
+            } catch (e) { console.error("Data error."); }
         }
 
         function setRoleFilter(role, btn) {
@@ -137,25 +168,22 @@
             container.innerHTML = list.map(m => {
                 const tagLink = `clashofclans://api/player?tag=${m.tag.replace('#', '')}`;
                 return `
-                <div class="flex items-center gap-4 p-4 bg-[#252525] border border-transparent hover:border-[#444] rounded-lg transition">
-                    <img src="${getTHImage(m.townHallLevel)}" class="th-icon" onerror="this.style.display='none'">
-                    <div class="flex-1">
-                        <div class="flex items-baseline gap-2">
-                            <span class="font-bold text-sm text-white leading-tight">${m.name}</span>
-                            <span class="text-[9px] text-gray-500 font-mono">XP ${m.expLevel}</span>
+                <div class="flex items-center gap-3 p-3 bg-[#252525] border border-transparent rounded-lg">
+                    <img src="${getTHImage(m.townHallLevel)}" class="th-icon">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-baseline gap-2 truncate">
+                            <span class="font-bold text-xs text-white">${m.name}</span>
+                            <span class="text-[8px] text-gray-500 font-mono">XP ${m.expLevel}</span>
                         </div>
-                        <div class="flex flex-col mt-0.5">
-                            <span class="text-[9px] gold font-bold uppercase tracking-wider leading-none">${roleMap[m.role]}</span>
-                            <span class="text-[9px] text-gray-600 font-mono tracking-tighter opacity-70 mt-1">${m.tag}</span>
-                        </div>
-                        <div class="flex gap-4 mt-2">
-                            <div><p class="stat-label">Donated</p><p class="stat-value text-green-500">${m.donations}</p></div>
-                            <div><p class="stat-label">Received</p><p class="stat-value text-red-400">${m.donationsReceived}</p></div>
+                        <span class="text-[8px] gold font-bold uppercase block">${roleMap[m.role]}</span>
+                        <div class="flex gap-4 mt-1.5">
+                            <div><p class="stat-label">Donated</p><p class="stat-value text-green-500 text-[9px]">${m.donations}</p></div>
+                            <div><p class="stat-label">Received</p><p class="stat-value text-red-400 text-[9px]">${m.donationsReceived}</p></div>
                         </div>
                     </div>
                     <div class="text-right">
-                        <p class="text-sm font-bold text-[#d4af37]">${m.trophies.toLocaleString()}</p>
-                        <a href="${tagLink}" class="btn-profile uppercase font-bold tracking-widest mt-2 inline-block">Profile</a>
+                        <p class="text-xs font-bold text-[#d4af37]">${m.trophies.toLocaleString()}</p>
+                        <a href="${tagLink}" class="text-[8px] bg-[#333] px-2 py-1 rounded text-gray-300 font-bold uppercase border border-gray-600 block mt-2 text-center">Open in Clash of Clans</a>
                     </div>
                 </div>`;
             }).join('');
@@ -164,20 +192,16 @@
         async function loadWar(filename) {
             const container = document.getElementById('warResults');
             const summary = document.getElementById('warSummary');
-            
             if (!filename) {
-                container.innerHTML = `<p class="text-center text-gray-600 italic py-20 font-light">Select a log to view battlefield data.</p>`;
+                container.innerHTML = `<p class="text-center text-gray-600 italic py-20 font-light text-sm">Select a log to view battlefield data.</p>`;
                 summary.classList.add('hidden');
                 return;
             }
-
             try {
                 const res = await fetch(`data/wars/${filename}`);
                 const war = await res.json();
-                
-                // Directly access official war total properties
                 document.getElementById('totalStars').innerText = war.clan.stars;
-                document.getElementById('totalDestruction').innerText = war.clan.destructionPercentage.toFixed(2) + "%";
+                document.getElementById('totalDestruction').innerText = war.clan.destructionPercentage.toFixed(1) + "%";
                 summary.classList.remove('hidden');
 
                 const opponentMap = {};
@@ -187,44 +211,39 @@
                 container.innerHTML = sortedMembers.map(m => {
                     const th = m.townhallLevel || m.townHallLevel || "?";
                     return `
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3 p-4 bg-[#252525] rounded-xl items-center border border-transparent hover:border-gray-700">
-                        <div class="md:col-span-4 flex items-center gap-3">
-                            <span class="text-[10px] font-mono font-bold text-gray-600">#${m.mapPosition}</span>
-                            <div class="flex items-center gap-2">
-                                <img src="${getTHImage(th)}" class="w-8 h-8 object-contain">
-                                <div><p class="font-bold text-sm text-white">${m.name}</p><p class="text-[9px] gold font-bold uppercase">TH${th}</p></div>
-                            </div>
+                    <div class="p-3 bg-[#252525] rounded-xl space-y-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-mono text-gray-600">#${m.mapPosition}</span>
+                            <img src="${getTHImage(th)}" class="w-6 h-6">
+                            <p class="font-bold text-xs text-white truncate">${m.name}</p>
                         </div>
-                        <div class="md:col-span-4">${renderAtk(m.attacks ? m.attacks[0] : null, opponentMap)}</div>
-                        <div class="md:col-span-4">${renderAtk(m.attacks && m.attacks[1] ? m.attacks[1] : null, opponentMap)}</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            ${renderAtk(m.attacks ? m.attacks[0] : null, opponentMap)}
+                            ${renderAtk(m.attacks && m.attacks[1] ? m.attacks[1] : null, opponentMap)}
+                        </div>
                     </div>`;
                 }).join('');
-            } catch (e) { 
-                container.innerHTML = `<p class="text-center text-red-500 py-20">Error loading war log.</p>`; 
-                summary.classList.add('hidden');
-            }
+            } catch (e) { container.innerHTML = `<p class="text-center text-red-500 py-20">Error.</p>`; }
         }
 
         function renderAtk(atk, map) {
-            if (!atk) return `<div class="text-center text-[9px] text-gray-600 uppercase font-bold border border-dashed border-gray-700 py-3 rounded-lg">Missing</div>`;
+            if (!atk) return `<div class="text-center text-[8px] text-gray-600 border border-dashed border-gray-700 py-2 rounded-lg uppercase">Missing</div>`;
             const defender = map[atk.defenderTag];
             const pct = atk.destructionPercentage;
             const stars = '★'.repeat(atk.stars).padEnd(3, '☆');
-            
-            let color = "bg-green-500";
-            if (pct < 100) color = "bg-yellow-500";
-            if (pct < 50) color = "bg-red-500";
+            let color = pct === 100 ? "text-green-500" : (pct < 50 ? "text-red-500" : "text-yellow-500");
+            let bgColor = pct === 100 ? "bg-green-500" : (pct < 50 ? "bg-red-500" : "bg-yellow-500");
 
             return `
-                <div class="bg-[#2a2a2a] p-2 rounded-lg border border-gray-700">
+                <div class="bg-[#1e1e1e] p-2 rounded-lg border border-gray-800">
                     <div class="flex justify-between items-center mb-1">
-                        <span class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">VS #${defender.pos} (TH${defender.th})</span>
-                        <span class="text-[10px] font-bold ${color.replace('bg-', 'text-')}">${pct}%</span>
+                        <span class="text-[8px] font-black text-gray-500 uppercase">VS #${defender.pos} (TH${defender.th})</span>
+                        <span class="text-[9px] font-bold ${color}">${pct}%</span>
                     </div>
                     <div class="flex justify-between items-center gap-2">
-                        <span class="text-xs gold leading-none">${stars}</span>
+                        <span class="text-[10px] gold leading-none">${stars}</span>
                         <div class="flex-1 bg-gray-800 h-1 rounded-full overflow-hidden">
-                            <div class="${color} h-full" style="width: ${pct}%"></div>
+                            <div class="${bgColor} h-full" style="width: ${pct}%"></div>
                         </div>
                     </div>
                 </div>`;
