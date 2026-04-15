@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 10,
-        "stars": 24,
-        "destructionPercentage": 32.0,
+        "attacks": 11,
+        "stars": 27,
+        "destructionPercentage": 36.0,
         "members": [
             {
                 "tag": "#9C229UGJ",
@@ -34,7 +34,15 @@
                         "duration": 132
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#9P0QUGPRQ",
+                    "defenderTag": "#9C229UGJ",
+                    "stars": 2,
+                    "destructionPercentage": 70,
+                    "order": 12,
+                    "duration": 137
+                }
             },
             {
                 "tag": "#2PULPGL90",
@@ -248,6 +256,16 @@
                 "name": "COBRA",
                 "townhallLevel": 15,
                 "mapPosition": 22,
+                "attacks": [
+                    {
+                        "attackerTag": "#8RJ8CC8LU",
+                        "defenderTag": "#L00LG9G",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 13,
+                        "duration": 71
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -307,9 +325,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/WhcMzvg-pVxhZCfRdzVohNGFxTYUrzvtvS65SCRlgTc.png"
         },
         "clanLevel": 29,
-        "attacks": 1,
-        "stars": 2,
-        "destructionPercentage": 3.2,
+        "attacks": 2,
+        "stars": 4,
+        "destructionPercentage": 6.0,
         "members": [
             {
                 "tag": "#G8UQUCRG",
@@ -502,7 +520,15 @@
                 "name": "Tere 2",
                 "townhallLevel": 14,
                 "mapPosition": 23,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#8RJ8CC8LU",
+                    "defenderTag": "#L00LG9G",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 13,
+                    "duration": 71
+                }
             },
             {
                 "tag": "#JUYU9QRP",
@@ -537,6 +563,16 @@
                 "name": "\u04934\u2022\u0138\u0447u",
                 "townhallLevel": 18,
                 "mapPosition": 3,
+                "attacks": [
+                    {
+                        "attackerTag": "#9P0QUGPRQ",
+                        "defenderTag": "#9C229UGJ",
+                        "stars": 2,
+                        "destructionPercentage": 70,
+                        "order": 12,
+                        "duration": 137
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
