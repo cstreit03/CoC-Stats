@@ -1,7 +1,7 @@
 name: Update Clan Stats
 on:
   schedule:
-    - cron: '0 */4 * * *' # Runs every 4 hours
+    - cron: '*/20 * * * *' # Runs every 20 minutes
   workflow_dispatch: # Allows you to run it manually
 
 jobs:
