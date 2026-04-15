@@ -15,7 +15,7 @@
         "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
     },
     "clanLevel": 32,
-    "clanPoints": 126477,
+    "clanPoints": 126408,
     "clanBuilderBasePoints": 42687,
     "clanCapitalPoints": 4387,
     "capitalLeague": {
@@ -35,59 +35,6 @@
     },
     "members": 45,
     "memberList": [
-        {
-            "tag": "#9G92CY9L",
-            "name": "brandondepalma",
-            "role": "coLeader",
-            "townHallLevel": 18,
-            "expLevel": 232,
-            "league": {
-                "id": 29000000,
-                "name": "Unranked",
-                "iconUrls": {
-                    "small": "https://api-assets.clashofclans.com/leagues/72/e--YMyIexEQQhE4imLoJcwhYn6Uy8KqlgyY3_kFV6t4.png",
-                    "tiny": "https://api-assets.clashofclans.com/leagues/36/e--YMyIexEQQhE4imLoJcwhYn6Uy8KqlgyY3_kFV6t4.png"
-                }
-            },
-            "leagueTier": {
-                "id": 105000034,
-                "name": "Legend League",
-                "iconUrls": {
-                    "small": "https://api-assets.clashofclans.com/leaguetiers/125/BvEu_UE53UzADvTRiU9AdyOrlvb1RqvBmMau_uX6xm0.png",
-                    "large": "https://api-assets.clashofclans.com/leaguetiers/326/BvEu_UE53UzADvTRiU9AdyOrlvb1RqvBmMau_uX6xm0.png"
-                }
-            },
-            "trophies": 5076,
-            "builderBaseTrophies": 3245,
-            "clanRank": 1,
-            "previousClanRank": 2,
-            "donations": 4685,
-            "donationsReceived": 4322,
-            "playerHouse": {
-                "elements": [
-                    {
-                        "type": "ground",
-                        "id": 82000004
-                    },
-                    {
-                        "type": "walls",
-                        "id": 82000079
-                    },
-                    {
-                        "type": "roof",
-                        "id": 82000085
-                    },
-                    {
-                        "type": "decoration",
-                        "id": 82000065
-                    }
-                ]
-            },
-            "builderBaseLeague": {
-                "id": 44000026,
-                "name": "Steel League III"
-            }
-        },
         {
             "tag": "#YQYVJ92C",
             "name": "SochieLife",
@@ -110,9 +57,9 @@
                     "large": "https://api-assets.clashofclans.com/leaguetiers/326/BvEu_UE53UzADvTRiU9AdyOrlvb1RqvBmMau_uX6xm0.png"
                 }
             },
-            "trophies": 5042,
+            "trophies": 5028,
             "builderBaseTrophies": 4607,
-            "clanRank": 2,
+            "clanRank": 1,
             "previousClanRank": 1,
             "donations": 6052,
             "donationsReceived": 6519,
@@ -142,6 +89,59 @@
             }
         },
         {
+            "tag": "#9G92CY9L",
+            "name": "brandondepalma",
+            "role": "coLeader",
+            "townHallLevel": 18,
+            "expLevel": 232,
+            "league": {
+                "id": 29000000,
+                "name": "Unranked",
+                "iconUrls": {
+                    "small": "https://api-assets.clashofclans.com/leagues/72/e--YMyIexEQQhE4imLoJcwhYn6Uy8KqlgyY3_kFV6t4.png",
+                    "tiny": "https://api-assets.clashofclans.com/leagues/36/e--YMyIexEQQhE4imLoJcwhYn6Uy8KqlgyY3_kFV6t4.png"
+                }
+            },
+            "leagueTier": {
+                "id": 105000034,
+                "name": "Legend League",
+                "iconUrls": {
+                    "small": "https://api-assets.clashofclans.com/leaguetiers/125/BvEu_UE53UzADvTRiU9AdyOrlvb1RqvBmMau_uX6xm0.png",
+                    "large": "https://api-assets.clashofclans.com/leaguetiers/326/BvEu_UE53UzADvTRiU9AdyOrlvb1RqvBmMau_uX6xm0.png"
+                }
+            },
+            "trophies": 5021,
+            "builderBaseTrophies": 3245,
+            "clanRank": 2,
+            "previousClanRank": 2,
+            "donations": 4685,
+            "donationsReceived": 4322,
+            "playerHouse": {
+                "elements": [
+                    {
+                        "type": "ground",
+                        "id": 82000004
+                    },
+                    {
+                        "type": "walls",
+                        "id": 82000079
+                    },
+                    {
+                        "type": "roof",
+                        "id": 82000085
+                    },
+                    {
+                        "type": "decoration",
+                        "id": 82000065
+                    }
+                ]
+            },
+            "builderBaseLeague": {
+                "id": 44000026,
+                "name": "Steel League III"
+            }
+        },
+        {
             "tag": "#V0GYVCJ9",
             "name": "YAGO",
             "role": "coLeader",
@@ -167,7 +167,7 @@
             "builderBaseTrophies": 4299,
             "clanRank": 3,
             "previousClanRank": 3,
-            "donations": 674,
+            "donations": 675,
             "donationsReceived": 1506,
             "playerHouse": {
                 "elements": [
@@ -487,7 +487,7 @@
             "clanRank": 9,
             "previousClanRank": 8,
             "donations": 1796,
-            "donationsReceived": 582,
+            "donationsReceived": 586,
             "playerHouse": {
                 "elements": [
                     {
@@ -1012,7 +1012,7 @@
                     "large": "https://api-assets.clashofclans.com/leaguetiers/326/DIMeRH3N4lrNObA3zAmk_eUin8nvNeLR89qYznnA--s.png"
                 }
             },
-            "trophies": 25,
+            "trophies": 43,
             "builderBaseTrophies": 4896,
             "clanRank": 19,
             "previousClanRank": 19,
@@ -1119,11 +1119,11 @@
                     "large": "https://api-assets.clashofclans.com/leaguetiers/326/1AhObOl55grQIWnGmn1J9qMWq5pmRA3aBObfYkQEjko.png"
                 }
             },
-            "trophies": 364,
+            "trophies": 375,
             "builderBaseTrophies": 4483,
             "clanRank": 21,
             "previousClanRank": 21,
-            "donations": 257,
+            "donations": 260,
             "donationsReceived": 2173,
             "playerHouse": {
                 "elements": [
@@ -1439,7 +1439,7 @@
                     "large": "https://api-assets.clashofclans.com/leaguetiers/326/vxV7LI0votsz0_n-8lW-Lag96D5HwKsEgEk_7247zC4.png"
                 }
             },
-            "trophies": 0,
+            "trophies": 40,
             "builderBaseTrophies": 4366,
             "clanRank": 27,
             "previousClanRank": 27,
@@ -1954,7 +1954,7 @@
             "name": "maxmom",
             "role": "admin",
             "townHallLevel": 14,
-            "expLevel": 130,
+            "expLevel": 131,
             "league": {
                 "id": 29000000,
                 "name": "Unranked",
@@ -1971,7 +1971,7 @@
                     "large": "https://api-assets.clashofclans.com/leaguetiers/326/a3zg3PSqri2WrWD8tGzKs0hJ5OrND1Rx1SJ45f5O0gE.png"
                 }
             },
-            "trophies": 144,
+            "trophies": 175,
             "builderBaseTrophies": 2531,
             "clanRank": 37,
             "previousClanRank": 37,
