@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 26,
-        "stars": 65,
-        "destructionPercentage": 87.72,
+        "attacks": 29,
+        "stars": 72,
+        "destructionPercentage": 96.0,
         "members": [
             {
                 "tag": "#9C229UGJ",
@@ -240,6 +240,16 @@
                 "name": "also Carsten",
                 "townhallLevel": 17,
                 "mapPosition": 20,
+                "attacks": [
+                    {
+                        "attackerTag": "#800CC2CCG",
+                        "defenderTag": "#JUYU9QRP",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 50,
+                        "duration": 127
+                    }
+                ],
                 "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#Q0YPUJUJ",
@@ -263,6 +273,14 @@
                         "destructionPercentage": 100,
                         "order": 27,
                         "duration": 105
+                    },
+                    {
+                        "attackerTag": "#VPJYP29",
+                        "defenderTag": "#9P0QUGPRQ",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 48,
+                        "duration": 108
                     }
                 ],
                 "opponentAttacks": 1,
@@ -470,6 +488,16 @@
                 "name": "Carsten",
                 "townhallLevel": 17,
                 "mapPosition": 19,
+                "attacks": [
+                    {
+                        "attackerTag": "#2PYVCVQP9",
+                        "defenderTag": "#RG0YU8J",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 49,
+                        "duration": 117
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#LV09LGP0",
@@ -1017,7 +1045,15 @@
                 "name": "raider black",
                 "townhallLevel": 16,
                 "mapPosition": 21,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#800CC2CCG",
+                    "defenderTag": "#JUYU9QRP",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 50,
+                    "duration": 127
+                }
             },
             {
                 "tag": "#YV9LJP8C",
@@ -1054,7 +1090,15 @@
                 "name": "tere",
                 "townhallLevel": 16,
                 "mapPosition": 20,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2PYVCVQP9",
+                    "defenderTag": "#RG0YU8J",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 49,
+                    "duration": 117
+                }
             },
             {
                 "tag": "#9P0QUGPRQ",
@@ -1071,14 +1115,14 @@
                         "duration": 137
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#Q92RUPUJ",
+                    "attackerTag": "#VPJYP29",
                     "defenderTag": "#9P0QUGPRQ",
-                    "stars": 2,
-                    "destructionPercentage": 93,
-                    "order": 47,
-                    "duration": 180
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 48,
+                    "duration": 108
                 }
             },
             {
