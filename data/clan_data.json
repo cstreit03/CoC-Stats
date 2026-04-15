@@ -15,8 +15,8 @@
         "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
     },
     "clanLevel": 32,
-    "clanPoints": 126408,
-    "clanBuilderBasePoints": 42687,
+    "clanPoints": 126395,
+    "clanBuilderBasePoints": 42680,
     "clanCapitalPoints": 4387,
     "capitalLeague": {
         "id": 85000019,
@@ -35,59 +35,6 @@
     },
     "members": 45,
     "memberList": [
-        {
-            "tag": "#YQYVJ92C",
-            "name": "SochieLife",
-            "role": "member",
-            "townHallLevel": 18,
-            "expLevel": 233,
-            "league": {
-                "id": 29000000,
-                "name": "Unranked",
-                "iconUrls": {
-                    "small": "https://api-assets.clashofclans.com/leagues/72/e--YMyIexEQQhE4imLoJcwhYn6Uy8KqlgyY3_kFV6t4.png",
-                    "tiny": "https://api-assets.clashofclans.com/leagues/36/e--YMyIexEQQhE4imLoJcwhYn6Uy8KqlgyY3_kFV6t4.png"
-                }
-            },
-            "leagueTier": {
-                "id": 105000034,
-                "name": "Legend League",
-                "iconUrls": {
-                    "small": "https://api-assets.clashofclans.com/leaguetiers/125/BvEu_UE53UzADvTRiU9AdyOrlvb1RqvBmMau_uX6xm0.png",
-                    "large": "https://api-assets.clashofclans.com/leaguetiers/326/BvEu_UE53UzADvTRiU9AdyOrlvb1RqvBmMau_uX6xm0.png"
-                }
-            },
-            "trophies": 5028,
-            "builderBaseTrophies": 4607,
-            "clanRank": 1,
-            "previousClanRank": 1,
-            "donations": 6052,
-            "donationsReceived": 6519,
-            "playerHouse": {
-                "elements": [
-                    {
-                        "type": "ground",
-                        "id": 82000004
-                    },
-                    {
-                        "type": "walls",
-                        "id": 82000049
-                    },
-                    {
-                        "type": "roof",
-                        "id": 82000126
-                    },
-                    {
-                        "type": "decoration",
-                        "id": 82000080
-                    }
-                ]
-            },
-            "builderBaseLeague": {
-                "id": 44000033,
-                "name": "Platinum League II"
-            }
-        },
         {
             "tag": "#9G92CY9L",
             "name": "brandondepalma",
@@ -112,7 +59,7 @@
             },
             "trophies": 5021,
             "builderBaseTrophies": 3245,
-            "clanRank": 2,
+            "clanRank": 1,
             "previousClanRank": 2,
             "donations": 4685,
             "donationsReceived": 4322,
@@ -139,6 +86,59 @@
             "builderBaseLeague": {
                 "id": 44000026,
                 "name": "Steel League III"
+            }
+        },
+        {
+            "tag": "#YQYVJ92C",
+            "name": "SochieLife",
+            "role": "member",
+            "townHallLevel": 18,
+            "expLevel": 233,
+            "league": {
+                "id": 29000000,
+                "name": "Unranked",
+                "iconUrls": {
+                    "small": "https://api-assets.clashofclans.com/leagues/72/e--YMyIexEQQhE4imLoJcwhYn6Uy8KqlgyY3_kFV6t4.png",
+                    "tiny": "https://api-assets.clashofclans.com/leagues/36/e--YMyIexEQQhE4imLoJcwhYn6Uy8KqlgyY3_kFV6t4.png"
+                }
+            },
+            "leagueTier": {
+                "id": 105000034,
+                "name": "Legend League",
+                "iconUrls": {
+                    "small": "https://api-assets.clashofclans.com/leaguetiers/125/BvEu_UE53UzADvTRiU9AdyOrlvb1RqvBmMau_uX6xm0.png",
+                    "large": "https://api-assets.clashofclans.com/leaguetiers/326/BvEu_UE53UzADvTRiU9AdyOrlvb1RqvBmMau_uX6xm0.png"
+                }
+            },
+            "trophies": 5015,
+            "builderBaseTrophies": 4607,
+            "clanRank": 2,
+            "previousClanRank": 1,
+            "donations": 6052,
+            "donationsReceived": 6519,
+            "playerHouse": {
+                "elements": [
+                    {
+                        "type": "ground",
+                        "id": 82000004
+                    },
+                    {
+                        "type": "walls",
+                        "id": 82000049
+                    },
+                    {
+                        "type": "roof",
+                        "id": 82000126
+                    },
+                    {
+                        "type": "decoration",
+                        "id": 82000080
+                    }
+                ]
+            },
+            "builderBaseLeague": {
+                "id": 44000033,
+                "name": "Platinum League II"
             }
         },
         {
@@ -216,7 +216,7 @@
                     "large": "https://api-assets.clashofclans.com/leaguetiers/326/VFqkaQimExWtSmIf9PC8WEpj4Vd58oLjPWyZqfVb5VE.png"
                 }
             },
-            "trophies": 428,
+            "trophies": 438,
             "builderBaseTrophies": 4684,
             "clanRank": 4,
             "previousClanRank": 5,
@@ -800,7 +800,7 @@
                     "large": "https://api-assets.clashofclans.com/leaguetiers/326/qVORiRguZ-xMq8L0g7rE1-rZuiA-lKlI8VKuMndRy4w.png"
                 }
             },
-            "trophies": 984,
+            "trophies": 996,
             "builderBaseTrophies": 2667,
             "clanRank": 15,
             "previousClanRank": 15,
@@ -1065,7 +1065,7 @@
                     "large": "https://api-assets.clashofclans.com/leaguetiers/326/YCZ7O_3_c8eCBYvX-92qiWeLc6Md6eNJ5A8O-2vUg7I.png"
                 }
             },
-            "trophies": 131,
+            "trophies": 139,
             "builderBaseTrophies": 3498,
             "clanRank": 20,
             "previousClanRank": 20,
@@ -1120,7 +1120,7 @@
                 }
             },
             "trophies": 375,
-            "builderBaseTrophies": 4483,
+            "builderBaseTrophies": 4455,
             "clanRank": 21,
             "previousClanRank": 21,
             "donations": 260,
@@ -1599,7 +1599,7 @@
                     "large": "https://api-assets.clashofclans.com/leaguetiers/326/WkqDvnK0CXI-Nc0TNTKG_fSuzRYoLRC54HFOdMCxVTI.png"
                 }
             },
-            "trophies": 31,
+            "trophies": 39,
             "builderBaseTrophies": 3337,
             "clanRank": 30,
             "previousClanRank": 30,
