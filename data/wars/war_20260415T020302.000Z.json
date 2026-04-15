@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 24,
-        "stars": 60,
-        "destructionPercentage": 80.0,
+        "attacks": 26,
+        "stars": 65,
+        "destructionPercentage": 87.72,
         "members": [
             {
                 "tag": "#9C229UGJ",
@@ -182,6 +182,16 @@
                 "name": "- nancy 95",
                 "townhallLevel": 18,
                 "mapPosition": 2,
+                "attacks": [
+                    {
+                        "attackerTag": "#Q92RUPUJ",
+                        "defenderTag": "#9P0QUGPRQ",
+                        "stars": 2,
+                        "destructionPercentage": 93,
+                        "order": 47,
+                        "duration": 180
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#Q9YRL80C",
@@ -402,6 +412,16 @@
                 "name": "BossHogg",
                 "townhallLevel": 18,
                 "mapPosition": 5,
+                "attacks": [
+                    {
+                        "attackerTag": "#L2PQ9QLUC",
+                        "defenderTag": "#8V8YP92UV",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 46,
+                        "duration": 132
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#Y8V9YJYJ",
@@ -1051,7 +1071,15 @@
                         "duration": 137
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#Q92RUPUJ",
+                    "defenderTag": "#9P0QUGPRQ",
+                    "stars": 2,
+                    "destructionPercentage": 93,
+                    "order": 47,
+                    "duration": 180
+                }
             },
             {
                 "tag": "#9P8Y2R0J",
@@ -1101,7 +1129,15 @@
                         "duration": 150
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#L2PQ9QLUC",
+                    "defenderTag": "#8V8YP92UV",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 46,
+                    "duration": 132
+                }
             },
             {
                 "tag": "#GCRU0UVGC",
