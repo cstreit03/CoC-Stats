@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 29,
-        "stars": 72,
-        "destructionPercentage": 96.0,
+        "attacks": 33,
+        "stars": 75,
+        "destructionPercentage": 100.0,
         "members": [
             {
                 "tag": "#9C229UGJ",
@@ -306,6 +306,14 @@
                         "destructionPercentage": 100,
                         "order": 22,
                         "duration": 53
+                    },
+                    {
+                        "attackerTag": "#9PU22U8Y",
+                        "defenderTag": "#YYCGQCGYU",
+                        "stars": 1,
+                        "destructionPercentage": 50,
+                        "order": 52,
+                        "duration": 84
                     }
                 ],
                 "opponentAttacks": 0
@@ -323,6 +331,14 @@
                         "destructionPercentage": 100,
                         "order": 44,
                         "duration": 93
+                    },
+                    {
+                        "attackerTag": "#99VJ2VVPQ",
+                        "defenderTag": "#YYCGQCGYU",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 53,
+                        "duration": 142
                     }
                 ],
                 "opponentAttacks": 1,
@@ -513,6 +529,16 @@
                 "name": "night dragon",
                 "townhallLevel": 15,
                 "mapPosition": 23,
+                "attacks": [
+                    {
+                        "attackerTag": "#LPU0GGCJQ",
+                        "defenderTag": "#YYCGQCGYU",
+                        "stars": 1,
+                        "destructionPercentage": 73,
+                        "order": 51,
+                        "duration": 166
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -585,6 +611,14 @@
                         "destructionPercentage": 100,
                         "order": 33,
                         "duration": 112
+                    },
+                    {
+                        "attackerTag": "#2VYVULCVL",
+                        "defenderTag": "#8V8YP92UV",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 54,
+                        "duration": 114
                     }
                 ],
                 "opponentAttacks": 0
@@ -800,7 +834,15 @@
                 "name": "BOSS G.",
                 "townhallLevel": 16,
                 "mapPosition": 18,
-                "opponentAttacks": 0
+                "opponentAttacks": 3,
+                "bestOpponentAttack": {
+                    "attackerTag": "#99VJ2VVPQ",
+                    "defenderTag": "#YYCGQCGYU",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 53,
+                    "duration": 142
+                }
             },
             {
                 "tag": "#8YJR2UPQJ",
@@ -1173,7 +1215,7 @@
                         "duration": 150
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#L2PQ9QLUC",
                     "defenderTag": "#8V8YP92UV",
