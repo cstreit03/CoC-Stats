@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 14,
-        "stars": 36,
-        "destructionPercentage": 48.0,
+        "attacks": 15,
+        "stars": 39,
+        "destructionPercentage": 52.0,
         "members": [
             {
                 "tag": "#9C229UGJ",
@@ -82,7 +82,15 @@
                 "name": "Ben",
                 "townhallLevel": 16,
                 "mapPosition": 18,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#8YJR2UPQJ",
+                    "defenderTag": "#U90CYLQ2",
+                    "stars": 1,
+                    "destructionPercentage": 87,
+                    "order": 26,
+                    "duration": 101
+                }
             },
             {
                 "tag": "#YQYVJ92C",
@@ -193,6 +201,16 @@
                 "name": "Viking",
                 "townhallLevel": 18,
                 "mapPosition": 8,
+                "attacks": [
+                    {
+                        "attackerTag": "#VPJYP29",
+                        "defenderTag": "#YV9LJP8C",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 27,
+                        "duration": 105
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -367,7 +385,15 @@
                 "name": "Viking 2",
                 "townhallLevel": 17,
                 "mapPosition": 15,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#8YJR2UPQJ",
+                    "defenderTag": "#GU2UVG9CV",
+                    "stars": 2,
+                    "destructionPercentage": 65,
+                    "order": 25,
+                    "duration": 97
+                }
             },
             {
                 "tag": "#LRR0LP2J0",
@@ -419,9 +445,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/WhcMzvg-pVxhZCfRdzVohNGFxTYUrzvtvS65SCRlgTc.png"
         },
         "clanLevel": 29,
-        "attacks": 10,
-        "stars": 20,
-        "destructionPercentage": 30.04,
+        "attacks": 12,
+        "stars": 23,
+        "destructionPercentage": 36.12,
         "members": [
             {
                 "tag": "#G8UQUCRG",
@@ -551,6 +577,24 @@
                 "name": "BURAK",
                 "townhallLevel": 18,
                 "mapPosition": 13,
+                "attacks": [
+                    {
+                        "attackerTag": "#8YJR2UPQJ",
+                        "defenderTag": "#GU2UVG9CV",
+                        "stars": 2,
+                        "destructionPercentage": 65,
+                        "order": 25,
+                        "duration": 97
+                    },
+                    {
+                        "attackerTag": "#8YJR2UPQJ",
+                        "defenderTag": "#U90CYLQ2",
+                        "stars": 1,
+                        "destructionPercentage": 87,
+                        "order": 26,
+                        "duration": 101
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#UUC9PCQ",
@@ -708,7 +752,15 @@
                 "name": "alain",
                 "townhallLevel": 18,
                 "mapPosition": 9,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#VPJYP29",
+                    "defenderTag": "#YV9LJP8C",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 27,
+                    "duration": 105
+                }
             },
             {
                 "tag": "#20UJ0Q92C",
