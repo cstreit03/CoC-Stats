@@ -67,7 +67,15 @@
                         "duration": 125
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#Q9YRL80C",
+                    "defenderTag": "#2PULPGL90",
+                    "stars": 2,
+                    "destructionPercentage": 88,
+                    "order": 14,
+                    "duration": 131
+                }
             },
             {
                 "tag": "#U90CYLQ2",
@@ -325,9 +333,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/WhcMzvg-pVxhZCfRdzVohNGFxTYUrzvtvS65SCRlgTc.png"
         },
         "clanLevel": 29,
-        "attacks": 2,
-        "stars": 4,
-        "destructionPercentage": 6.0,
+        "attacks": 3,
+        "stars": 6,
+        "destructionPercentage": 9.52,
         "members": [
             {
                 "tag": "#G8UQUCRG",
@@ -454,6 +462,16 @@
                 "name": "dRAgboniZre",
                 "townhallLevel": 18,
                 "mapPosition": 1,
+                "attacks": [
+                    {
+                        "attackerTag": "#Q9YRL80C",
+                        "defenderTag": "#2PULPGL90",
+                        "stars": 2,
+                        "destructionPercentage": 88,
+                        "order": 14,
+                        "duration": 131
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#2PULPGL90",
