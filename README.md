@@ -1,7 +1,3 @@
-This is a professional, streamlined version of the README.md. It removes the icons/emojis and focuses on the technical setup and permission steps required to get the automation running.
-
-***
-
 # CoC War Stats Dashboard
 
 A tactical dashboard for tracking Clash of Clans performance. This project uses a Python scraper and GitHub Actions to automatically update clan and war data every 20 minutes.
