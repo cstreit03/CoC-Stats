@@ -7,10 +7,12 @@ import {
     fetchWarData 
 } from './api.js';
 import { renderMembers, renderWarHistory, renderWarDetail } from './render.js';
+import { renderCharts } from './charts.js';
 import { 
     switchView, 
     updateMemberCount, 
-    updatePageTitle 
+    updatePageTitle,
+    updateHeader
 } from './ui.js';
 
 let allMembers = [];
@@ -21,13 +23,13 @@ let fp = null;
 
 async function init() {
     try {
-        // Set default title
-        updatePageTitle("Dashboard");
-
         // Load Current Data
         const clanData = await fetchClanData();
         allMembers = clanData.memberList || [];
         updateDisplay();
+
+        // Update Header with Clan Info
+        updateHeader(clanData.name, clanData.badgeUrls?.medium || clanData.badgeUrls?.small);
 
         // Load Member Index for calendar restrictions
         const memberIndex = await fetchMembersIndex();
@@ -43,17 +45,29 @@ async function init() {
             availableMemberDates.push(todayStr);
         }
 
-        // Initialize Flatpickr
+        // Initialize Flatpickr for Member Date
         fp = flatpickr("#memberDate", {
             defaultDate: todayStr,
             enable: availableMemberDates,
             dateFormat: "Y-m-d",
             onChange: function(selectedDates, dateStr) {
                 handleMemberDateChange(dateStr);
-            },
-            onDayCreate: function(dObj, dStr, fp, dayElem) {
-                // Ensure weekend days (sat/sun) don't have special colors from themes
-                dayElem.classList.remove("flatpickr-disabled"); // theme might use this
+            }
+        });
+
+        // Initialize Flatpickr for War Dates
+        const startPicker = flatpickr("#warStartDate", {
+            dateFormat: "Y-m-d",
+            onChange: function(selectedDates, dateStr) {
+                endPicker.set('minDate', dateStr);
+                filterWarHistory();
+            }
+        });
+        const endPicker = flatpickr("#warEndDate", {
+            dateFormat: "Y-m-d",
+            onChange: function(selectedDates, dateStr) {
+                startPicker.set('maxDate', dateStr);
+                filterWarHistory();
             }
         });
 
@@ -104,17 +118,27 @@ async function handleMemberDateChange(dateValue) {
 }
 
 function filterWarHistory() {
-    const startVal = document.getElementById('warStartDate').value.replace(/-/g, '');
-    const endVal = document.getElementById('warEndDate').value.replace(/-/g, '');
+    const startVal = document.getElementById('warStartDate').value.replace(/-/g, ''); // YYYYMMDD
+    const endVal = document.getElementById('warEndDate').value.replace(/-/g, '');   // YYYYMMDD
     
-    let filtered = fullWarHistory;
-    
-    if (startVal) {
-        filtered = filtered.filter(w => w.startTime.substring(0, 8) >= startVal);
-    }
-    if (endVal) {
-        filtered = filtered.filter(w => w.startTime.substring(0, 8) <= endVal);
-    }
+    let filtered = fullWarHistory.filter(w => {
+        // Always include active wars
+        const now = new Date();
+        const year = w.endTime.substring(0, 4);
+        const month = w.endTime.substring(4, 6) - 1;
+        const day = w.endTime.substring(6, 8);
+        const hour = w.endTime.substring(9, 11);
+        const min = w.endTime.substring(11, 13);
+        const sec = w.endTime.substring(13, 15);
+        const warEnd = new Date(Date.UTC(year, month, day, hour, min, sec));
+        
+        if (now < warEnd) return true;
+        
+        const warDate = w.startTime.substring(0, 8);
+        if (startVal && warDate < startVal) return false;
+        if (endVal && warDate > endVal) return false;
+        return true;
+    });
     
     renderWarHistory(filtered);
 }
@@ -170,13 +194,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('tab-members').addEventListener('click', () => switchView('members'));
     document.getElementById('tab-war').addEventListener('click', () => switchView('war'));
+    document.getElementById('tab-stats').addEventListener('click', () => {
+        switchView('stats');
+        renderCharts(fullWarHistory);
+    });
     
     document.getElementById('sortBy').addEventListener('change', updateDisplay);
     
     // Member date is now handled by Flatpickr onChange
-    
-    document.getElementById('warStartDate').addEventListener('change', filterWarHistory);
-    document.getElementById('warEndDate').addEventListener('change', filterWarHistory);
     
     document.getElementById('backToWarList').addEventListener('click', showWarList);
 

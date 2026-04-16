@@ -1,19 +1,34 @@
 export function switchView(view) {
-    const membersSection = document.getElementById('section-members');
-    const warSection = document.getElementById('section-war');
-    const membersTab = document.getElementById('tab-members');
-    const warTab = document.getElementById('tab-war');
+    const sections = {
+        members: document.getElementById('section-members'),
+        war: document.getElementById('section-war'),
+        stats: document.getElementById('section-stats')
+    };
+    const tabs = {
+        members: document.getElementById('tab-members'),
+        war: document.getElementById('tab-war'),
+        stats: document.getElementById('tab-stats')
+    };
 
-    if (view === 'members') {
-        membersSection.classList.remove('hidden-section');
-        warSection.classList.add('hidden-section');
-        membersTab.classList.add('active');
-        warTab.classList.remove('active');
-    } else {
-        warSection.classList.remove('hidden-section');
-        membersSection.classList.add('hidden-section');
-        warTab.classList.add('active');
-        membersTab.classList.remove('active');
+    Object.keys(sections).forEach(key => {
+        if (key === view) {
+            sections[key].classList.remove('hidden-section');
+            tabs[key].classList.add('active');
+        } else {
+            sections[key].classList.add('hidden-section');
+            tabs[key].classList.remove('active');
+        }
+    });
+}
+
+export function updateHeader(name, badgeUrl) {
+    const titleEl = document.getElementById('pageTitle');
+    const badgeEl = document.getElementById('clanBadge');
+    
+    if (name) titleEl.innerText = name;
+    if (badgeUrl) {
+        badgeEl.src = badgeUrl;
+        badgeEl.classList.remove('hidden');
     }
 }
 

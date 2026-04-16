@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { background: #121212; color: #e5e5e5; font-family: 'Inter', sans-serif; }
         .medieval { font-family: 'Cinzel', serif; }
@@ -22,22 +23,65 @@
 
         .hidden-section { display: none !important; }
 
-        .btn-role { font-size: 10px; font-weight: bold; border: 1px solid #444; border-radius: 6px; padding: 6px 12px; cursor: pointer; color: #777; background: transparent; }
+        .control-base { 
+            background: #252525; 
+            border: 1px solid #333; 
+            border-radius: 6px; 
+            padding: 6px 10px; 
+            font-size: 10px; 
+            font-weight: 600; 
+            color: #ccc; 
+            outline: none; 
+            transition: all 0.2s;
+            height: 32px;
+            display: flex;
+            align-items: center;
+        }
+        .control-base:focus { border-color: #d4af37; }
+        
+        .btn-role { 
+            font-size: 10px; 
+            font-weight: bold; 
+            border: 1px solid #333; 
+            border-radius: 6px; 
+            padding: 0 12px; 
+            cursor: pointer; 
+            color: #777; 
+            background: #1e1e1e; 
+            height: 32px;
+            transition: 0.2s;
+        }
+        .btn-role:hover { border-color: #555; color: #aaa; }
         .btn-role.active { border-color: #d4af37; color: #d4af37; background: rgba(212, 175, 55, 0.1); }
+        
         .stat-label { font-size: 8px; color: #777; text-transform: uppercase; font-weight: bold; }
         .stat-value { font-size: 10px; font-weight: 600; color: #ccc; }
+
+        /* Custom Select styling to hide default arrow in some browsers and ensure consistency */
+        select.control-base {
+            appearance: none;
+            padding-right: 24px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23777'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 12px;
+        }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
     <div class="max-w-7xl mx-auto mb-6 flex flex-col items-center text-center">
-        <h1 id="pageTitle" class="text-3xl md:text-5xl font-bold gold medieval uppercase tracking-tighter">Dashboard</h1>
+        <div id="headerContent" class="flex items-center gap-4">
+            <img id="clanBadge" class="w-12 h-12 md:w-16 md:h-16 hidden" alt="Clan Badge">
+            <h1 id="pageTitle" class="text-3xl md:text-5xl font-bold gold medieval uppercase tracking-tighter">Dashboard</h1>
+        </div>
         <div class="h-1 w-16 bg-[#d4af37] mt-2"></div>
     </div>
 
     <div class="flex mb-6 rounded-t-lg overflow-hidden border border-[#333]">
         <button id="tab-members" class="tab-btn active medieval uppercase tracking-widest">Members</button>
         <button id="tab-war" class="tab-btn medieval uppercase tracking-widest">War</button>
+        <button id="tab-stats" class="tab-btn medieval uppercase tracking-widest">War Stats</button>
     </div>
 
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -53,7 +97,13 @@
 
                     <div class="flex flex-wrap items-center gap-4 p-4 bg-[#1a1a1a] rounded-xl border border-gray-800">
                         <!-- Filters -->
-                        <div class="flex flex-wrap gap-2 pr-4 border-r border-gray-800">
+                        <div class="flex flex-wrap items-center gap-2 pr-4 border-r border-gray-800">
+                            <div class="flex items-center gap-2 mr-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                </svg>
+                                <span class="text-[10px] font-bold text-gray-500 uppercase">Role:</span>
+                            </div>
                             <button data-role="all" class="btn-role active">ALL</button>
                             <button data-role="leader" class="btn-role">LEADER</button>
                             <button data-role="coLeader" class="btn-role">CO-LEADER</button>
@@ -62,14 +112,20 @@
                         </div>
                         
                         <!-- Controls -->
-                        <div class="flex flex-wrap items-center gap-4">
+                        <div class="flex flex-wrap items-center gap-6">
                             <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
                                 <span class="text-[10px] font-bold text-gray-500 uppercase">Date:</span>
-                                <input type="text" id="memberDate" class="bg-[#252525] border border-gray-700 text-[10px] p-1.5 rounded text-gray-300 font-mono outline-none focus:border-gold transition-colors" placeholder="Select Date...">
+                                <input type="text" id="memberDate" class="control-base w-32 font-mono" placeholder="Select Date...">
                             </div>
                             <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                                </svg>
                                 <span class="text-[10px] font-bold text-gray-500 uppercase">Sort:</span>
-                                <select id="sortBy" class="bg-[#252525] border border-gray-700 text-[10px] p-1.5 rounded text-gray-300 outline-none focus:border-gold transition-colors">
+                                <select id="sortBy" class="control-base">
                                     <option value="league" selected>League + Trophies</option>
                                     <option value="trophies">Trophies Only</option>
                                     <option value="townHallLevel">Town Hall</option>
@@ -92,11 +148,16 @@
                 <div id="warListView">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <h2 class="medieval text-lg font-bold">War History</h2>
-                        <div class="flex items-center gap-2">
-                            <span class="text-[10px] font-bold text-gray-500 uppercase">Range:</span>
-                            <input type="date" id="warStartDate" class="bg-[#252525] border border-gray-700 text-[10px] p-1 rounded text-gray-500 font-mono">
-                            <span class="text-gray-600 text-[10px]">-</span>
-                            <input type="date" id="warEndDate" class="bg-[#252525] border border-gray-700 text-[10px] p-1 rounded text-gray-500 font-mono">
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span class="text-[10px] font-bold text-gray-500 uppercase">Date Range:</span>
+                            </div>
+                                <input type="text" id="warStartDate" class="control-base w-32 font-mono" placeholder="Start Date">
+                                <span class="text-gray-600 text-[10px]">-</span>
+                                <input type="text" id="warEndDate" class="control-base w-32 font-mono" placeholder="End Date">
                         </div>
                     </div>
                     <div id="warHistoryList" class="space-y-4">
@@ -129,6 +190,23 @@
 
                     <div id="warResults" class="space-y-4">
                         <!-- War detail content will now be a single column of wide rows -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- War Stats Section -->
+        <div id="section-stats" class="lg:col-span-12 hidden-section">
+            <div class="panel p-4 md:p-6">
+                <h2 class="medieval text-lg font-bold mb-6">War Analytics</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase mb-4 tracking-widest">Star Performance Trend (%)</h3>
+                        <canvas id="starsTrendChart"></canvas>
+                    </div>
+                    <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
+                        <h3 class="text-xs font-bold text-gray-500 uppercase mb-4 tracking-widest">Top 10 Performers (MTD)</h3>
+                        <canvas id="topPerformersChart"></canvas>
                     </div>
                 </div>
             </div>
