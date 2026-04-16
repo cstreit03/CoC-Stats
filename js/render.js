@@ -146,11 +146,11 @@ export function renderWarHistory(warHistory) {
         let isPinned = false;
 
         if (now < start) {
-            statusLabel = "In Preparation";
+            statusLabel = "Preparation Day";
             countdownTarget = war.startTime;
             isPinned = true;
         } else if (now < end) {
-            statusLabel = "In Progress";
+            statusLabel = "War Day";
             countdownTarget = war.endTime;
             isPinned = true;
         }
@@ -196,22 +196,22 @@ export function renderWarHistory(warHistory) {
                 </div>
             </div>
             <div class="flex justify-between items-center mb-4">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 w-1/3">
                     <img src="${war.clan.badgeUrls.small}" class="w-10 h-10">
-                    <div>
-                        <p class="text-xs font-bold text-white">${war.clan.name}</p>
+                    <div class="min-w-0">
+                        <p class="text-xs font-bold text-white truncate">${war.clan.name}</p>
                         <p class="text-[9px] text-gray-500">${clanAttacks}/${totalPossibleAttacks} Attacks</p>
                     </div>
                 </div>
-                <div class="text-center">
+                <div class="flex flex-col items-center justify-center w-1/3 text-center">
+                    ${countdownTarget ? `<p id="cd-${war.filename}" data-end="${countdownTarget}" class="mb-1 font-mono gold text-[11px]">${getCountdown(countdownTarget)}</p>` : ''}
                     <p class="text-[11px] font-black ${isPinned ? 'gold' : scoreColor} uppercase tracking-widest mb-1">${resultLabel}</p>
                     <p class="medieval ${isPinned ? 'gold' : scoreColor} text-xl">${war.clan.stars} - ${war.opponent.stars}</p>
-                    ${countdownTarget ? `<p id="cd-${war.filename}" data-end="${countdownTarget}" class="mt-1 font-mono gold text-[11px]">${getCountdown(countdownTarget)}</p>` : ''}
                     <p class="text-[9px] text-gray-500 mt-1">${war.clan.destructionPercentage.toFixed(1)}% vs ${war.opponent.destructionPercentage.toFixed(1)}%</p>
                 </div>
-                <div class="flex items-center gap-3 text-right">
-                    <div>
-                        <p class="text-xs font-bold text-white">${war.opponent.name}</p>
+                <div class="flex items-center gap-3 text-right justify-end w-1/3">
+                    <div class="min-w-0">
+                        <p class="text-xs font-bold text-white truncate">${war.opponent.name}</p>
                         <p class="text-[9px] text-gray-500">${opponentAttacks}/${totalPossibleAttacks} Attacks</p>
                     </div>
                     <img src="${war.opponent.badgeUrls.small}" class="w-10 h-10">
@@ -442,10 +442,14 @@ export function renderAbout(clanData) {
                         </div>
                         <p class="text-sm text-gray-300 leading-relaxed italic">"${clanData.description}"</p>
                     </div>
-                    <div class="grid grid-cols-2 gap-x-8 gap-y-4 min-w-[300px]">
+                    <div class="grid grid-cols-2 gap-x-8 gap-y-4 min-w-[350px]">
                         <div>
                             <p class="stat-label">Location</p>
                             <p class="stat-value">${clanData.location?.name || 'Unknown'}</p>
+                        </div>
+                        <div>
+                            <p class="stat-label">Type</p>
+                            <p class="stat-value text-gold uppercase">${clanData.type}</p>
                         </div>
                         <div>
                             <p class="stat-label">Language</p>
@@ -459,7 +463,7 @@ export function renderAbout(clanData) {
                             <p class="stat-label">Family Friendly</p>
                             <p class="stat-value">${clanData.isFamilyFriendly ? 'Yes' : 'No'}</p>
                         </div>
-                        <div class="col-span-2">
+                        <div class="col-span-1">
                             <p class="stat-label mb-2">Clan Labels</p>
                             <div class="flex flex-wrap gap-2">
                                 ${labelsHtml}
@@ -472,30 +476,32 @@ export function renderAbout(clanData) {
             <!-- Three Columns under it -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- War Info -->
-                <div class="bg-[#1a1a1a] p-5 rounded-xl border border-gray-800 flex flex-col h-full">
-                    <h3 class="medieval text-sm font-bold gold mb-4 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                        War Performance
-                    </h3>
-                    <div class="space-y-4 flex-1">
-                        <div class="p-3 bg-[#252525] rounded-lg">
-                            <p class="stat-label">War League</p>
-                            <p class="stat-value text-white">${clanData.warLeague?.name || 'Unranked'}</p>
-                        </div>
-                        <div class="grid grid-cols-3 gap-2">
-                            <div class="text-center p-2 bg-[#252525] rounded-lg">
-                                <p class="stat-label">Wins</p>
-                                <p class="text-green-500 font-bold">${clanData.warWins}</p>
+                <div class="bg-[#1a1a1a] p-5 rounded-xl border border-gray-800 flex flex-col justify-between">
+                    <div>
+                        <h3 class="medieval text-sm font-bold gold mb-4 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                            War Performance
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="p-3 bg-[#252525] rounded-lg">
+                                <p class="stat-label">War League</p>
+                                <p class="stat-value text-white">${clanData.warLeague?.name || 'Unranked'}</p>
                             </div>
-                            <div class="text-center p-2 bg-[#252525] rounded-lg">
-                                <p class="stat-label">Losses</p>
-                                <p class="text-red-500 font-bold">${clanData.warLosses}</p>
-                            </div>
-                            <div class="text-center p-2 bg-[#252525] rounded-lg">
-                                <p class="stat-label">Ties</p>
-                                <p class="text-gray-500 font-bold">${clanData.warTies}</p>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div class="text-center p-2 bg-[#252525] rounded-lg">
+                                    <p class="stat-label">Wins</p>
+                                    <p class="text-green-500 font-bold">${clanData.warWins}</p>
+                                </div>
+                                <div class="text-center p-2 bg-[#252525] rounded-lg">
+                                    <p class="stat-label">Losses</p>
+                                    <p class="text-red-500 font-bold">${clanData.warLosses}</p>
+                                </div>
+                                <div class="text-center p-2 bg-[#252525] rounded-lg">
+                                    <p class="stat-label">Ties</p>
+                                    <p class="text-gray-500 font-bold">${clanData.warTies}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -505,53 +511,53 @@ export function renderAbout(clanData) {
                 </div>
 
                 <!-- Clan Capital -->
-                <div class="bg-[#1a1a1a] p-5 rounded-xl border border-gray-800">
-                    <h3 class="medieval text-sm font-bold gold mb-4 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H5a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m0 10V4m-2 4h1m1 4h1m-3 10a1 1 0 011-1h2a1 1 0 011 1v3a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3z" />
-                        </svg>
-                        Clan Capital
-                    </h3>
-                    <div class="space-y-4">
-                        <div class="p-3 bg-[#252525] rounded-lg">
-                            <p class="stat-label">Capital League</p>
-                            <p class="stat-value text-white">${clanData.capitalLeague?.name || 'Unranked'}</p>
-                        </div>
-                        <div class="p-3 bg-[#252525] rounded-lg">
-                            <p class="stat-label">Capital Hall Level</p>
-                            <p class="stat-value text-white">${clanData.clanCapital?.capitalHallLevel || 'Unknown'}</p>
-                        </div>
-                        <div class="p-3 bg-[#252525] rounded-lg">
-                            <p class="stat-label">Districts Unlocked</p>
-                            <p class="stat-value text-white">${(clanData.clanCapital?.districts || []).length} Districts</p>
+                <div class="bg-[#1a1a1a] p-5 rounded-xl border border-gray-800 flex flex-col justify-between">
+                    <div>
+                        <h3 class="medieval text-sm font-bold gold mb-4 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H5a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m0 10V4m-2 4h1m1 4h1m-3 10a1 1 0 011-1h2a1 1 0 011 1v3a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3z" />
+                            </svg>
+                            Clan Capital
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="p-3 bg-[#252525] rounded-lg">
+                                <p class="stat-label">Capital League</p>
+                                <p class="stat-value text-white">${clanData.capitalLeague?.name || 'Unranked'}</p>
+                            </div>
+                            <div class="p-3 bg-[#252525] rounded-lg">
+                                <p class="stat-label">Capital Hall Level</p>
+                                <p class="stat-value text-white">${clanData.clanCapital?.capitalHallLevel || 'Unknown'}</p>
+                            </div>
+                            <div class="p-3 bg-[#252525] rounded-lg">
+                                <p class="stat-label">Districts Unlocked</p>
+                                <p class="stat-value text-white">${(clanData.clanCapital?.districts || []).length} Districts</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Requirements -->
-                <div class="bg-[#1a1a1a] p-5 rounded-xl border border-gray-800">
-                    <h3 class="medieval text-sm font-bold gold mb-4 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Join Requirements
-                    </h3>
-                    <div class="space-y-4">
-                        <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center">
-                            <p class="stat-label">Required Trophies</p>
-                            <p class="stat-value text-white">${clanData.requiredTrophies.toLocaleString()}</p>
-                        </div>
-                        <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center">
-                            <p class="stat-label">Min. Town Hall</p>
-                            <p class="stat-value text-white">TH${clanData.requiredTownhallLevel}</p>
-                        </div>
-                        <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center">
-                            <p class="stat-label">Builder Trophies</p>
-                            <p class="stat-value text-white">${clanData.requiredBuilderBaseTrophies.toLocaleString()}</p>
-                        </div>
-                        <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center">
-                            <p class="stat-label">Type</p>
-                            <p class="stat-value text-gold uppercase">${clanData.type}</p>
+                <div class="bg-[#1a1a1a] p-5 rounded-xl border border-gray-800 flex flex-col justify-between">
+                    <div>
+                        <h3 class="medieval text-sm font-bold gold mb-4 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Join Requirements
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center">
+                                <p class="stat-label">Required Trophies</p>
+                                <p class="stat-value text-white">${clanData.requiredTrophies.toLocaleString()}</p>
+                            </div>
+                            <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center">
+                                <p class="stat-label">Min. Town Hall</p>
+                                <p class="stat-value text-white">TH${clanData.requiredTownhallLevel}</p>
+                            </div>
+                            <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center">
+                                <p class="stat-label">Builder Trophies</p>
+                                <p class="stat-value text-white">${clanData.requiredBuilderBaseTrophies.toLocaleString()}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

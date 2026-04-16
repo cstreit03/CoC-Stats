@@ -32,6 +32,7 @@ async function init() {
 
         // Update Header with Clan Info
         updateHeader(clanData.name, clanData.badgeUrls?.medium || clanData.badgeUrls?.small);
+        renderAbout(clanData);
 
         // Load Member Index for calendar restrictions
         const memberIndex = await fetchMembersIndex();

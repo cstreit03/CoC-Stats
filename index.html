@@ -79,16 +79,16 @@
     </div>
 
     <div class="flex mb-6 rounded-t-lg overflow-hidden border border-[#333]">
-        <button id="tab-members" class="tab-btn active medieval uppercase tracking-widest">Members</button>
+        <button id="tab-about" class="tab-btn active medieval uppercase tracking-widest">About</button>
+        <button id="tab-members" class="tab-btn medieval uppercase tracking-widest">Members</button>
         <button id="tab-war" class="tab-btn medieval uppercase tracking-widest">War</button>
         <button id="tab-stats" class="tab-btn medieval uppercase tracking-widest">War Stats</button>
-        <button id="tab-about" class="tab-btn medieval uppercase tracking-widest">About</button>
     </div>
 
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         <!-- Members Section -->
-        <div id="section-members" class="lg:col-span-12">
+        <div id="section-members" class="lg:col-span-12 hidden-section">
             <div class="panel p-4 md:p-6">
                 <div class="flex flex-col gap-6 mb-6">
                     <div class="flex justify-between items-center">
@@ -216,7 +216,7 @@
         </div>
 
         <!-- About Section -->
-        <div id="section-about" class="lg:col-span-12 hidden-section">
+        <div id="section-about" class="lg:col-span-12">
             <div id="aboutContent"></div>
         </div>
     </div>
