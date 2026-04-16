@@ -2,13 +2,11 @@ export function switchView(view) {
     const sections = {
         members: document.getElementById('section-members'),
         war: document.getElementById('section-war'),
-        stats: document.getElementById('section-stats'),
         about: document.getElementById('section-about')
     };
     const tabs = {
         members: document.getElementById('tab-members'),
         war: document.getElementById('tab-war'),
-        stats: document.getElementById('tab-stats'),
         about: document.getElementById('tab-about')
     };
 
@@ -21,6 +19,32 @@ export function switchView(view) {
             tabs[key].classList.remove('active');
         }
     });
+}
+
+export function switchSubView(subview) {
+    const views = {
+        history: document.getElementById('warListView'),
+        stats: document.getElementById('warStatsView'),
+        infractions: document.getElementById('warInfractionsView')
+    };
+    const btns = {
+        history: document.getElementById('subtab-history'),
+        stats: document.getElementById('subtab-stats'),
+        infractions: document.getElementById('subtab-infractions')
+    };
+
+    Object.keys(views).forEach(key => {
+        if (key === subview) {
+            views[key].classList.remove('hidden');
+            btns[key].classList.add('active');
+        } else {
+            views[key].classList.add('hidden');
+            btns[key].classList.remove('active');
+        }
+    });
+    
+    // Ensure war detail view is hidden when switching sub-tabs
+    document.getElementById('warDetailView').classList.add('hidden');
 }
 
 export function updateHeader(name, badgeUrl) {

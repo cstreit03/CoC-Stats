@@ -6,10 +6,17 @@ import {
     fetchWarIndex, 
     fetchWarData 
 } from './api.js';
-import { renderMembers, renderWarHistory, renderWarDetail, renderAbout } from './render.js';
+import { 
+    renderMembers, 
+    renderWarHistory, 
+    renderWarDetail, 
+    renderAbout,
+    renderInfractions
+} from './render.js';
 import { renderCharts } from './charts.js';
 import { 
     switchView, 
+    switchSubView,
     updateMemberCount, 
     updatePageTitle,
     updateHeader
@@ -30,9 +37,11 @@ async function init() {
         allMembers = clanData.memberList || [];
         updateDisplay();
 
+        // Default: About tab
+        renderAbout(latestClanData);
+
         // Update Header with Clan Info
         updateHeader(clanData.name, clanData.badgeUrls?.medium || clanData.badgeUrls?.small);
-        renderAbout(clanData);
 
         // Load Member Index for calendar restrictions
         const memberIndex = await fetchMembersIndex();
@@ -43,7 +52,6 @@ async function init() {
             return `${dateStr.substring(0,4)}-${dateStr.substring(4,6)}-${dateStr.substring(6,8)}`;
         });
         
-        // Ensure today is in available dates if not already
         if (!availableMemberDates.includes(todayStr)) {
             availableMemberDates.push(todayStr);
         }
@@ -121,11 +129,10 @@ async function handleMemberDateChange(dateValue) {
 }
 
 function filterWarHistory() {
-    const startVal = document.getElementById('warStartDate').value.replace(/-/g, ''); // YYYYMMDD
-    const endVal = document.getElementById('warEndDate').value.replace(/-/g, '');   // YYYYMMDD
+    const startVal = document.getElementById('warStartDate').value.replace(/-/g, '');
+    const endVal = document.getElementById('warEndDate').value.replace(/-/g, '');
     
     let filtered = fullWarHistory.filter(w => {
-        // Always include active wars
         const now = new Date();
         const year = w.endTime.substring(0, 4);
         const month = w.endTime.substring(4, 6) - 1;
@@ -157,9 +164,7 @@ function updateDisplay() {
         } else if (sortKey === 'league') {
             const leagueA = a.leagueTier?.id || a.league?.id || 0;
             const leagueB = b.leagueTier?.id || b.league?.id || 0;
-            if (leagueA !== leagueB) {
-                return leagueB - leagueA;
-            }
+            if (leagueA !== leagueB) return leagueB - leagueA;
             return b.trophies - a.trophies;
         } else {
             return b[sortKey] - a[sortKey];
@@ -189,27 +194,30 @@ function showWarList() {
     document.getElementById('warDetailView').classList.add('hidden');
 }
 
-// Expose to window for onclick handlers
 window.loadWarDetail = loadWarDetail;
 
 document.addEventListener('DOMContentLoaded', () => {
     init();
 
-    document.getElementById('tab-members').addEventListener('click', () => switchView('members'));
-    document.getElementById('tab-war').addEventListener('click', () => switchView('war'));
-    document.getElementById('tab-stats').addEventListener('click', () => {
-        switchView('stats');
-        renderCharts(fullWarHistory);
-    });
     document.getElementById('tab-about').addEventListener('click', () => {
         switchView('about');
         renderAbout(latestClanData);
     });
+    document.getElementById('tab-members').addEventListener('click', () => switchView('members'));
+    document.getElementById('tab-war').addEventListener('click', () => switchView('war'));
+
+    // War Sub-tabs
+    document.getElementById('subtab-history').addEventListener('click', () => switchSubView('history'));
+    document.getElementById('subtab-stats').addEventListener('click', () => {
+        switchSubView('stats');
+        renderCharts(fullWarHistory);
+    });
+    document.getElementById('subtab-infractions').addEventListener('click', () => {
+        switchSubView('infractions');
+        renderInfractions(fullWarHistory);
+    });
     
     document.getElementById('sortBy').addEventListener('change', updateDisplay);
-    
-    // Member date is now handled by Flatpickr onChange
-    
     document.getElementById('backToWarList').addEventListener('click', showWarList);
 
     document.getElementById('clearMembersFilters').addEventListener('click', () => {
@@ -217,7 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.btn-role').forEach(b => b.classList.remove('active'));
         document.querySelector('[data-role="all"]').classList.add('active');
         document.getElementById('sortBy').value = 'league';
-        // Reset Flatpickr
         const todayStr = new Date().toISOString().split('T')[0];
         fp.setDate(todayStr);
         handleMemberDateChange(todayStr);
@@ -226,9 +233,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('clearWarFilters').addEventListener('click', () => {
         document.getElementById('warStartDate').value = '';
         document.getElementById('warEndDate').value = '';
-        // We need to re-initialize or reset the flatpickr instances if we kept references, 
-        // but simple value clear + trigger change works for basic usage.
-        // For strict validation, we refresh the list.
         filterWarHistory();
     });
 
