@@ -6,7 +6,7 @@ import {
     fetchWarIndex, 
     fetchWarData 
 } from './api.js';
-import { renderMembers, renderWarHistory, renderWarDetail } from './render.js';
+import { renderMembers, renderWarHistory, renderWarDetail, renderAbout } from './render.js';
 import { renderCharts } from './charts.js';
 import { 
     switchView, 
@@ -16,6 +16,7 @@ import {
 } from './ui.js';
 
 let allMembers = [];
+let latestClanData = null;
 let currentRoleFilter = 'all';
 let fullWarHistory = [];
 let availableMemberDates = [];
@@ -25,6 +26,7 @@ async function init() {
     try {
         // Load Current Data
         const clanData = await fetchClanData();
+        latestClanData = clanData;
         allMembers = clanData.memberList || [];
         updateDisplay();
 
@@ -198,12 +200,36 @@ document.addEventListener('DOMContentLoaded', () => {
         switchView('stats');
         renderCharts(fullWarHistory);
     });
+    document.getElementById('tab-about').addEventListener('click', () => {
+        switchView('about');
+        renderAbout(latestClanData);
+    });
     
     document.getElementById('sortBy').addEventListener('change', updateDisplay);
     
     // Member date is now handled by Flatpickr onChange
     
     document.getElementById('backToWarList').addEventListener('click', showWarList);
+
+    document.getElementById('clearMembersFilters').addEventListener('click', () => {
+        currentRoleFilter = 'all';
+        document.querySelectorAll('.btn-role').forEach(b => b.classList.remove('active'));
+        document.querySelector('[data-role="all"]').classList.add('active');
+        document.getElementById('sortBy').value = 'league';
+        // Reset Flatpickr
+        const todayStr = new Date().toISOString().split('T')[0];
+        fp.setDate(todayStr);
+        handleMemberDateChange(todayStr);
+    });
+
+    document.getElementById('clearWarFilters').addEventListener('click', () => {
+        document.getElementById('warStartDate').value = '';
+        document.getElementById('warEndDate').value = '';
+        // We need to re-initialize or reset the flatpickr instances if we kept references, 
+        // but simple value clear + trigger change works for basic usage.
+        // For strict validation, we refresh the list.
+        filterWarHistory();
+    });
 
     document.querySelectorAll('.btn-role').forEach(btn => {
         btn.addEventListener('click', () => {

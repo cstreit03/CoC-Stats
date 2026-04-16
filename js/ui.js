@@ -2,12 +2,14 @@ export function switchView(view) {
     const sections = {
         members: document.getElementById('section-members'),
         war: document.getElementById('section-war'),
-        stats: document.getElementById('section-stats')
+        stats: document.getElementById('section-stats'),
+        about: document.getElementById('section-about')
     };
     const tabs = {
         members: document.getElementById('tab-members'),
         war: document.getElementById('tab-war'),
-        stats: document.getElementById('tab-stats')
+        stats: document.getElementById('tab-stats'),
+        about: document.getElementById('tab-about')
     };
 
     Object.keys(sections).forEach(key => {

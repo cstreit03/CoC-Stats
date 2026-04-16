@@ -82,6 +82,7 @@
         <button id="tab-members" class="tab-btn active medieval uppercase tracking-widest">Members</button>
         <button id="tab-war" class="tab-btn medieval uppercase tracking-widest">War</button>
         <button id="tab-stats" class="tab-btn medieval uppercase tracking-widest">War Stats</button>
+        <button id="tab-about" class="tab-btn medieval uppercase tracking-widest">About</button>
     </div>
 
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -135,6 +136,7 @@
                                     <option value="role">Role</option>
                                 </select>
                             </div>
+                            <button id="clearMembersFilters" class="text-[9px] font-bold text-gray-500 hover:text-gold uppercase transition-colors">Clear Filters</button>
                         </div>
                     </div>
                 </div>
@@ -151,13 +153,14 @@
                         <div class="flex items-center gap-3">
                             <div class="flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v12a2 2 0 002 2z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                                 <span class="text-[10px] font-bold text-gray-500 uppercase">Date Range:</span>
                             </div>
                                 <input type="text" id="warStartDate" class="control-base w-32 font-mono" placeholder="Start Date">
                                 <span class="text-gray-600 text-[10px]">-</span>
                                 <input type="text" id="warEndDate" class="control-base w-32 font-mono" placeholder="End Date">
+                                <button id="clearWarFilters" class="text-[9px] font-bold text-gray-500 hover:gold uppercase transition-colors ml-2">Clear</button>
                         </div>
                     </div>
                     <div id="warHistoryList" class="space-y-4">
@@ -210,6 +213,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- About Section -->
+        <div id="section-about" class="lg:col-span-12 hidden-section">
+            <div id="aboutContent"></div>
         </div>
     </div>
 
