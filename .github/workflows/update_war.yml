@@ -1,11 +1,11 @@
-name: Update Clan Stats
+name: Update War Stats (15m)
 on:
   schedule:
-    - cron: '*/20 * * * *' # Runs every 20 minutes
-  workflow_dispatch: # Allows you to run it manually
+    - cron: '*/15 * * * *' # Runs every 15 minutes
+  workflow_dispatch:
 
 jobs:
-  build:
+  update-war:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -19,16 +19,18 @@ jobs:
       - name: Install Dependencies
         run: pip install requests python-dotenv
 
-      - name: Run Scraper
+      - name: Run War Scraper
         env:
           COC_API_TOKEN: ${{ secrets.COC_API_TOKEN }}
           CLAN_TAG: ${{ secrets.CLAN_TAG }}
-        run: python scraper.py
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/scrapers
+          python scrapers/war_scraper.py
 
       - name: Commit and Push
         run: |
           git config --global user.name "Stats Bot"
           git config --global user.email "bot@github.com"
           git add data/
-          git commit -m "Auto-update clan stats" || exit 0
+          git commit -m "Auto-update war stats" || exit 0
           git push

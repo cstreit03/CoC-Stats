@@ -1,0 +1,36 @@
+name: Update Clan Data (Daily)
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs once a day at midnight
+  workflow_dispatch:
+
+jobs:
+  update-clan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install requests python-dotenv
+
+      - name: Run Clan Scraper
+        env:
+          COC_API_TOKEN: ${{ secrets.COC_API_TOKEN }}
+          CLAN_TAG: ${{ secrets.CLAN_TAG }}
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/scrapers
+          python scrapers/clan_scraper.py
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "Stats Bot"
+          git config --global user.email "bot@github.com"
+          git add data/
+          git commit -m "Auto-update clan members" || exit 0
+          git push
