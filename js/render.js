@@ -528,7 +528,7 @@ export function renderWarDetail(warData, history = []) {
     container.className = "space-y-3";
     container.innerHTML = `
         <div class="flex items-center justify-between px-1 mb-2">
-            <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">${currentWarFilters.selectedClan === 'clan' ? 'Clan' : 'Opponent'} Member Roster</p>
+            <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">War Roster</p>
             <div class="flex gap-2 p-1 bg-[#1a1a1a] rounded-lg border border-gray-800">
                 <button id="showAttacks" class="text-[9px] font-bold px-3 py-1 rounded transition-all ${currentWarFilters.viewType === 'attacks' ? 'text-gold bg-gold/10' : 'text-gray-500 hover:text-gray-300'} uppercase">Attacks</button>
                 <button id="showDefenses" class="text-[9px] font-bold px-3 py-1 rounded transition-all ${currentWarFilters.viewType === 'defenses' ? 'text-gold bg-gold/10' : 'text-gray-500 hover:text-gray-300'} uppercase">Defenses</button>
