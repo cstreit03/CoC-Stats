@@ -1,11 +1,13 @@
 let starsChart = null;
 let topPerformersChart = null;
+let efficiencyChart = null;
 
 export function renderCharts(warHistory) {
     if (!warHistory || warHistory.length === 0) return;
 
     renderStarsTrend(warHistory);
     renderTopPerformers(warHistory);
+    renderEfficiencyChart(warHistory);
 }
 
 function parseCoCDate(dateStr) {
@@ -73,13 +75,11 @@ function renderStarsTrend(warHistory) {
 
 function renderTopPerformers(warHistory) {
     const ctx = document.getElementById('topPerformersChart').getContext('2d');
-    
-    // Filter to current month
     const now = new Date();
     const currentMonthStr = now.toISOString().substring(0, 4) + now.toISOString().substring(5, 7);
     const monthWars = warHistory.filter(w => w.startTime.substring(0, 6) === currentMonthStr);
     
-    const performanceMap = {}; // tag -> { name, Easy: 0, Normal: 0, Hard: 0, total: 0 }
+    const performanceMap = {};
 
     monthWars.forEach(war => {
         const opponentMap = {};
@@ -104,16 +104,12 @@ function renderTopPerformers(warHistory) {
 
     const labels = top20.map(p => p.name);
     const datasets = [
-        { label: 'Hard', data: top20.map(p => p.Hard), backgroundColor: '#f87171' }, // Red-400
-        { label: 'Normal', data: top20.map(p => p.Normal), backgroundColor: '#facc15' }, // Yellow-400
-        { label: 'Easy', data: top20.map(p => p.Easy), backgroundColor: '#4ade80' } // Green-400
+        { label: 'Hard', data: top20.map(p => p.Hard), backgroundColor: '#f87171' },
+        { label: 'Normal', data: top20.map(p => p.Normal), backgroundColor: '#facc15' },
+        { label: 'Easy', data: top20.map(p => p.Easy), backgroundColor: '#4ade80' }
     ];
 
     if (topPerformersChart) topPerformersChart.destroy();
-
-    // Update parent title via DOM since Chart.js options title is less flexible for our layout
-    const titleEl = ctx.canvas.parentNode.querySelector('h3');
-    if (titleEl) titleEl.innerText = "Top 10 Performers MTD";
 
     topPerformersChart = new Chart(ctx, {
         type: 'bar',
@@ -128,11 +124,66 @@ function renderTopPerformers(warHistory) {
             },
             plugins: {
                 legend: { position: 'bottom', labels: { color: '#777', font: { size: 9 }, boxWidth: 10, padding: 15 } }
-            },
-            layout: { padding: { bottom: 10 } }
+            }
         }
     });
 
-    const container = ctx.canvas.parentNode;
-    container.style.height = `${top20.length * 25 + 60}px`;
+    ctx.canvas.parentNode.style.height = `${top20.length * 28 + 60}px`;
+}
+
+function renderEfficiencyChart(warHistory) {
+    const ctx = document.getElementById('efficiencyChart').getContext('2d');
+    const now = new Date();
+    const currentMonthStr = now.toISOString().substring(0, 4) + now.toISOString().substring(5, 7);
+    const monthWars = warHistory.filter(w => w.startTime.substring(0, 6) === currentMonthStr);
+
+    const statsMap = {}; // tag -> { name, s3:0, s2:0, s1:0, s0:0, total: 0 }
+
+    monthWars.forEach(war => {
+        war.clan.members.forEach(m => {
+            if (!statsMap[m.tag]) statsMap[m.tag] = { name: m.name, s3: 0, s2: 0, s1: 0, s0: 0, total: 0 };
+            (m.attacks || []).forEach(atk => {
+                statsMap[m.tag].total++;
+                if (atk.stars === 3) statsMap[m.tag].s3++;
+                else if (atk.stars === 2) statsMap[m.tag].s2++;
+                else if (atk.stars === 1) statsMap[m.tag].s1++;
+                else statsMap[m.tag].s0++;
+            });
+        });
+    });
+
+    const top20 = Object.values(statsMap)
+        .filter(p => p.total > 0)
+        .sort((a, b) => (b.s3/b.total) - (a.s3/a.total) || b.total - a.total)
+        .slice(0, 20);
+
+    const labels = top20.map(p => p.name);
+    const datasets = [
+        { label: '3-Star %', data: top20.map(p => (p.s3/p.total*100).toFixed(1)), backgroundColor: '#4ade80' },
+        { label: '2-Star %', data: top20.map(p => (p.s2/p.total*100).toFixed(1)), backgroundColor: '#facc15' },
+        { label: '1-Star %', data: top20.map(p => (p.s1/p.total*100).toFixed(1)), backgroundColor: '#9ca3af' },
+        { label: 'Fail %', data: top20.map(p => (p.s0/p.total*100).toFixed(1)), backgroundColor: '#f87171' }
+    ];
+
+    if (efficiencyChart) efficiencyChart.destroy();
+
+    efficiencyChart = new Chart(ctx, {
+        type: 'bar',
+        data: { labels, datasets },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: { stacked: true, beginAtZero: true, max: 100, grid: { color: '#333' }, ticks: { color: '#777', font: { size: 9 }, callback: (v) => v + '%' } },
+                y: { stacked: true, grid: { display: false }, ticks: { color: '#ccc', font: { size: 10, weight: 'bold' } } }
+            },
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#777', font: { size: 9 }, boxWidth: 10, padding: 15 } },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.raw}%` } }
+            }
+        }
+    });
+
+    ctx.canvas.parentNode.style.height = `${top20.length * 28 + 60}px`;
 }
