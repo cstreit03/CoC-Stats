@@ -1,58 +1,75 @@
 /**
  * Analytics & Charts Module
- * Handles all Month-to-Date (MTD) statistical aggregations and Chart.js rendering.
+ * Handles all MTD statistical aggregations and Chart.js rendering.
  */
 import { parseCoCDate } from './constants.js';
 
-let starsChart = null;      // Star history line chart
-let efficiencyChart = null; // Stacked bar chart for conversion rates
+let starsChart = null;      
+let efficiencyChart = null; 
 
 /**
  * Main entry point for rendering the Stats tab.
- * Aggregates all war data month-to-date.
+ * @param {Array} warHistory - Full list of war data.
+ * @param {string} range - Filter type ('month', 'week', 'prev').
  */
-export function renderCharts(warHistory) {
+export function renderCharts(warHistory, range = 'month') {
     if (!warHistory || warHistory.length === 0) return;
 
-    renderStarsTrend(warHistory);
-    renderTopPerformers(warHistory);
-    renderEfficiencyChart(warHistory);
+    // Filter history based on range
+    const filteredHistory = filterHistoryByRange(warHistory, range);
+    
+    renderStarsTrend(filteredHistory);
+    renderTopPerformers(filteredHistory);
+    renderEfficiencyChart(filteredHistory);
 }
 
 /**
- * Line Chart: War Stars Achieved (%)
- * Filters for finished wars only to show a historical trend.
+ * Filter utility for the Stats time-range dropdown.
  */
+function filterHistoryByRange(warHistory, range) {
+    const now = new Date();
+    
+    if (range === 'month') {
+        const currentMonthStr = now.toISOString().substring(0, 4) + now.toISOString().substring(5, 7);
+        return warHistory.filter(w => w.startTime.substring(0, 6) === currentMonthStr);
+    }
+    
+    if (range === 'week') {
+        const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        return warHistory.filter(w => parseCoCDate(w.startTime) >= oneWeekAgo);
+    }
+    
+    if (range === 'prev') {
+        // Return only the most recently finished war
+        const finished = warHistory
+            .filter(w => parseCoCDate(w.endTime) < now)
+            .sort((a, b) => b.startTime.localeCompare(a.startTime));
+        return finished.slice(0, 1);
+    }
+    
+    return warHistory;
+}
+
 function renderStarsTrend(warHistory) {
     const canvas = document.getElementById('starsTrendChart');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const now = new Date();
 
-    // Line chart only shows finished wars
-    const finishedWars = warHistory.filter(w => {
-        const end = parseCoCDate(w.endTime);
-        return end && now > end;
-    });
-    
+    const finishedWars = warHistory.filter(w => parseCoCDate(w.endTime) < now);
     if (finishedWars.length === 0) {
         if (starsChart) starsChart.destroy();
         return;
     }
 
-    // Sort chronologically and take the last 10 entries
     const sortedHistory = finishedWars.sort((a, b) => a.startTime.localeCompare(b.startTime));
-    const last10 = sortedHistory.slice(-10);
-    
-    const labels = last10.map(w => w.startTime.substring(4, 6) + '/' + w.startTime.substring(6, 8));
-    const data = last10.map(w => {
+    const labels = sortedHistory.map(w => w.startTime.substring(4, 6) + '/' + w.startTime.substring(6, 8));
+    const data = sortedHistory.map(w => {
         const totalPossibleStars = (w.teamSize || 0) * 3;
-        if (totalPossibleStars === 0) return 0;
-        return ((w.clan.stars / totalPossibleStars) * 100).toFixed(1);
+        return totalPossibleStars === 0 ? 0 : ((w.clan.stars / totalPossibleStars) * 100).toFixed(1);
     });
 
     if (starsChart) starsChart.destroy();
-
     starsChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -78,26 +95,12 @@ function renderStarsTrend(warHistory) {
     });
 }
 
-/**
- * Table: Stars Earned Breakdown
- * Aggregates the raw count of 3, 2, 1, and 0 star hits for every player MTD.
- */
 function renderTopPerformers(warHistory) {
     const container = document.getElementById('topPerformersContainer');
     if (!container) return;
-    const now = new Date();
-    // Get year-month string like "202604"
-    const currentMonthStr = now.toISOString().substring(0, 4) + now.toISOString().substring(5, 7);
-    
-    // Aggregate data from all wars that started this month
-    const monthWars = warHistory.filter(w => {
-        if (!w.startTime) return false;
-        return w.startTime.substring(0, 6) === currentMonthStr;
-    });
     
     const statsMap = {}; 
-
-    monthWars.forEach(war => {
+    warHistory.forEach(war => {
         if (!war.clan || !war.clan.members) return;
         war.clan.members.forEach(m => {
             if (!statsMap[m.tag]) statsMap[m.tag] = { name: m.name, s3: 0, s2: 0, s1: 0, s0: 0, totalStars: 0 };
@@ -111,68 +114,30 @@ function renderTopPerformers(warHistory) {
         });
     });
 
-    // Sort by stars descending and take Top 20
     const topPerformers = Object.values(statsMap)
         .filter(p => (p.s3 + p.s2 + p.s1 + p.s0) > 0)
         .sort((a, b) => b.totalStars - a.totalStars || b.s3 - a.s3)
         .slice(0, 20);
 
     if (topPerformers.length === 0) {
-        container.innerHTML = `<p class="text-center text-gray-600 py-10 text-[10px]">No attack data for this month yet.</p>`;
+        container.innerHTML = `<p class="text-center text-gray-600 py-10 text-[10px]">No attack data for this range.</p>`;
         return;
     }
 
-    let html = `
-        <table class="w-full text-[10px] text-left border-collapse">
-            <thead>
-                <tr class="border-b border-gray-800 text-gray-500 uppercase font-black">
-                    <th class="py-2 pl-1">Player</th>
-                    <th class="py-2 text-center text-green-500">3★</th>
-                    <th class="py-2 text-center text-yellow-500">2★</th>
-                    <th class="py-2 text-center text-red-500">1★</th>
-                    <th class="py-2 text-center text-gray-500">0★</th>
-                    <th class="py-2 text-right pr-1 gold">Total</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-800/30">
-    `;
-
+    let html = `<table class="w-full text-[10px] text-left border-collapse"><thead><tr class="border-b border-gray-800 text-gray-500 uppercase font-black"><th class="py-2 pl-1">Player</th><th class="py-2 text-center text-green-500">3★</th><th class="py-2 text-center text-yellow-500">2★</th><th class="py-2 text-center text-red-500">1★</th><th class="py-2 text-center text-gray-500">0★</th><th class="py-2 text-right pr-1 gold">Total</th></tr></thead><tbody class="divide-y divide-gray-800/30">`;
     topPerformers.forEach(p => {
-        html += `
-            <tr class="hover:bg-white/5 transition-colors">
-                <td class="py-2 pl-1 font-bold text-gray-300">${p.name}</td>
-                <td class="py-2 text-center font-mono">${p.s3}</td>
-                <td class="py-2 text-center font-mono">${p.s2}</td>
-                <td class="py-2 text-center font-mono">${p.s1}</td>
-                <td class="py-2 text-center font-mono">${p.s0}</td>
-                <td class="py-2 text-right pr-1 font-bold gold">${p.totalStars}</td>
-            </tr>
-        `;
+        html += `<tr class="hover:bg-white/5 transition-colors"><td class="py-2 pl-1 font-bold text-gray-300">${p.name}</td><td class="py-2 text-center font-mono">${p.s3}</td><td class="py-2 text-center font-mono">${p.s2}</td><td class="py-2 text-center font-mono">${p.s1}</td><td class="py-2 text-center font-mono">${p.s0}</td><td class="py-2 text-right pr-1 font-bold gold">${p.totalStars}</td></tr>`;
     });
-
-    html += `</tbody></table>`;
-    container.innerHTML = html;
+    container.innerHTML = html + `</tbody></table>`;
 }
 
-/**
- * Chart: Stars Conversion Rates
- * Stacked horizontal bars showing the percentage distribution of attack outcomes.
- */
 function renderEfficiencyChart(warHistory) {
     const canvas = document.getElementById('efficiencyChart');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    const now = new Date();
-    const currentMonthStr = now.toISOString().substring(0, 4) + now.toISOString().substring(5, 7);
-    
-    const monthWars = warHistory.filter(w => {
-        if (!w.startTime) return false;
-        return w.startTime.substring(0, 6) === currentMonthStr;
-    });
-
     const statsMap = {}; 
 
-    monthWars.forEach(war => {
+    warHistory.forEach(war => {
         if (!war.clan || !war.clan.members) return;
         war.clan.members.forEach(m => {
             if (!statsMap[m.tag]) statsMap[m.tag] = { name: m.name, s3: 0, s2: 0, s1: 0, s0: 0, total: 0 };
@@ -186,34 +151,23 @@ function renderEfficiencyChart(warHistory) {
         });
     });
 
-    // Rank by 3-star percentage descending
-    const top20 = Object.values(statsMap)
-        .filter(p => p.total > 0)
-        .sort((a, b) => (b.s3/b.total) - (a.s3/a.total) || b.total - a.total)
-        .slice(0, 20);
-
-    if (top20.length === 0) {
-        if (efficiencyChart) efficiencyChart.destroy();
-        return;
-    }
+    const top20 = Object.values(statsMap).filter(p => p.total > 0).sort((a, b) => (b.s3/b.total) - (a.s3/a.total) || b.total - a.total).slice(0, 20);
+    if (top20.length === 0) { if (efficiencyChart) efficiencyChart.destroy(); return; }
 
     const labels = top20.map(p => p.name);
     const datasets = [
-        { label: '3-Star %', data: top20.map(p => (p.s3/p.total*100).toFixed(1)), backgroundColor: '#4ade80' }, // Green
-        { label: '2-Star %', data: top20.map(p => (p.s2/p.total*100).toFixed(1)), backgroundColor: '#facc15' }, // Yellow
-        { label: '1-Star %', data: top20.map(p => (p.s1/p.total*100).toFixed(1)), backgroundColor: '#ef4444' }, // Red
-        { label: 'Fail %', data: top20.map(p => (p.s0/p.total*100).toFixed(1)), backgroundColor: '#9ca3af' }  // Grey
+        { label: '3-Star %', data: top20.map(p => (p.s3/p.total*100).toFixed(1)), backgroundColor: '#4ade80' },
+        { label: '2-Star %', data: top20.map(p => (p.s2/p.total*100).toFixed(1)), backgroundColor: '#facc15' },
+        { label: '1-Star %', data: top20.map(p => (p.s1/p.total*100).toFixed(1)), backgroundColor: '#ef4444' },
+        { label: 'Fail %', data: top20.map(p => (p.s0/p.total*100).toFixed(1)), backgroundColor: '#9ca3af' }
     ];
 
     if (efficiencyChart) efficiencyChart.destroy();
-
     efficiencyChart = new Chart(ctx, {
         type: 'bar',
         data: { labels, datasets },
         options: {
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
+            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
             scales: {
                 x: { stacked: true, beginAtZero: true, max: 100, grid: { color: '#333' }, ticks: { color: '#777', font: { size: 9 }, callback: (v) => v + '%' } },
                 y: { stacked: true, grid: { display: false }, ticks: { color: '#ccc', font: { size: 10, weight: 'bold' } } }
@@ -224,10 +178,6 @@ function renderEfficiencyChart(warHistory) {
             }
         }
     });
-
-    // Dynamically adjust container height to prevent squishing
     const container = document.getElementById('efficiencyContainer');
-    if (container) {
-        container.style.height = `${top20.length * 28 + 60}px`;
-    }
+    if (container) container.style.height = `${top20.length * 28 + 60}px`;
 }

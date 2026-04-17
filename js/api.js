@@ -4,63 +4,52 @@
  */
 
 /**
+ * Generic fetcher with cache-busting
+ */
+export async function fetchData(path) {
+    const res = await fetch(`${path}?t=${Date.now()}`);
+    if (!res.ok) throw new Error(`Failed to fetch ${path}`);
+    return await res.json();
+}
+
+/**
  * Fetches the latest available clan data by scanning the index.
- * It will try each file in the index (newest first) until one loads successfully.
  */
 export async function fetchClanData() {
-    // We add a timestamp query param to prevent browser caching of the index file
-    const indexRes = await fetch(`data/clan_stats_index.json?t=${Date.now()}`);
-    if (!indexRes.ok) throw new Error("Failed to fetch clan index");
-    const index = await indexRes.json();
+    const index = await fetchData('data/clan_stats_index.json');
     if (!index || index.length === 0) throw new Error("Clan index is empty");
     
-    // Iterate through the index and try to load the latest file
     for (const filename of index) {
         try {
-            const res = await fetch(`data/clan_stats/${filename}?t=${Date.now()}`);
-            if (res.ok) {
-                return await res.json();
-            }
+            return await fetchData(`data/clan_stats/${filename}`);
         } catch (e) {
             console.warn(`Could not load indexed file: ${filename}, trying next...`);
         }
     }
-    
     throw new Error("No available clan data files found in index.");
 }
 
-/**
- * Fetches the raw list of daily member snapshots.
- */
 export async function fetchMembersIndex() {
-    const res = await fetch(`data/clan_stats_index.json?t=${Date.now()}`);
-    if (!res.ok) return [];
-    return await res.json();
+    return await fetchData('data/clan_stats_index.json');
 }
 
-/**
- * Fetches a specific historical snapshot.
- */
 export async function fetchHistoricalMembers(filename) {
-    const res = await fetch(`data/clan_stats/${filename}?t=${Date.now()}`);
-    if (!res.ok) throw new Error("Failed to fetch historical member data");
-    return await res.json();
+    return await fetchData(`data/clan_stats/${filename}`);
 }
 
-/**
- * Fetches the list of war history files.
- */
 export async function fetchWarIndex() {
-    const res = await fetch(`data/war_stats_index.json?t=${Date.now()}`);
-    if (!res.ok) return [];
-    return await res.json();
+    return await fetchData('data/war_stats_index.json');
+}
+
+export async function fetchWarData(filename) {
+    return await fetchData(`data/war_stats/${filename}`);
 }
 
 /**
- * Fetches data for a specific war.
+ * Global Sync Trigger
+ * Notifies the scrapers to update data (via Github Actions typically, but here simulated)
  */
-export async function fetchWarData(filename) {
-    const res = await fetch(`data/war_stats/${filename}?t=${Date.now()}`);
-    if (!res.ok) throw new Error("Failed to fetch war data");
-    return await res.json();
+export async function syncData() {
+    // In this environment, we just wait a bit and re-fetch the index
+    return new Promise(resolve => setTimeout(resolve, 1000));
 }

@@ -17,341 +17,278 @@ import {
     renderAbout
 } from './render.js';
 import { renderCharts } from './charts.js';
-import { 
-    switchView, 
-    switchSubView,
-    updateMemberCount, 
-    updateHeader
-} from './ui.js';
 
 // Global state variables
-let allMembers = [];           // Current list of members being viewed
-let latestClanData = null;     // Latest clan profile (About tab)
-let currentRoleFilter = 'all'; // Active role filter for Roster
-let fullWarHistory = [];       // Loaded war records
-let availableMemberDates = []; // List of dated snapshots for Roster
-let fp = null;                 // Flatpickr instance for Roster date
+let allMembers = [];           
+let latestClanData = null;     
+let currentRoleFilter = 'all'; 
+let fullWarHistory = [];       
+let availableMemberDates = []; 
+let fp = null;                 
+let activeWarFilename = null;  
+let warHistoryPickers = []; 
 
 /**
- * Initializes the application by fetching all necessary data.
+ * UI View Controllers
  */
+function switchView(viewId, updateHash = true) {
+    // Select all elements that start with 'section-' and hide them
+    document.querySelectorAll('[id^="section-"]').forEach(s => s.classList.add('hidden-section'));
+    
+    // Show target section
+    const target = document.getElementById(`section-${viewId}`);
+    if (target) target.classList.remove('hidden-section');
+    
+    // Update tabs
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const activeTab = document.getElementById(`tab-${viewId}`);
+    if (activeTab) activeTab.classList.add('active');
+    
+    if (updateHash) window.location.hash = viewId;
+}
+
+function switchSubView(subviewId, updateHash = true) {
+    const isHistory = subviewId === 'history';
+    document.getElementById('warListView')?.classList.toggle('hidden', !isHistory);
+    document.getElementById('warStatsView')?.classList.toggle('hidden', isHistory);
+    document.getElementById('warDetailView')?.classList.add('hidden');
+    
+    document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`subtab-${subviewId}`)?.classList.add('active');
+    
+    if (updateHash) window.location.hash = `war/${subviewId}`;
+}
+
+function updateMemberCount(count) {
+    const el = document.getElementById('memberCount');
+    if (el) el.innerText = `${count} / 50`;
+}
+
+function updateHeader(name, badgeUrl) {
+    const title = document.getElementById('pageTitle');
+    const badge = document.getElementById('clanBadge');
+    if (title) title.innerText = name;
+    if (badge && badgeUrl) {
+        badge.src = badgeUrl;
+        badge.classList.remove('hidden');
+    }
+}
+
+/**
+ * Syncs all data in the background without a full page reload.
+ */
+window.syncData = async () => {
+    const btns = document.querySelectorAll('.sync-btn');
+    btns.forEach(b => b.classList.add('syncing'));
+    try {
+        await init();
+        if (activeWarFilename) {
+            const warData = fullWarHistory.find(w => w.filename === activeWarFilename);
+            if (warData) renderWarDetail(warData, fullWarHistory);
+        }
+    } catch (e) {
+        console.error("Sync failed", e);
+    } finally {
+        setTimeout(() => btns.forEach(b => b.classList.remove('syncing')), 500);
+    }
+};
+
+function preRoute() {
+    const hash = window.location.hash.replace('#', '');
+    const tabAbout = document.getElementById('tab-about');
+    const tabMembers = document.getElementById('tab-members');
+    const tabWar = document.getElementById('tab-war');
+    if (!tabAbout || !tabMembers || !tabWar) return;
+    
+    [tabAbout, tabMembers, tabWar].forEach(t => t.classList.remove('active'));
+    if (!hash || hash === 'about') tabAbout.classList.add('active');
+    else if (hash === 'members') tabMembers.classList.add('active');
+    else if (hash.startsWith('war')) tabWar.classList.add('active');
+}
+
 async function init() {
-    // 1. Try to load latest Clan/Member Profile
+    // 1. Load Clan/Member Profile
     try {
         const clanData = await fetchClanData();
         latestClanData = clanData;
-        allMembers = clanData.memberList || [];
+        allMembers = clanData.memberList || clanData.members || [];
         updateDisplay();
         renderAbout(latestClanData);
         bindAboutPageEvents();
         updateHeader(clanData.name, clanData.badgeUrls?.medium || clanData.badgeUrls?.small);
-    } catch (e) {
-        console.error("Critical: Could not load latest clan data.", e);
-    }
+    } catch (e) { console.error("Could not load latest clan data.", e); }
 
-    // 2. Setup Member Snapshot Filter (Roster Tab)
+    // 2. Setup Member Snapshot Filter
     try {
         const memberIndex = await fetchMembersIndex();
         const todayStr = new Date().toISOString().split('T')[0];
-        
-        // Convert filenames to YYYY-MM-DD for Flatpickr
         availableMemberDates = memberIndex.map(f => {
             const dateStr = f.replace('members_', '').replace('.json', '');
             return `${dateStr.substring(0,4)}-${dateStr.substring(4,6)}-${dateStr.substring(6,8)}`;
         });
-        
-        // Default to the newest available indexed snapshot
         let bestDefaultDate = availableMemberDates[0] || todayStr;
-        
-        // Add "today" to available dates if missing (logic in api.js handles the fallback)
-        if (!availableMemberDates.includes(todayStr)) {
-            availableMemberDates.push(todayStr);
-        }
-
+        if (!availableMemberDates.includes(todayStr)) availableMemberDates.push(todayStr);
+        if (fp) fp.destroy();
         fp = flatpickr("#memberDate", {
-            defaultDate: bestDefaultDate,
-            enable: availableMemberDates,
-            dateFormat: "Y-m-d",
-            onChange: function(selectedDates, dateStr) {
-                handleMemberDateChange(dateStr);
-            }
+            defaultDate: bestDefaultDate, enable: availableMemberDates, dateFormat: "Y-m-d",
+            onChange: function(selectedDates, dateStr) { handleMemberDateChange(dateStr); }
         });
-
-        // Initialize title correctly
         const titleEl = document.getElementById('memberTitle');
-        if (titleEl) {
-            const isToday = bestDefaultDate === todayStr;
-            titleEl.innerText = isToday ? "Current Members" : `Members: ${bestDefaultDate}`;
-        }
-    } catch (e) {
-        console.warn("Could not setup member date filters.", e);
-    }
+        if (titleEl) titleEl.innerText = bestDefaultDate === todayStr ? "Current Members" : `Members: ${bestDefaultDate}`;
+    } catch (e) { console.warn("Could not setup member date filters.", e); }
 
-    // 3. Setup War Date Range Filters (History Tab)
-    try {
-        const startPicker = flatpickr("#warStartDate", {
-            dateFormat: "Y-m-d",
-            onChange: function(selectedDates, dateStr) {
-                if (endPicker) endPicker.set('minDate', dateStr);
-                filterWarHistory();
-            }
-        });
-        const endPicker = flatpickr("#warEndDate", {
-            dateFormat: "Y-m-d",
-            onChange: function(selectedDates, dateStr) {
-                if (startPicker) startPicker.set('maxDate', dateStr);
-                filterWarHistory();
-            }
-        });
-    } catch (e) {
-        console.warn("Could not setup war date filters.", e);
-    }
-
-    // 4. Load War History and aggregate stats
+    // 3. Load War History
     try {
         const warIndex = await fetchWarIndex();
         const warDataPromises = warIndex.reverse().map(async (filename) => {
             try {
                 const data = await fetchWarData(filename);
                 return { ...data, filename };
-            } catch (e) {
-                console.error(`Error loading war ${filename}`, e);
-                return null;
-            }
+            } catch (e) { return null; }
         });
-        
         fullWarHistory = (await Promise.all(warDataPromises)).filter(w => w !== null);
         renderWarHistory(fullWarHistory);
-    } catch (e) {
-        console.error("Could not load war history.", e);
-    }
+        setupWarHistoryPickers();
+        handleInitialRoute();
+    } catch (e) { console.error("Could not load war history.", e); handleInitialRoute(); }
 }
 
-/**
- * Binds interactive events for the About tab.
- */
+function setupWarHistoryPickers() {
+    warHistoryPickers.forEach(p => p.destroy());
+    const startEl = document.getElementById('warStartDate');
+    const endEl = document.getElementById('warEndDate');
+    if (!startEl || !endEl) return;
+    
+    const sP = flatpickr(startEl, { 
+        dateFormat: "Y-m-d", 
+        onChange: (selectedDates) => {
+            if (selectedDates.length > 0) eP.set('minDate', selectedDates[0]);
+            filterWarHistory(); 
+        } 
+    });
+    const eP = flatpickr(endEl, { 
+        dateFormat: "Y-m-d", 
+        onChange: (selectedDates) => {
+            if (selectedDates.length > 0) sP.set('maxDate', selectedDates[0]);
+            filterWarHistory(); 
+        } 
+    });
+    warHistoryPickers = [sP, eP];
+}
+
+function handleInitialRoute() {
+    const hash = window.location.hash.replace('#', '');
+    if (!hash || hash === 'about') { switchView('about', false); return; }
+    if (hash === 'members') { switchView(hash, false); }
+    else if (hash.startsWith('war/')) {
+        const parts = hash.split('/');
+        const subview = parts[1];
+        let detailFile = parts[2];
+        if (detailFile && !detailFile.endsWith('.json')) detailFile += '.json';
+        switchView('war', false);
+        if (detailFile) loadWarDetail(detailFile, false); 
+        else {
+            switchSubView(subview, false);
+            if (subview === 'stats') renderCharts(fullWarHistory, document.getElementById('statsTimeRange')?.value || 'month');
+        }
+    } else if (hash === 'war') { switchView('war', false); switchSubView('history', false); }
+}
+
 function bindAboutPageEvents() {
     const btn = document.getElementById('viewWarHistoryBtn');
-    if (btn) {
-        btn.onclick = () => {
-            switchView('war');
-            switchSubView('history');
-        };
-    }
+    if (btn) btn.onclick = () => { switchView('war'); switchSubView('history'); };
 }
 
-/**
- * Handles the logic when a new snapshot date is selected in the Roster.
- */
 async function handleMemberDateChange(dateValue, shouldFetch = true) {
     if (!dateValue) return;
-    
-    const todayStr = new Date().toISOString().split('T')[0];
-    const isToday = dateValue === todayStr;
-    const titleEl = document.getElementById('memberTitle');
-    
-    if (titleEl) {
-        titleEl.innerText = isToday ? "Current Members" : `Members: ${dateValue}`;
-    }
-
-    if (!shouldFetch) return;
-
     const snapshotName = `members_${dateValue.replace(/-/g, '')}.json`;
     try {
-        let data;
-        if (isToday) {
-            data = await fetchClanData();
-        } else {
-            data = await fetchHistoricalMembers(snapshotName);
-        }
-        allMembers = data.memberList || [];
+        let data = await fetchHistoricalMembers(snapshotName);
+        allMembers = data.memberList || data.members || [];
         updateDisplay();
     } catch (e) {
-        console.warn(`Snapshot ${snapshotName} not found, falling back to latest available.`);
-        try {
-            const fallbackData = await fetchClanData();
-            allMembers = fallbackData.memberList || [];
-            updateDisplay();
-        } catch (err) {
-            console.error("Failed to load even fallback data.");
-            allMembers = [];
-            updateDisplay();
-        }
+        const fb = await fetchClanData(); allMembers = fb.memberList || fb.members || []; updateDisplay();
     }
 }
 
-/**
- * Filters the war list based on selected start/end dates.
- */
 function filterWarHistory() {
     const startVal = document.getElementById('warStartDate')?.value.replace(/-/g, '') || '';
     const endVal = document.getElementById('warEndDate')?.value.replace(/-/g, '') || '';
-    
     let filtered = fullWarHistory.filter(w => {
-        const now = new Date();
-        const warEnd = parseCoCDate(w.endTime);
-        
-        // Pinned wars (active/prep) are always visible
-        if (now < warEnd) return true;
-        
         const warDate = w.startTime.substring(0, 8);
         if (startVal && warDate < startVal) return false;
         if (endVal && warDate > endVal) return false;
         return true;
     });
-    
     renderWarHistory(filtered);
 }
 
-/**
- * Triggers a sort and re-render of the member roster.
- */
 function updateDisplay() {
-    const sortByEl = document.getElementById('sortBy');
-    if (!sortByEl) return;
-    const sortKey = sortByEl.value;
-    
+    const sortKey = document.getElementById('sortBy')?.value || 'league';
     let filtered = allMembers.filter(m => currentRoleFilter === 'all' || m.role === currentRoleFilter);
     updateMemberCount(filtered.length);
-    
     filtered.sort((a, b) => {
-        if (sortKey === 'role') {
-            return (roleWeight[b.role] || 0) - (roleWeight[a.role] || 0);
-        } else if (sortKey === 'league') {
-            const leagueA = a.leagueTier?.id || a.league?.id || 0;
-            const leagueB = b.leagueTier?.id || b.league?.id || 0;
-            if (leagueA !== leagueB) return leagueB - leagueA;
-            return (b.trophies || 0) - (a.trophies || 0);
-        } else {
-            return (b[sortKey] || 0) - (a[sortKey] || 0);
+        if (sortKey === 'role') return (roleWeight[b.role] || 0) - (roleWeight[a.role] || 0);
+        if (sortKey === 'league') {
+            const lA = a.leagueTier?.id || a.league?.id || 0; const lB = b.leagueTier?.id || b.league?.id || 0;
+            return lA !== lB ? lB - lA : (b.trophies || 0) - (a.trophies || 0);
         }
+        return (b[sortKey] || 0) - (a[sortKey] || 0);
     });
     renderMembers(filtered);
 }
 
-/**
- * Updates the active role filter.
- */
 function setRoleFilter(role, btn) {
     currentRoleFilter = role;
     document.querySelectorAll('.btn-role').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    updateDisplay();
+    btn.classList.add('active'); updateDisplay();
 }
 
-/**
- * Transitions the UI to show specific war details.
- */
-async function loadWarDetail(filename) {
+async function loadWarDetail(filename, updateHash = true) {
     const warData = fullWarHistory.find(w => w.filename === filename);
     if (warData) {
-        const listView = document.getElementById('warListView');
-        const detailView = document.getElementById('warDetailView');
-        if (listView) listView.classList.add('hidden');
-        if (detailView) {
-            detailView.classList.remove('hidden');
-            renderWarDetail(warData, fullWarHistory);
-        }
+        activeWarFilename = filename;
+        document.getElementById('warListView')?.classList.add('hidden');
+        document.getElementById('warStatsView')?.classList.add('hidden');
+        document.getElementById('warDetailView')?.classList.remove('hidden');
+        renderWarDetail(warData, fullWarHistory);
+        if (updateHash) window.location.hash = `war/details/${filename.replace('.json', '')}`;
     }
 }
 
-/**
- * Transitions back to the war history list.
- */
 function showWarList() {
-    const listView = document.getElementById('warListView');
-    const detailView = document.getElementById('warDetailView');
-    if (listView) listView.classList.remove('hidden');
-    if (detailView) detailView.classList.add('hidden');
+    activeWarFilename = null;
+    document.getElementById('warListView')?.classList.remove('hidden');
+    document.getElementById('warDetailView')?.classList.add('hidden');
+    window.location.hash = `war/history`;
 }
 
-// Expose navigation functions to global scope for HTML onclick handlers
 window.loadWarDetail = loadWarDetail;
 
-/**
- * DOM Ready Listener
- */
 document.addEventListener('DOMContentLoaded', () => {
-    init();
-
-    // Bind Primary Navigation
-    const tabAbout = document.getElementById('tab-about');
-    if (tabAbout) {
-        tabAbout.addEventListener('click', () => {
-            switchView('about');
-            if (latestClanData) renderAbout(latestClanData);
-            bindAboutPageEvents();
-        });
-    }
-
-    const tabMembers = document.getElementById('tab-members');
-    if (tabMembers) tabMembers.addEventListener('click', () => switchView('members'));
-
-    const tabWar = document.getElementById('tab-war');
-    if (tabWar) {
-        tabWar.addEventListener('click', () => {
-            switchView('war');
-            switchSubView('history');
-        });
-    }
-
-    // Bind War Sub-navigation
-    const subtabHistory = document.getElementById('subtab-history');
-    if (subtabHistory) subtabHistory.addEventListener('click', () => switchSubView('history'));
-
-    const subtabStats = document.getElementById('subtab-stats');
-    if (subtabStats) {
-        subtabStats.addEventListener('click', () => {
-            switchSubView('stats');
-            renderCharts(fullWarHistory);
-        });
-    }
-    
-    // Bind Filter Controls
-    const sortBy = document.getElementById('sortBy');
-    if (sortBy) sortBy.addEventListener('change', updateDisplay);
-
-    const backToWarList = document.getElementById('backToWarList');
-    if (backToWarList) backToWarList.addEventListener('click', showWarList);
-
-    // Bind Clear Buttons
-    const clearMembers = document.getElementById('clearMembersFilters');
-    if (clearMembers) {
-        clearMembers.addEventListener('click', () => {
-            currentRoleFilter = 'all';
-            document.querySelectorAll('.btn-role').forEach(b => b.classList.remove('active'));
-            const allBtn = document.querySelector('[data-role="all"]');
-            if (allBtn) allBtn.classList.add('active');
-            const sortBy = document.getElementById('sortBy');
-            if (sortBy) sortBy.value = 'league';
-            
-            const bestDate = availableMemberDates[0] || new Date().toISOString().split('T')[0];
-            if (fp) fp.setDate(bestDate);
-            handleMemberDateChange(bestDate);
-        });
-    }
-
-    const clearWar = document.getElementById('clearWarFilters');
-    if (clearWar) {
-        clearWar.addEventListener('click', () => {
-            const start = document.getElementById('warStartDate');
-            const end = document.getElementById('warEndDate');
-            if (start) start.value = '';
-            if (end) end.value = '';
-            filterWarHistory();
-        });
-    }
-
-    // Bind Role Filter Buttons
-    document.querySelectorAll('.btn-role').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const role = btn.getAttribute('data-role');
-            setRoleFilter(role, btn);
-        });
+    preRoute(); init();
+    document.getElementById('tab-about')?.addEventListener('click', () => { switchView('about'); if (latestClanData) renderAbout(latestClanData); bindAboutPageEvents(); });
+    document.getElementById('tab-members')?.addEventListener('click', () => switchView('members'));
+    document.getElementById('tab-war')?.addEventListener('click', () => { switchView('war'); switchSubView('history'); });
+    document.getElementById('subtab-history')?.addEventListener('click', () => switchSubView('history'));
+    document.getElementById('subtab-stats')?.addEventListener('click', () => { switchSubView('stats'); renderCharts(fullWarHistory, document.getElementById('statsTimeRange')?.value || 'month'); });
+    document.getElementById('statsTimeRange')?.addEventListener('change', (e) => { renderCharts(fullWarHistory, e.target.value); });
+    document.getElementById('sortBy')?.addEventListener('change', updateDisplay);
+    document.getElementById('backToWarList')?.addEventListener('click', showWarList);
+    document.getElementById('clearMembersFilters')?.addEventListener('click', () => {
+        currentRoleFilter = 'all'; document.querySelectorAll('.btn-role').forEach(b => b.classList.remove('active'));
+        document.querySelector('[data-role="all"]')?.classList.add('active');
+        document.getElementById('sortBy').value = 'league';
+        updateDisplay();
     });
-
-    // Global listener to close tactical tooltips when clicking outside
-    document.addEventListener('click', () => {
-        document.querySelectorAll('.info-tooltip').forEach(t => t.classList.remove('active'));
+    document.getElementById('clearWarFilters')?.addEventListener('click', () => {
+        const start = document.getElementById('warStartDate');
+        const end = document.getElementById('warEndDate');
+        if (start) start.value = '';
+        if (end) end.value = '';
+        warHistoryPickers.forEach(p => { p.clear(); p.set('minDate', null); p.set('maxDate', null); });
+        filterWarHistory();
     });
+    document.querySelectorAll('.btn-role').forEach(btn => { btn.addEventListener('click', () => setRoleFilter(btn.getAttribute('data-role'), btn)); });
+    document.addEventListener('click', () => { document.querySelectorAll('.info-tooltip').forEach(t => t.classList.remove('active')); });
 });

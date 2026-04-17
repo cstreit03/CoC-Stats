@@ -28,14 +28,14 @@
 
     <!-- Main Navigation Tabs -->
     <div class="flex mb-6 rounded-t-lg overflow-hidden border border-[#333]">
-        <button id="tab-about" class="tab-btn active medieval uppercase tracking-widest">About</button>
+        <button id="tab-about" class="tab-btn medieval uppercase tracking-widest">About</button>
         <button id="tab-members" class="tab-btn medieval uppercase tracking-widest">Members</button>
         <button id="tab-war" class="tab-btn medieval uppercase tracking-widest">War</button>
     </div>
 
     <div class="max-w-7xl mx-auto">
         <!-- Section: About -->
-        <div id="section-about" class="lg:col-span-12">
+        <div id="section-about" class="lg:col-span-12 hidden-section">
             <div id="aboutContent"></div>
         </div>
 
@@ -86,7 +86,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Member list container -->
                 <div id="memberList" class="space-y-2"></div>
             </div>
         </div>
@@ -94,7 +93,6 @@
         <!-- Section: War -->
         <div id="section-war" class="lg:col-span-12 hidden-section">
             <div class="panel p-3 md:p-6">
-                <!-- War Sub-tabs -->
                 <div class="flex items-center gap-2 mb-6 p-1 bg-[#1a1a1a] rounded-lg w-fit border border-gray-800">
                     <button id="subtab-history" class="sub-tab-btn active uppercase tracking-wider">History</button>
                     <button id="subtab-stats" class="sub-tab-btn uppercase tracking-wider">Stats</button>
@@ -103,7 +101,12 @@
                 <!-- View: War History List -->
                 <div id="warListView">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 px-1">
-                        <h2 class="medieval text-base md:text-lg font-bold">War History</h2>
+                        <div class="flex items-center gap-3">
+                            <h2 class="medieval text-base md:text-lg font-bold">War History</h2>
+                            <button onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Sync Data">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                            </button>
+                        </div>
                         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
                             <div class="flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -122,7 +125,22 @@
 
                 <!-- View: War Analytics -->
                 <div id="warStatsView" class="hidden">
-                    <h2 class="medieval text-base md:text-lg font-bold mb-6">War Stats</h2>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 px-1">
+                        <div class="flex items-center gap-3">
+                            <h2 class="medieval text-base md:text-lg font-bold">War Stats</h2>
+                            <button onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Sync Data">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold text-gray-500 uppercase">Time Range:</span>
+                            <select id="statsTimeRange" class="control-base h-8">
+                                <option value="month">This Month</option>
+                                <option value="week">This Week</option>
+                                <option value="prev">Previous War</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="space-y-8">
                         <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
                             <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">War Stars Achieved (%)</h3>
@@ -149,6 +167,13 @@
                 <div id="warDetailView" class="hidden">
                     <button id="backToWarList" class="mb-4 text-xs gold hover:underline flex items-center gap-1">← Back to History</button>
                     
+                    <div class="flex items-center gap-3 mb-6 px-1">
+                        <h2 class="medieval text-base md:text-lg font-bold">War Details</h2>
+                        <button id="syncDetailBtn" onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Sync Data">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                        </button>
+                    </div>
+
                     <!-- War Summary Card -->
                     <div id="warSummary" class="flex flex-row items-center justify-between gap-2 p-4 bg-[#252525] rounded-xl border border-dashed border-gray-700 min-h-[100px]">
                         <div class="flex items-center gap-2 md:gap-3 w-1/3 text-left">
@@ -168,8 +193,8 @@
                         </div>
                     </div>
                     
-                    <!-- War Metrics Container (Probability, Ratio, etc) -->
-                    <div id="warMetrics" class="grid grid-cols-2 md:grid-cols-4 gap-4 my-6"></div>
+                    <!-- War Metrics Container -->
+                    <div id="warMetrics" class="grid grid-cols-2 md:grid-cols-5 gap-4 my-6"></div>
                     
                     <!-- Attacks/Map container -->
                     <div id="warResults" class="space-y-4"></div>
