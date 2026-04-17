@@ -117,7 +117,7 @@ function renderTopPerformers(warHistory) {
     const topPerformers = Object.values(statsMap)
         .filter(p => (p.s3 + p.s2 + p.s1 + p.s0) > 0)
         .sort((a, b) => b.totalStars - a.totalStars || b.s3 - a.s3)
-        .slice(0, 20);
+        .slice(0, 25);
 
     if (topPerformers.length === 0) {
         container.innerHTML = `<p class="text-center text-gray-600 py-10 text-[10px]">No attack data for this range.</p>`;
@@ -151,15 +151,15 @@ function renderEfficiencyChart(warHistory) {
         });
     });
 
-    const top20 = Object.values(statsMap).filter(p => p.total > 0).sort((a, b) => (b.s3/b.total) - (a.s3/a.total) || b.total - a.total).slice(0, 20);
-    if (top20.length === 0) { if (efficiencyChart) efficiencyChart.destroy(); return; }
+    const top25 = Object.values(statsMap).filter(p => p.total > 0).sort((a, b) => (b.s3/b.total) - (a.s3/a.total) || b.total - a.total).slice(0, 25);
+    if (top25.length === 0) { if (efficiencyChart) efficiencyChart.destroy(); return; }
 
-    const labels = top20.map(p => p.name);
+    const labels = top25.map(p => p.name);
     const datasets = [
-        { label: '3-Star %', data: top20.map(p => (p.s3/p.total*100).toFixed(1)), backgroundColor: '#4ade80' },
-        { label: '2-Star %', data: top20.map(p => (p.s2/p.total*100).toFixed(1)), backgroundColor: '#facc15' },
-        { label: '1-Star %', data: top20.map(p => (p.s1/p.total*100).toFixed(1)), backgroundColor: '#ef4444' },
-        { label: 'Fail %', data: top20.map(p => (p.s0/p.total*100).toFixed(1)), backgroundColor: '#9ca3af' }
+        { label: '3-Star %', data: top25.map(p => (p.s3/p.total*100).toFixed(1)), backgroundColor: '#4ade80' },
+        { label: '2-Star %', data: top25.map(p => (p.s2/p.total*100).toFixed(1)), backgroundColor: '#facc15' },
+        { label: '1-Star %', data: top25.map(p => (p.s1/p.total*100).toFixed(1)), backgroundColor: '#ef4444' },
+        { label: 'Fail %', data: top25.map(p => (p.s0/p.total*100).toFixed(1)), backgroundColor: '#9ca3af' }
     ];
 
     if (efficiencyChart) efficiencyChart.destroy();
@@ -179,5 +179,5 @@ function renderEfficiencyChart(warHistory) {
         }
     });
     const container = document.getElementById('efficiencyContainer');
-    if (container) container.style.height = `${top20.length * 28 + 60}px`;
+    if (container) container.style.height = `${top25.length * 28 + 60}px`;
 }
