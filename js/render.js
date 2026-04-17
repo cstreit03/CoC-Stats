@@ -113,7 +113,8 @@ let currentWarFilters = {
     difficulty: 'all',
     performance: 'all',
     sortBy: 'mapPosition',
-    selectedClan: 'clan'
+    selectedClan: 'clan',
+    strategy: 'Mirror'
 };
 
 export function renderWarHistory(warHistory) {
@@ -235,28 +236,183 @@ function renderMemberCard(m, infoMap, totalAttacks) {
         </div>`;
 }
 
-export function renderWarDetail(warData) {
+function calculateWinProbability(warData, history) {
+    const buckets = {
+        'UP2': { sum: 0, count: 0, def: 0.8 }, 
+        'UP1': { sum: 0, count: 0, def: 1.5 },
+        'SAME': { sum: 0, count: 0, def: 2.2 },
+        'DROP': { sum: 0, count: 0, def: 2.8 }
+    };
+
+    history.forEach(w => {
+        const oppMap = {};
+        w.opponent.members.forEach(om => oppMap[om.tag] = om.townhallLevel || om.townHallLevel);
+        w.clan.members.forEach(m => {
+            const attackerTH = m.townhallLevel || m.townHallLevel;
+            (m.attacks || []).forEach(a => {
+                const targetTH = oppMap[a.defenderTag];
+                if (!targetTH) return;
+                const diff = targetTH - attackerTH;
+                let cat = 'SAME';
+                if (diff >= 2) cat = 'UP2';
+                else if (diff === 1) cat = 'UP1';
+                else if (diff <= -1) cat = 'DROP';
+                buckets[cat].sum += a.stars;
+                buckets[cat].count++;
+            });
+        });
+    });
+
+    const getExpected = (diff) => {
+        let cat = 'SAME';
+        if (diff >= 2) cat = 'UP2';
+        else if (diff === 1) cat = 'UP1';
+        else if (diff <= -1) cat = 'DROP';
+        return buckets[cat].count > 0 ? buckets[cat].sum / buckets[cat].count : buckets[cat].def;
+    };
+
+    const oppMembers = [...warData.opponent.members].sort((a,b) => a.mapPosition - b.mapPosition);
+    let clanProjectedStars = warData.clan.stars || 0;
+    
+    const offsetMap = { 'Up One': -1, 'Mirror': 0, 'Drop One': 1, 'Drop Two': 2, 'Drop Three': 3 };
+    const offset = offsetMap[currentWarFilters.strategy] || 0;
+
+    warData.clan.members.forEach(m => {
+        const attacksUsed = m.attacks ? m.attacks.length : 0;
+        const attacksLeft = 2 - attacksUsed;
+        if (attacksLeft <= 0) return;
+
+        for (let i = 0; i < attacksLeft; i++) {
+            let targetIdx = (m.mapPosition - 1) + offset;
+            if (targetIdx < 0) targetIdx = 0;
+            if (targetIdx >= oppMembers.length) targetIdx = oppMembers.length - 1;
+            
+            const target = oppMembers[targetIdx];
+            const diff = (target.townhallLevel || target.townHallLevel) - (m.townhallLevel || m.townHallLevel);
+            clanProjectedStars += getExpected(diff);
+        }
+    });
+
+    const oppAttacksUsed = warData.opponent.attacks || 0;
+    const oppPossible = warData.teamSize * 2;
+    const oppRemaining = oppPossible - oppAttacksUsed;
+    const oppCurrentStars = warData.opponent.stars || 0;
+    const oppEfficiency = oppAttacksUsed > 0 ? oppCurrentStars / oppAttacksUsed : 2.0;
+    const oppProjectedStars = oppCurrentStars + (oppRemaining * oppEfficiency);
+
+    const prob = (clanProjectedStars / (clanProjectedStars + oppProjectedStars)) * 100;
+    return Math.min(99, Math.max(1, Math.round(prob)));
+}
+
+export function renderWarDetail(warData, history = []) {
     const container = document.getElementById('warResults');
-    if (!container) return;
+    const metricsContainer = document.getElementById('warMetrics');
+    if (!container || !metricsContainer) return;
+
     const totalPossibleAttacks = warData.teamSize * warData.attacksPerMember;
+
+    // 1. Math for Metrics
+    const winProb = calculateWinProbability(warData, history);
+    
+    const clanTHSum = warData.clan.members.reduce((sum, m) => sum + (m.townhallLevel || m.townHallLevel || 0), 0);
+    const oppTHSum = warData.opponent.members.reduce((sum, m) => sum + (m.townhallLevel || m.townHallLevel || 0), 0);
+    const initialTHRatio = (clanTHSum / oppTHSum).toFixed(2);
+
+    const clanAvailableTHPower = warData.clan.members.reduce((sum, m) => {
+        const attacksLeft = 2 - (m.attacks ? m.attacks.length : 0);
+        return sum + ((m.townhallLevel || m.townHallLevel || 0) * attacksLeft);
+    }, 0);
+    
+    const oppBasesNeedsClearingSum = warData.opponent.members
+        .filter(m => (m.bestOpponentAttack?.stars || 0) < 3)
+        .reduce((sum, m) => sum + (m.townhallLevel || m.townHallLevel || 0), 0);
+    const currentTHRatio = oppBasesNeedsClearingSum > 0 ? (clanAvailableTHPower / oppBasesNeedsClearingSum).toFixed(2) : "∞";
+
+    const threeStarredBases = warData.opponent.members.filter(m => (m.bestOpponentAttack?.stars || 0) === 3).length;
+    const mapCompletionPct = Math.round((threeStarredBases / warData.teamSize) * 100);
+
+    const cleanupNeeded = warData.opponent.members.filter(m => {
+        const stars = m.bestOpponentAttack?.stars || 0;
+        return stars > 0 && stars < 3;
+    }).length;
+
+    // Global toggle function
+    window.toggleStatInfo = (type, event) => {
+        event.stopPropagation();
+        const allTooltips = document.querySelectorAll('.info-tooltip');
+        const target = document.getElementById(`tooltip-${type}`);
+        const isActive = target.classList.contains('active');
+        
+        allTooltips.forEach(t => t.classList.remove('active'));
+        if (!isActive) target.classList.add('active');
+    };
+
+    // 2. Render Metrics Boxes
+    metricsContainer.innerHTML = `
+        <div class="bg-[#1a1a1a] p-3 rounded-xl border border-gray-800 flex flex-col justify-between relative group">
+            <button onclick="window.toggleStatInfo('prob', event)" class="absolute top-2 right-2 text-[10px] text-gray-600 hover:text-gold transition-colors">ⓘ</button>
+            <div id="tooltip-prob" class="info-tooltip">Win Probability: Uses monthly averages to simulate remaining attacks for both clans to project the final score and win chance.</div>
+            <div class="flex justify-between items-start mb-1 pr-4">
+                <span class="text-[8px] font-black text-gray-500 uppercase tracking-widest">Win Probability</span>
+                <select id="probStrategy" class="bg-transparent border-none text-[8px] gold font-bold uppercase outline-none cursor-pointer p-0 m-0">
+                    <option value="Up One" ${currentWarFilters.strategy === 'Up One' ? 'selected' : ''}>Up One</option>
+                    <option value="Mirror" ${currentWarFilters.strategy === 'Mirror' ? 'selected' : ''}>Mirror</option>
+                    <option value="Drop One" ${currentWarFilters.strategy === 'Drop One' ? 'selected' : ''}>Drop 1</option>
+                    <option value="Drop Two" ${currentWarFilters.strategy === 'Drop Two' ? 'selected' : ''}>Drop 2</option>
+                    <option value="Drop Three" ${currentWarFilters.strategy === 'Drop Three' ? 'selected' : ''}>Drop 3</option>
+                </select>
+            </div>
+            <p class="text-xl font-bold gold leading-none">${winProb}%</p>
+        </div>
+        <div class="bg-[#1a1a1a] p-3 rounded-xl border border-gray-800 flex flex-col justify-center relative group">
+            <button onclick="window.toggleStatInfo('ratio', event)" class="absolute top-2 right-2 text-[10px] text-gray-600 hover:text-gold transition-colors">ⓘ</button>
+            <div id="tooltip-ratio" class="info-tooltip">TH Power Ratio: Compares your clan's total available Town Hall levels for remaining attacks against the Town Hall levels of enemy bases not yet 3-starred.</div>
+            <span class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">TH Power Ratio</span>
+            <p class="text-xl font-bold text-white leading-none">${currentTHRatio} <span class="text-[9px] text-gray-600 font-normal">Start: ${initialTHRatio}</span></p>
+        </div>
+        <div class="bg-[#1a1a1a] p-3 rounded-xl border border-gray-800 flex flex-col justify-center relative group">
+            <button onclick="window.toggleStatInfo('comp', event)" class="absolute top-2 right-2 text-[10px] text-gray-600 hover:text-gold transition-colors">ⓘ</button>
+            <div id="tooltip-comp" class="info-tooltip">Map Completion: The percentage of enemy bases that have been successfully 3-starred.</div>
+            <span class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">Map Completion</span>
+            <p class="text-xl font-bold text-green-500 leading-none">${mapCompletionPct}% <span class="text-[9px] text-gray-600 font-normal">${threeStarredBases}/${warData.teamSize}</span></p>
+        </div>
+        <div class="bg-[#1a1a1a] p-3 rounded-xl border border-gray-800 flex flex-col justify-center relative group">
+            <button onclick="window.toggleStatInfo('clean', event)" class="absolute top-2 right-2 text-[10px] text-gray-600 hover:text-gold transition-colors">ⓘ</button>
+            <div id="tooltip-clean" class="info-tooltip">Clean-up Needed: The count of enemy bases that have been attacked but only partially cleared (1 or 2 stars).</div>
+            <span class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">Clean-up Needed</span>
+            <p class="text-xl font-bold ${cleanupNeeded > 0 ? 'text-yellow-500' : 'text-gray-600'} leading-none">${cleanupNeeded}</p>
+        </div>
+    `;
+
+    const probSelect = document.getElementById('probStrategy');
+    if (probSelect) {
+        probSelect.onchange = (e) => {
+            currentWarFilters.strategy = e.target.value;
+            renderWarDetail(warData, history);
+        };
+    }
+
+    // 3. Render Filters Bar
     let filterBar = document.getElementById('warDetailFilters');
     if (!filterBar) {
         const detailView = document.getElementById('warDetailView');
-        const summary = document.getElementById('warSummary');
         filterBar = document.createElement('div');
         filterBar.id = 'warDetailFilters';
         filterBar.className = 'flex flex-wrap items-center gap-4 mb-6 p-4 bg-[#1a1a1a] rounded-xl border border-gray-800';
-        detailView.insertBefore(filterBar, summary.nextSibling);
+        detailView.insertBefore(filterBar, container);
     }
     filterBar.innerHTML = `
         <div class="flex items-center gap-2 w-full lg:w-auto pb-4 lg:pb-0 lg:pr-4 border-b lg:border-b-0 lg:border-r border-gray-800 mr-0 lg:mr-2">
-            <button id="toggleClan" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'clan' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[120px]">
-                <img src="${warData.clan.badgeUrls.small}" class="w-4 h-4">
-                <span class="text-[9px] md:text-[10px] font-bold uppercase truncate">${warData.clan.name}</span>
+            <button id="toggleClan" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'clan' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[100px]">
+                <img src="${warData.clan.badgeUrls.small}" class="w-3.5 h-3.5">
+                <span class="text-[9px] font-bold uppercase truncate">${warData.clan.name}</span>
             </button>
-            <button id="toggleOpponent" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'opponent' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[120px]">
-                <img src="${warData.opponent.badgeUrls.small}" class="w-4 h-4">
-                <span class="text-[9px] md:text-[10px] font-bold uppercase truncate">${warData.opponent.name}</span>
+            <button id="toggleMap" class="flex-1 lg:flex-none flex items-center justify-center px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'map' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[80px]">
+                <span class="text-[9px] font-bold uppercase">Map</span>
+            </button>
+            <button id="toggleOpponent" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'opponent' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[100px]">
+                <img src="${warData.opponent.badgeUrls.small}" class="w-3.5 h-3.5">
+                <span class="text-[9px] font-bold uppercase truncate">${warData.opponent.name}</span>
             </button>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-2 lg:flex lg:items-center gap-4 w-full lg:w-auto">
@@ -297,16 +453,20 @@ export function renderWarDetail(warData) {
             </div>
             <button id="clearDetailFilters" class="text-[10px] font-bold text-gray-500 hover:text-gold uppercase transition-colors col-span-2 lg:ml-auto">Clear</button>
         </div>`;
-    document.getElementById('toggleClan').onclick = () => { currentWarFilters.selectedClan = 'clan'; renderWarDetail(warData); };
-    document.getElementById('toggleOpponent').onclick = () => { currentWarFilters.selectedClan = 'opponent'; renderWarDetail(warData); };
-    document.getElementById('filterAttacks').onchange = (e) => { currentWarFilters.attacks = e.target.value; renderWarDetail(warData); };
-    document.getElementById('filterDifficulty').onchange = (e) => { currentWarFilters.difficulty = e.target.value; renderWarDetail(warData); };
-    document.getElementById('filterPerformance').onchange = (e) => { currentWarFilters.performance = e.target.value; renderWarDetail(warData); };
-    document.getElementById('filterSort').onchange = (e) => { currentWarFilters.sortBy = e.target.value; renderWarDetail(warData); };
+
+    document.getElementById('toggleClan').onclick = () => { currentWarFilters.selectedClan = 'clan'; renderWarDetail(warData, history); };
+    document.getElementById('toggleMap').onclick = () => { currentWarFilters.selectedClan = 'map'; renderWarDetail(warData, history); };
+    document.getElementById('toggleOpponent').onclick = () => { currentWarFilters.selectedClan = 'opponent'; renderWarDetail(warData, history); };
+    document.getElementById('filterAttacks').onchange = (e) => { currentWarFilters.attacks = e.target.value; renderWarDetail(warData, history); };
+    document.getElementById('filterDifficulty').onchange = (e) => { currentWarFilters.difficulty = e.target.value; renderWarDetail(warData, history); };
+    document.getElementById('filterPerformance').onchange = (e) => { currentWarFilters.performance = e.target.value; renderWarDetail(warData, history); };
+    document.getElementById('filterSort').onchange = (e) => { currentWarFilters.sortBy = e.target.value; renderWarDetail(warData, history); };
     document.getElementById('clearDetailFilters').onclick = () => {
-        currentWarFilters = { attacks: 'all', difficulty: 'all', performance: 'all', sortBy: 'mapPosition', selectedClan: 'clan' };
-        renderWarDetail(warData);
+        currentWarFilters = { attacks: 'all', difficulty: 'all', performance: 'all', sortBy: 'mapPosition', selectedClan: 'clan', strategy: 'Mirror' };
+        renderWarDetail(warData, history);
     };
+
+    // 4. Update Summary Header
     const clanStars = warData.clan.stars || 0;
     const opponentStars = warData.opponent.stars || 0;
     const clanDest = warData.clan.destructionPercentage || 0;
@@ -328,24 +488,13 @@ export function renderWarDetail(warData) {
             else { resultLabel = "Draw"; scoreColor = "text-gray-400"; }
         }
     }
-    const clanScoreEl = document.getElementById('totalStars');
-    const oppScoreEl = document.getElementById('opponentStars');
-    if (clanScoreEl) {
-        clanScoreEl.innerText = clanStars;
-        clanScoreEl.className = `text-xl font-bold ${isPinned ? 'gold' : scoreColor}`;
-    }
-    if (oppScoreEl) {
-        oppScoreEl.innerText = opponentStars;
-        oppScoreEl.className = `text-xl font-bold ${isPinned ? 'gold' : (scoreColor === "text-green-500" ? "text-red-500" : (scoreColor === "text-red-500" ? "text-green-500" : "text-gray-400"))}`;
-    }
-    const cd = document.getElementById('totalDestruction'); if (cd) cd.innerText = clanDest.toFixed(1) + "%";
-    const ca = document.getElementById('clanAttacks'); if (ca) ca.innerText = `${warData.clan.attacks || 0}/${totalPossibleAttacks} Attacks`;
-    const od = document.getElementById('opponentDestruction'); if (od) od.innerText = opponentDest.toFixed(1) + "%";
-    const oa = document.getElementById('opponentAttacks'); if (oa) oa.innerText = `${warData.opponent.attacks || 0}/${totalPossibleAttacks} Attacks`;
-    const cn = document.getElementById('clanNameDetail'); if (cn) cn.innerText = warData.clan.name;
-    const on = document.getElementById('opponentNameDetail'); if (on) on.innerText = warData.opponent.name;
-    const cb = document.getElementById('detailClanBadge'); if (cb) cb.src = warData.clan.badgeUrls.small;
-    const ob = document.getElementById('detailOpponentBadge'); if (ob) ob.src = warData.opponent.badgeUrls.small;
+
+    document.getElementById('detailClanBadge').src = warData.clan.badgeUrls.small;
+    document.getElementById('detailOpponentBadge').src = warData.opponent.badgeUrls.small;
+    document.getElementById('clanNameDetail').innerText = warData.clan.name;
+    document.getElementById('opponentNameDetail').innerText = warData.opponent.name;
+    document.getElementById('clanAttacks').innerText = `${warData.clan.attacks || 0}/${totalPossibleAttacks} Attacks`;
+    document.getElementById('opponentAttacks').innerText = `${warData.opponent.attacks || 0}/${totalPossibleAttacks} Attacks`;
 
     const summaryHeader = document.getElementById('warResultHeader');
     if (summaryHeader) {
@@ -354,10 +503,40 @@ export function renderWarDetail(warData) {
             <p class="medieval ${isPinned ? 'gold' : scoreColor} text-lg md:text-2xl">${clanStars} - ${opponentStars}</p>
             <p class="text-[8px] md:text-[9px] text-gray-500 mt-1">${clanDest.toFixed(1)}% vs ${opponentDest.toFixed(1)}%</p>`;
     }
+
+    // 5. Render Attacks List
     const clanMap = {};
     warData.clan.members.forEach(m => clanMap[m.tag] = { pos: m.mapPosition, th: m.townhallLevel || m.townHallLevel, name: m.name });
     const opponentMap = {};
     warData.opponent.members.forEach(m => opponentMap[m.tag] = { pos: m.mapPosition, th: m.townhallLevel || m.townHallLevel, name: m.name });
+
+    if (currentWarFilters.selectedClan === 'map') {
+        const sortedClan = [...warData.clan.members].sort((a,b) => a.mapPosition - b.mapPosition);
+        const sortedOpp = [...warData.opponent.members].sort((a,b) => a.mapPosition - b.mapPosition);
+        
+        container.className = "space-y-2";
+        container.innerHTML = `
+            <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest pl-1 mb-2">War Map Matchup</p>
+            ${sortedClan.map((m, idx) => {
+                const opp = sortedOpp[idx] || { name: 'Empty', townhallLevel: 0 };
+                return `
+                <div class="flex items-center gap-2 p-2 bg-[#252525] rounded-lg border border-gray-800">
+                    <div class="flex items-center gap-2 flex-1 min-w-0">
+                        <span class="text-[9px] font-mono text-gray-600">#${m.mapPosition}</span>
+                        <img src="${getTHImage(m.townhallLevel || m.townHallLevel)}" class="w-6 h-6 object-contain">
+                        <span class="text-[10px] font-bold text-white truncate">${m.name}</span>
+                    </div>
+                    <div class="text-[9px] font-black text-gray-700 mx-2 italic">VS</div>
+                    <div class="flex items-center justify-end gap-2 flex-1 min-w-0 text-right">
+                        <span class="text-[10px] font-bold text-gray-300 truncate">${opp.name}</span>
+                        <img src="${getTHImage(opp.townhallLevel || opp.townHallLevel)}" class="w-6 h-6 object-contain">
+                        <span class="text-[9px] font-mono text-gray-600">#${opp.mapPosition}</span>
+                    </div>
+                </div>`;
+            }).join('')}`;
+        return;
+    }
+
     const filterFunc = (m, sideMap) => {
         const attackCount = m.attacks ? m.attacks.length : 0;
         const totalStars = (m.attacks || []).reduce((sum, a) => sum + a.stars, 0);
@@ -374,6 +553,7 @@ export function renderWarDetail(warData) {
         }
         return true;
     };
+
     const sortFunc = (a, b) => {
         if (currentWarFilters.sortBy === 'stars') {
             const aStars = (a.attacks || []).reduce((sum, atk) => sum + atk.stars, 0);
@@ -382,9 +562,11 @@ export function renderWarDetail(warData) {
         }
         return a.mapPosition - b.mapPosition;
     };
+
     const membersToRender = currentWarFilters.selectedClan === 'clan' ? warData.clan.members : warData.opponent.members;
     const oppositeMap = currentWarFilters.selectedClan === 'clan' ? opponentMap : clanMap;
     const filteredMembers = membersToRender.filter(m => filterFunc(m, oppositeMap)).sort(sortFunc);
+
     container.className = "space-y-3";
     container.innerHTML = `
         <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest pl-1">

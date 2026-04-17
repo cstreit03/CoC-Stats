@@ -31,6 +31,54 @@
         .stat-label { font-size: 8px; color: #777; text-transform: uppercase; font-weight: bold; }
         .stat-value { font-size: 10px; font-weight: 600; color: #ccc; }
         select.control-base { appearance: none; padding-right: 24px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23777'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; background-size: 12px; }
+
+        /* Custom Tooltips */
+        .info-tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 9px;
+            line-height: 1.4;
+            color: #bbb;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            display: none;
+        }
+        .info-tooltip.active {
+            display: block;
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .info-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: #2a2a2a transparent transparent transparent;
+        }
+        .info-tooltip::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 7px;
+            border-style: solid;
+            border-color: #444 transparent transparent transparent;
+            margin-top: 1px;
+        }
     </style>
 </head>
 <body class="p-3 md:p-10">
@@ -164,6 +212,10 @@
                             <img id="detailOpponentBadge" src="" class="w-8 h-8 md:w-10 md:h-10">
                         </div>
                     </div>
+                    
+                    <!-- War Metrics Container -->
+                    <div id="warMetrics" class="grid grid-cols-2 md:grid-cols-4 gap-4 my-6"></div>
+                    
                     <div id="warResults" class="space-y-4"></div>
                 </div>
             </div>

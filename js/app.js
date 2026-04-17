@@ -39,7 +39,6 @@ async function init() {
         updateHeader(clanData.name, clanData.badgeUrls?.medium || clanData.badgeUrls?.small);
     } catch (e) {
         console.error("Critical: Could not load latest clan data.", e);
-        // Page won't load properly without this, but we'll try to continue to load War data if possible
     }
 
     // 2. Setup Member Date Filter
@@ -52,7 +51,6 @@ async function init() {
             return `${dateStr.substring(0,4)}-${dateStr.substring(4,6)}-${dateStr.substring(6,8)}`;
         });
         
-        // Use the first actually available indexed date as the default
         let bestDefaultDate = availableMemberDates[0] || todayStr;
         
         if (!availableMemberDates.includes(todayStr)) {
@@ -68,7 +66,6 @@ async function init() {
             }
         });
 
-        // Ensure title matches initial load
         const titleEl = document.getElementById('memberTitle');
         if (titleEl) {
             const isToday = bestDefaultDate === todayStr;
@@ -172,16 +169,12 @@ function filterWarHistory() {
     let filtered = fullWarHistory.filter(w => {
         const now = new Date();
         const warEnd = parseCoCDate(w.endTime);
-        
-        // Pinned wars (active/prep) always show
         if (now < warEnd) return true;
-        
         const warDate = w.startTime.substring(0, 8);
         if (startVal && warDate < startVal) return false;
         if (endVal && warDate > endVal) return false;
         return true;
     });
-    
     renderWarHistory(filtered);
 }
 
@@ -195,14 +188,14 @@ function updateDisplay() {
     
     filtered.sort((a, b) => {
         if (sortKey === 'role') {
-            return roleWeight[b.role] - roleWeight[a.role];
+            return (roleWeight[b.role] || 0) - (roleWeight[a.role] || 0);
         } else if (sortKey === 'league') {
             const leagueA = a.leagueTier?.id || a.league?.id || 0;
             const leagueB = b.leagueTier?.id || b.league?.id || 0;
             if (leagueA !== leagueB) return leagueB - leagueA;
-            return b.trophies - a.trophies;
+            return (b.trophies || 0) - (a.trophies || 0);
         } else {
-            return b[sortKey] - a[sortKey];
+            return (b[sortKey] || 0) - (a[sortKey] || 0);
         }
     });
     renderMembers(filtered);
@@ -223,7 +216,7 @@ async function loadWarDetail(filename) {
         if (listView) listView.classList.add('hidden');
         if (detailView) {
             detailView.classList.remove('hidden');
-            renderWarDetail(warData);
+            renderWarDetail(warData, fullWarHistory);
         }
     }
 }
@@ -309,5 +302,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const role = btn.getAttribute('data-role');
             setRoleFilter(role, btn);
         });
+    });
+
+    // Global listener to close tooltips when clicking outside
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.info-tooltip').forEach(t => t.classList.remove('active'));
     });
 });
