@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 3,
-        "stars": 8,
-        "destructionPercentage": 11.72,
+        "attacks": 4,
+        "stars": 10,
+        "destructionPercentage": 14.84,
         "members": [
             {
                 "tag": "#9C229UGJ",
@@ -182,6 +182,16 @@
                 "name": "COBRA",
                 "townhallLevel": 15,
                 "mapPosition": 21,
+                "attacks": [
+                    {
+                        "attackerTag": "#8RJ8CC8LU",
+                        "defenderTag": "#LYYLQQJ82",
+                        "stars": 2,
+                        "destructionPercentage": 78,
+                        "order": 4,
+                        "duration": 107
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -406,7 +416,15 @@
                 "name": "Jake Jr",
                 "townhallLevel": 15,
                 "mapPosition": 23,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#8RJ8CC8LU",
+                    "defenderTag": "#LYYLQQJ82",
+                    "stars": 2,
+                    "destructionPercentage": 78,
+                    "order": 4,
+                    "duration": 107
+                }
             },
             {
                 "tag": "#PVU0QVCJ0",

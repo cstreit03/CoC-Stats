@@ -11,23 +11,17 @@ def update_clan_data():
     
     if res.status_code == 200:
         clan_data = res.json()
-        
-        # 1. Update the 'current' file (legacy support and current view)
-        current_path = 'data/clan_stats/clan_data.json'
-        with open(current_path, 'w') as f:
-            json.dump(clan_data, f, indent=4)
-        print(f"Updated {current_path}")
-        
-        # 2. Save daily snapshot
+
+        # 1. Save daily snapshot
         today = datetime.now().strftime('%Y%m%d')
         filename = f"members_{today}.json"
         snapshot_path = os.path.join('data/clan_stats', filename)
-        
+
         with open(snapshot_path, 'w') as f:
             json.dump(clan_data, f, indent=4)
         print(f"Saved snapshot to {snapshot_path}")
-        
-        # 3. Update clan_stats_index.json
+
+        # 2. Update clan_stats_index.json
         index_path = 'data/clan_stats_index.json'
         index = []
         if os.path.exists(index_path):

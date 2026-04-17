@@ -2,7 +2,7 @@
 
 A tactical dashboard for tracking Clash of Clans performance. This project uses a Python scraper and GitHub Actions to automatically update clan and war data every 20 minutes.
 
-See live example: http://clash.h4ck3rz.com/
+See live example: http://clash.kenaz.dev
 
 ## Setup Instructions
 

@@ -4,10 +4,20 @@ export async function fetchClanData() {
     const index = await indexRes.json();
     if (!index || index.length === 0) throw new Error("Clan index is empty");
     
-    const latestFile = index[0];
-    const res = await fetch(`data/clan_stats/${latestFile}`);
-    if (!res.ok) throw new Error(`Failed to fetch latest clan data: ${latestFile}`);
-    return await res.json();
+    // Try each file in the index until one works
+    for (const filename of index) {
+        try {
+            const res = await fetch(`data/clan_stats/${filename}`);
+            if (res.ok) {
+                const data = await res.json();
+                return data;
+            }
+        } catch (e) {
+            console.warn(`Could not load indexed file: ${filename}, trying next...`);
+        }
+    }
+    
+    throw new Error("No available clan data files found in index.");
 }
 
 export async function fetchMembersIndex() {

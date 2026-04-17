@@ -1,4 +1,4 @@
-import { roleWeight } from './constants.js';
+import { roleWeight, parseCoCDate } from './constants.js';
 import { 
     fetchClanData, 
     fetchMembersIndex, 
@@ -17,7 +17,6 @@ import {
     switchView, 
     switchSubView,
     updateMemberCount, 
-    updatePageTitle,
     updateHeader
 } from './ui.js';
 
@@ -29,17 +28,22 @@ let availableMemberDates = [];
 let fp = null;
 
 async function init() {
+    // 1. Try to load Clan/Member Data
     try {
         const clanData = await fetchClanData();
         latestClanData = clanData;
         allMembers = clanData.memberList || [];
         updateDisplay();
-
         renderAbout(latestClanData);
         bindAboutPageEvents();
-
         updateHeader(clanData.name, clanData.badgeUrls?.medium || clanData.badgeUrls?.small);
+    } catch (e) {
+        console.error("Critical: Could not load latest clan data.", e);
+        // Page won't load properly without this, but we'll try to continue to load War data if possible
+    }
 
+    // 2. Setup Member Date Filter
+    try {
         const memberIndex = await fetchMembersIndex();
         const todayStr = new Date().toISOString().split('T')[0];
         
@@ -48,12 +52,15 @@ async function init() {
             return `${dateStr.substring(0,4)}-${dateStr.substring(4,6)}-${dateStr.substring(6,8)}`;
         });
         
+        // Use the first actually available indexed date as the default
+        let bestDefaultDate = availableMemberDates[0] || todayStr;
+        
         if (!availableMemberDates.includes(todayStr)) {
             availableMemberDates.push(todayStr);
         }
 
         fp = flatpickr("#memberDate", {
-            defaultDate: todayStr,
+            defaultDate: bestDefaultDate,
             enable: availableMemberDates,
             dateFormat: "Y-m-d",
             onChange: function(selectedDates, dateStr) {
@@ -61,21 +68,38 @@ async function init() {
             }
         });
 
+        // Ensure title matches initial load
+        const titleEl = document.getElementById('memberTitle');
+        if (titleEl) {
+            const isToday = bestDefaultDate === todayStr;
+            titleEl.innerText = isToday ? "Current Members" : `Members: ${bestDefaultDate}`;
+        }
+    } catch (e) {
+        console.warn("Could not setup member date filters.", e);
+    }
+
+    // 3. Setup War Date Filters
+    try {
         const startPicker = flatpickr("#warStartDate", {
             dateFormat: "Y-m-d",
             onChange: function(selectedDates, dateStr) {
-                endPicker.set('minDate', dateStr);
+                if (endPicker) endPicker.set('minDate', dateStr);
                 filterWarHistory();
             }
         });
         const endPicker = flatpickr("#warEndDate", {
             dateFormat: "Y-m-d",
             onChange: function(selectedDates, dateStr) {
-                startPicker.set('maxDate', dateStr);
+                if (startPicker) startPicker.set('maxDate', dateStr);
                 filterWarHistory();
             }
         });
+    } catch (e) {
+        console.warn("Could not setup war date filters.", e);
+    }
 
+    // 4. Load War History
+    try {
         const warIndex = await fetchWarIndex();
         const warDataPromises = warIndex.reverse().map(async (filename) => {
             try {
@@ -89,9 +113,8 @@ async function init() {
         
         fullWarHistory = (await Promise.all(warDataPromises)).filter(w => w !== null);
         renderWarHistory(fullWarHistory);
-
     } catch (e) {
-        console.error("Data error.", e);
+        console.error("Could not load war history.", e);
     }
 }
 
@@ -105,14 +128,18 @@ function bindAboutPageEvents() {
     }
 }
 
-async function handleMemberDateChange(dateValue) {
+async function handleMemberDateChange(dateValue, shouldFetch = true) {
     if (!dateValue) return;
     
     const todayStr = new Date().toISOString().split('T')[0];
     const isToday = dateValue === todayStr;
     const titleEl = document.getElementById('memberTitle');
     
-    titleEl.innerText = isToday ? "Current Members" : `Members: ${dateValue}`;
+    if (titleEl) {
+        titleEl.innerText = isToday ? "Current Members" : `Members: ${dateValue}`;
+    }
+
+    if (!shouldFetch) return;
 
     const snapshotName = `members_${dateValue.replace(/-/g, '')}.json`;
     try {
@@ -125,26 +152,28 @@ async function handleMemberDateChange(dateValue) {
         allMembers = data.memberList || [];
         updateDisplay();
     } catch (e) {
-        console.warn("Snapshot not found.");
-        allMembers = [];
-        updateDisplay();
+        console.warn(`Snapshot ${snapshotName} not found, falling back to latest available.`);
+        try {
+            const fallbackData = await fetchClanData();
+            allMembers = fallbackData.memberList || [];
+            updateDisplay();
+        } catch (err) {
+            console.error("Failed to load even fallback data.");
+            allMembers = [];
+            updateDisplay();
+        }
     }
 }
 
 function filterWarHistory() {
-    const startVal = document.getElementById('warStartDate').value.replace(/-/g, '');
-    const endVal = document.getElementById('warEndDate').value.replace(/-/g, '');
+    const startVal = document.getElementById('warStartDate')?.value.replace(/-/g, '') || '';
+    const endVal = document.getElementById('warEndDate')?.value.replace(/-/g, '') || '';
     
     let filtered = fullWarHistory.filter(w => {
         const now = new Date();
-        const year = w.endTime.substring(0, 4);
-        const month = parseInt(w.endTime.substring(4, 6)) - 1;
-        const day = w.endTime.substring(6, 8);
-        const hour = w.endTime.substring(9, 11);
-        const min = w.endTime.substring(11, 13);
-        const sec = w.endTime.substring(13, 15);
-        const warEnd = new Date(Date.UTC(year, month, day, hour, min, sec));
+        const warEnd = parseCoCDate(w.endTime);
         
+        // Pinned wars (active/prep) always show
         if (now < warEnd) return true;
         
         const warDate = w.startTime.substring(0, 8);
@@ -157,7 +186,10 @@ function filterWarHistory() {
 }
 
 function updateDisplay() {
-    const sortKey = document.getElementById('sortBy').value;
+    const sortByEl = document.getElementById('sortBy');
+    if (!sortByEl) return;
+    const sortKey = sortByEl.value;
+    
     let filtered = allMembers.filter(m => currentRoleFilter === 'all' || m.role === currentRoleFilter);
     updateMemberCount(filtered.length);
     
@@ -186,15 +218,21 @@ function setRoleFilter(role, btn) {
 async function loadWarDetail(filename) {
     const warData = fullWarHistory.find(w => w.filename === filename);
     if (warData) {
-        document.getElementById('warListView').classList.add('hidden');
-        document.getElementById('warDetailView').classList.remove('hidden');
-        renderWarDetail(warData);
+        const listView = document.getElementById('warListView');
+        const detailView = document.getElementById('warDetailView');
+        if (listView) listView.classList.add('hidden');
+        if (detailView) {
+            detailView.classList.remove('hidden');
+            renderWarDetail(warData);
+        }
     }
 }
 
 function showWarList() {
-    document.getElementById('warListView').classList.remove('hidden');
-    document.getElementById('warDetailView').classList.add('hidden');
+    const listView = document.getElementById('warListView');
+    const detailView = document.getElementById('warDetailView');
+    if (listView) listView.classList.remove('hidden');
+    if (detailView) detailView.classList.add('hidden');
 }
 
 window.loadWarDetail = loadWarDetail;
@@ -202,41 +240,69 @@ window.loadWarDetail = loadWarDetail;
 document.addEventListener('DOMContentLoaded', () => {
     init();
 
-    document.getElementById('tab-about').addEventListener('click', () => {
-        switchView('about');
-        renderAbout(latestClanData);
-        bindAboutPageEvents();
-    });
-    document.getElementById('tab-members').addEventListener('click', () => switchView('members'));
-    document.getElementById('tab-war').addEventListener('click', () => {
-        switchView('war');
-        switchSubView('history');
-    });
+    const tabAbout = document.getElementById('tab-about');
+    if (tabAbout) {
+        tabAbout.addEventListener('click', () => {
+            switchView('about');
+            if (latestClanData) renderAbout(latestClanData);
+            bindAboutPageEvents();
+        });
+    }
 
-    document.getElementById('subtab-history').addEventListener('click', () => switchSubView('history'));
-    document.getElementById('subtab-stats').addEventListener('click', () => {
-        switchSubView('stats');
-        renderCharts(fullWarHistory);
-    });
+    const tabMembers = document.getElementById('tab-members');
+    if (tabMembers) tabMembers.addEventListener('click', () => switchView('members'));
+
+    const tabWar = document.getElementById('tab-war');
+    if (tabWar) {
+        tabWar.addEventListener('click', () => {
+            switchView('war');
+            switchSubView('history');
+        });
+    }
+
+    const subtabHistory = document.getElementById('subtab-history');
+    if (subtabHistory) subtabHistory.addEventListener('click', () => switchSubView('history'));
+
+    const subtabStats = document.getElementById('subtab-stats');
+    if (subtabStats) {
+        subtabStats.addEventListener('click', () => {
+            switchSubView('stats');
+            renderCharts(fullWarHistory);
+        });
+    }
     
-    document.getElementById('sortBy').addEventListener('change', updateDisplay);
-    document.getElementById('backToWarList').addEventListener('click', showWarList);
+    const sortBy = document.getElementById('sortBy');
+    if (sortBy) sortBy.addEventListener('change', updateDisplay);
 
-    document.getElementById('clearMembersFilters').addEventListener('click', () => {
-        currentRoleFilter = 'all';
-        document.querySelectorAll('.btn-role').forEach(b => b.classList.remove('active'));
-        document.querySelector('[data-role="all"]').classList.add('active');
-        document.getElementById('sortBy').value = 'league';
-        const todayStr = new Date().toISOString().split('T')[0];
-        fp.setDate(todayStr);
-        handleMemberDateChange(todayStr);
-    });
+    const backToWarList = document.getElementById('backToWarList');
+    if (backToWarList) backToWarList.addEventListener('click', showWarList);
 
-    document.getElementById('clearWarFilters').addEventListener('click', () => {
-        document.getElementById('warStartDate').value = '';
-        document.getElementById('warEndDate').value = '';
-        filterWarHistory();
-    });
+    const clearMembers = document.getElementById('clearMembersFilters');
+    if (clearMembers) {
+        clearMembers.addEventListener('click', () => {
+            currentRoleFilter = 'all';
+            document.querySelectorAll('.btn-role').forEach(b => b.classList.remove('active'));
+            const allBtn = document.querySelector('[data-role="all"]');
+            if (allBtn) allBtn.classList.add('active');
+            const sortBy = document.getElementById('sortBy');
+            if (sortBy) sortBy.value = 'league';
+            
+            const bestDate = availableMemberDates[0] || new Date().toISOString().split('T')[0];
+            if (fp) fp.setDate(bestDate);
+            handleMemberDateChange(bestDate);
+        });
+    }
+
+    const clearWar = document.getElementById('clearWarFilters');
+    if (clearWar) {
+        clearWar.addEventListener('click', () => {
+            const start = document.getElementById('warStartDate');
+            const end = document.getElementById('warEndDate');
+            if (start) start.value = '';
+            if (end) end.value = '';
+            filterWarHistory();
+        });
+    }
 
     document.querySelectorAll('.btn-role').forEach(btn => {
         btn.addEventListener('click', () => {
