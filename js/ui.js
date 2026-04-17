@@ -1,3 +1,11 @@
+/**
+ * UI State & Navigation Module
+ * Manages tab switching and header updates.
+ */
+
+/**
+ * Switches between primary top-level tabs (About, Members, War).
+ */
 export function switchView(view) {
     const sections = {
         members: document.getElementById('section-members'),
@@ -22,6 +30,9 @@ export function switchView(view) {
     });
 }
 
+/**
+ * Switches between sub-tabs within the War section (History, Stats).
+ */
 export function switchSubView(subview) {
     const views = {
         history: document.getElementById('warListView'),
@@ -43,10 +54,14 @@ export function switchSubView(subview) {
         }
     });
     
+    // Always hide the "View War" details when clicking top sub-tabs
     const detailView = document.getElementById('warDetailView');
     if (detailView) detailView.classList.add('hidden');
 }
 
+/**
+ * Updates the global site header (Clan Name and Badge).
+ */
 export function updateHeader(name, badgeUrl) {
     const titleEl = document.getElementById('pageTitle');
     const badgeEl = document.getElementById('clanBadge');
@@ -58,11 +73,17 @@ export function updateHeader(name, badgeUrl) {
     }
 }
 
+/**
+ * Updates the member count label in the Roster tab.
+ */
 export function updateMemberCount(count) {
     const countEl = document.getElementById('memberCount');
     if (countEl) countEl.innerText = `${count} / 50`;
 }
 
+/**
+ * Forces an update of the main page title.
+ */
 export function updatePageTitle(title) {
     const el = document.getElementById('pageTitle');
     if (el) el.innerText = title;

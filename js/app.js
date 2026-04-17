@@ -1,3 +1,7 @@
+/**
+ * Main Application Module
+ * Orchestrates the data loading flow, global event listeners, and view switching.
+ */
 import { roleWeight, parseCoCDate } from './constants.js';
 import { 
     fetchClanData, 
@@ -20,15 +24,19 @@ import {
     updateHeader
 } from './ui.js';
 
-let allMembers = [];
-let latestClanData = null;
-let currentRoleFilter = 'all';
-let fullWarHistory = [];
-let availableMemberDates = [];
-let fp = null;
+// Global state variables
+let allMembers = [];           // Current list of members being viewed
+let latestClanData = null;     // Latest clan profile (About tab)
+let currentRoleFilter = 'all'; // Active role filter for Roster
+let fullWarHistory = [];       // Loaded war records
+let availableMemberDates = []; // List of dated snapshots for Roster
+let fp = null;                 // Flatpickr instance for Roster date
 
+/**
+ * Initializes the application by fetching all necessary data.
+ */
 async function init() {
-    // 1. Try to load Clan/Member Data
+    // 1. Try to load latest Clan/Member Profile
     try {
         const clanData = await fetchClanData();
         latestClanData = clanData;
@@ -41,18 +49,21 @@ async function init() {
         console.error("Critical: Could not load latest clan data.", e);
     }
 
-    // 2. Setup Member Date Filter
+    // 2. Setup Member Snapshot Filter (Roster Tab)
     try {
         const memberIndex = await fetchMembersIndex();
         const todayStr = new Date().toISOString().split('T')[0];
         
+        // Convert filenames to YYYY-MM-DD for Flatpickr
         availableMemberDates = memberIndex.map(f => {
             const dateStr = f.replace('members_', '').replace('.json', '');
             return `${dateStr.substring(0,4)}-${dateStr.substring(4,6)}-${dateStr.substring(6,8)}`;
         });
         
+        // Default to the newest available indexed snapshot
         let bestDefaultDate = availableMemberDates[0] || todayStr;
         
+        // Add "today" to available dates if missing (logic in api.js handles the fallback)
         if (!availableMemberDates.includes(todayStr)) {
             availableMemberDates.push(todayStr);
         }
@@ -66,6 +77,7 @@ async function init() {
             }
         });
 
+        // Initialize title correctly
         const titleEl = document.getElementById('memberTitle');
         if (titleEl) {
             const isToday = bestDefaultDate === todayStr;
@@ -75,7 +87,7 @@ async function init() {
         console.warn("Could not setup member date filters.", e);
     }
 
-    // 3. Setup War Date Filters
+    // 3. Setup War Date Range Filters (History Tab)
     try {
         const startPicker = flatpickr("#warStartDate", {
             dateFormat: "Y-m-d",
@@ -95,7 +107,7 @@ async function init() {
         console.warn("Could not setup war date filters.", e);
     }
 
-    // 4. Load War History
+    // 4. Load War History and aggregate stats
     try {
         const warIndex = await fetchWarIndex();
         const warDataPromises = warIndex.reverse().map(async (filename) => {
@@ -115,6 +127,9 @@ async function init() {
     }
 }
 
+/**
+ * Binds interactive events for the About tab.
+ */
 function bindAboutPageEvents() {
     const btn = document.getElementById('viewWarHistoryBtn');
     if (btn) {
@@ -125,6 +140,9 @@ function bindAboutPageEvents() {
     }
 }
 
+/**
+ * Handles the logic when a new snapshot date is selected in the Roster.
+ */
 async function handleMemberDateChange(dateValue, shouldFetch = true) {
     if (!dateValue) return;
     
@@ -162,6 +180,9 @@ async function handleMemberDateChange(dateValue, shouldFetch = true) {
     }
 }
 
+/**
+ * Filters the war list based on selected start/end dates.
+ */
 function filterWarHistory() {
     const startVal = document.getElementById('warStartDate')?.value.replace(/-/g, '') || '';
     const endVal = document.getElementById('warEndDate')?.value.replace(/-/g, '') || '';
@@ -169,15 +190,22 @@ function filterWarHistory() {
     let filtered = fullWarHistory.filter(w => {
         const now = new Date();
         const warEnd = parseCoCDate(w.endTime);
+        
+        // Pinned wars (active/prep) are always visible
         if (now < warEnd) return true;
+        
         const warDate = w.startTime.substring(0, 8);
         if (startVal && warDate < startVal) return false;
         if (endVal && warDate > endVal) return false;
         return true;
     });
+    
     renderWarHistory(filtered);
 }
 
+/**
+ * Triggers a sort and re-render of the member roster.
+ */
 function updateDisplay() {
     const sortByEl = document.getElementById('sortBy');
     if (!sortByEl) return;
@@ -201,6 +229,9 @@ function updateDisplay() {
     renderMembers(filtered);
 }
 
+/**
+ * Updates the active role filter.
+ */
 function setRoleFilter(role, btn) {
     currentRoleFilter = role;
     document.querySelectorAll('.btn-role').forEach(b => b.classList.remove('active'));
@@ -208,6 +239,9 @@ function setRoleFilter(role, btn) {
     updateDisplay();
 }
 
+/**
+ * Transitions the UI to show specific war details.
+ */
 async function loadWarDetail(filename) {
     const warData = fullWarHistory.find(w => w.filename === filename);
     if (warData) {
@@ -221,6 +255,9 @@ async function loadWarDetail(filename) {
     }
 }
 
+/**
+ * Transitions back to the war history list.
+ */
 function showWarList() {
     const listView = document.getElementById('warListView');
     const detailView = document.getElementById('warDetailView');
@@ -228,11 +265,16 @@ function showWarList() {
     if (detailView) detailView.classList.add('hidden');
 }
 
+// Expose navigation functions to global scope for HTML onclick handlers
 window.loadWarDetail = loadWarDetail;
 
+/**
+ * DOM Ready Listener
+ */
 document.addEventListener('DOMContentLoaded', () => {
     init();
 
+    // Bind Primary Navigation
     const tabAbout = document.getElementById('tab-about');
     if (tabAbout) {
         tabAbout.addEventListener('click', () => {
@@ -253,6 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Bind War Sub-navigation
     const subtabHistory = document.getElementById('subtab-history');
     if (subtabHistory) subtabHistory.addEventListener('click', () => switchSubView('history'));
 
@@ -264,12 +307,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
+    // Bind Filter Controls
     const sortBy = document.getElementById('sortBy');
     if (sortBy) sortBy.addEventListener('change', updateDisplay);
 
     const backToWarList = document.getElementById('backToWarList');
     if (backToWarList) backToWarList.addEventListener('click', showWarList);
 
+    // Bind Clear Buttons
     const clearMembers = document.getElementById('clearMembersFilters');
     if (clearMembers) {
         clearMembers.addEventListener('click', () => {
@@ -297,6 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Bind Role Filter Buttons
     document.querySelectorAll('.btn-role').forEach(btn => {
         btn.addEventListener('click', () => {
             const role = btn.getAttribute('data-role');
@@ -304,7 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Global listener to close tooltips when clicking outside
+    // Global listener to close tactical tooltips when clicking outside
     document.addEventListener('click', () => {
         document.querySelectorAll('.info-tooltip').forEach(t => t.classList.remove('active'));
     });

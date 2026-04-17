@@ -1,8 +1,16 @@
+/**
+ * Analytics & Charts Module
+ * Handles all Month-to-Date (MTD) statistical aggregations and Chart.js rendering.
+ */
 import { parseCoCDate } from './constants.js';
 
-let starsChart = null;
-let efficiencyChart = null;
+let starsChart = null;      // Star history line chart
+let efficiencyChart = null; // Stacked bar chart for conversion rates
 
+/**
+ * Main entry point for rendering the Stats tab.
+ * Aggregates all war data month-to-date.
+ */
 export function renderCharts(warHistory) {
     if (!warHistory || warHistory.length === 0) return;
 
@@ -11,23 +19,28 @@ export function renderCharts(warHistory) {
     renderEfficiencyChart(warHistory);
 }
 
+/**
+ * Line Chart: War Stars Achieved (%)
+ * Filters for finished wars only to show a historical trend.
+ */
 function renderStarsTrend(warHistory) {
     const canvas = document.getElementById('starsTrendChart');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const now = new Date();
 
+    // Line chart only shows finished wars
     const finishedWars = warHistory.filter(w => {
         const end = parseCoCDate(w.endTime);
         return end && now > end;
     });
     
     if (finishedWars.length === 0) {
-        // If no wars finished, show an empty state or message on the canvas parent
         if (starsChart) starsChart.destroy();
         return;
     }
 
+    // Sort chronologically and take the last 10 entries
     const sortedHistory = finishedWars.sort((a, b) => a.startTime.localeCompare(b.startTime));
     const last10 = sortedHistory.slice(-10);
     
@@ -65,12 +78,18 @@ function renderStarsTrend(warHistory) {
     });
 }
 
+/**
+ * Table: Stars Earned Breakdown
+ * Aggregates the raw count of 3, 2, 1, and 0 star hits for every player MTD.
+ */
 function renderTopPerformers(warHistory) {
     const container = document.getElementById('topPerformersContainer');
     if (!container) return;
     const now = new Date();
+    // Get year-month string like "202604"
     const currentMonthStr = now.toISOString().substring(0, 4) + now.toISOString().substring(5, 7);
     
+    // Aggregate data from all wars that started this month
     const monthWars = warHistory.filter(w => {
         if (!w.startTime) return false;
         return w.startTime.substring(0, 6) === currentMonthStr;
@@ -92,6 +111,7 @@ function renderTopPerformers(warHistory) {
         });
     });
 
+    // Sort by stars descending and take Top 20
     const topPerformers = Object.values(statsMap)
         .filter(p => (p.s3 + p.s2 + p.s1 + p.s0) > 0)
         .sort((a, b) => b.totalStars - a.totalStars || b.s3 - a.s3)
@@ -134,6 +154,10 @@ function renderTopPerformers(warHistory) {
     container.innerHTML = html;
 }
 
+/**
+ * Chart: Stars Conversion Rates
+ * Stacked horizontal bars showing the percentage distribution of attack outcomes.
+ */
 function renderEfficiencyChart(warHistory) {
     const canvas = document.getElementById('efficiencyChart');
     if (!canvas) return;
@@ -162,6 +186,7 @@ function renderEfficiencyChart(warHistory) {
         });
     });
 
+    // Rank by 3-star percentage descending
     const top20 = Object.values(statsMap)
         .filter(p => p.total > 0)
         .sort((a, b) => (b.s3/b.total) - (a.s3/a.total) || b.total - a.total)
@@ -200,6 +225,7 @@ function renderEfficiencyChart(warHistory) {
         }
     });
 
+    // Dynamically adjust container height to prevent squishing
     const container = document.getElementById('efficiencyContainer');
     if (container) {
         container.style.height = `${top20.length * 28 + 60}px`;

@@ -1,0 +1,207 @@
+/* 
+ * Dashboard Global Styles
+ * Medieval-Modern aesthetic for CoC Stats
+ */
+
+body { 
+    background: #121212; 
+    color: #e5e5e5; 
+    font-family: 'Inter', sans-serif; 
+    -webkit-tap-highlight-color: transparent; 
+}
+
+/* Medieval header font */
+.medieval { 
+    font-family: 'Cinzel', serif; 
+}
+
+/* Main content panels */
+.panel { 
+    background: #1e1e1e; 
+    border: 1px solid #333; 
+    border-radius: 12px; 
+}
+
+/* Town Hall icon scaling */
+.th-icon { 
+    width: 36px; 
+    height: 36px; 
+    object-fit: contain; 
+}
+
+@media (min-width: 768px) { 
+    .th-icon { width: 44px; height: 44px; } 
+}
+
+.gold { 
+    color: #d4af37; 
+}
+
+/* Main Navigation Tabs */
+.tab-btn { 
+    flex: 1; 
+    text-align: center; 
+    padding: 12px 8px; 
+    font-size: 10px; 
+    font-weight: bold; 
+    color: #666; 
+    border-bottom: 2px solid #222; 
+    transition: 0.3s; 
+    background: #1a1a1a; 
+    cursor: pointer; 
+    white-space: nowrap; 
+}
+
+@media (min-width: 768px) { 
+    .tab-btn { padding: 14px; font-size: 12px; } 
+}
+
+.tab-btn.active { 
+    color: #d4af37; 
+    border-bottom-color: #d4af37; 
+    background: #222; 
+}
+
+/* Internal sub-navigation (History/Stats) */
+.sub-tab-btn { 
+    padding: 8px 12px; 
+    font-size: 10px; 
+    font-weight: bold; 
+    color: #555; 
+    border-radius: 6px; 
+    transition: 0.2s; 
+    cursor: pointer; 
+    border: 1px solid transparent; 
+}
+
+.sub-tab-btn.active { 
+    color: #d4af37; 
+    background: rgba(212, 175, 55, 0.1); 
+    border-color: rgba(212, 175, 55, 0.3); 
+}
+
+.hidden-section { 
+    display: none !important; 
+}
+
+/* Standard UI Controls (Selects/Inputs) */
+.control-base { 
+    background: #252525; 
+    border: 1px solid #333; 
+    border-radius: 6px; 
+    padding: 6px 10px; 
+    font-size: 10px; 
+    font-weight: 600; 
+    color: #ccc; 
+    outline: none; 
+    transition: all 0.2s; 
+    height: 32px; 
+    display: flex; 
+    align-items: center; 
+}
+
+.control-base:focus { 
+    border-color: #d4af37; 
+}
+
+/* Role Filter Buttons */
+.btn-role { 
+    font-size: 9px; 
+    font-weight: bold; 
+    border: 1px solid #333; 
+    border-radius: 6px; 
+    padding: 0 10px; 
+    cursor: pointer; 
+    color: #777; 
+    background: #1e1e1e; 
+    height: 32px; 
+    transition: 0.2s; 
+    white-space: nowrap; 
+}
+
+@media (min-width: 768px) { 
+    .btn-role { font-size: 10px; padding: 0 12px; } 
+}
+
+.btn-role.active { 
+    border-color: #d4af37; 
+    color: #d4af37; 
+    background: rgba(212, 175, 55, 0.1); 
+}
+
+/* Labels and value styling for cards */
+.stat-label { 
+    font-size: 8px; 
+    color: #777; 
+    text-transform: uppercase; 
+    font-weight: bold; 
+}
+
+.stat-value { 
+    font-size: 10px; 
+    font-weight: 600; 
+    color: #ccc; 
+}
+
+select.control-base { 
+    appearance: none; 
+    padding-right: 24px; 
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23777'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); 
+    background-repeat: no-repeat; 
+    background-position: right 8px center; 
+    background-size: 12px; 
+}
+
+/* 
+ * Tactical Metric Tooltips 
+ */
+.info-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 9px;
+    line-height: 1.4;
+    color: #bbb;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    display: none;
+}
+
+.info-tooltip.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Tooltip Arrow */
+.info-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #2a2a2a transparent transparent transparent;
+}
+
+.info-tooltip::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 7px;
+    border-style: solid;
+    border-color: #444 transparent transparent transparent;
+    margin-top: 1px;
+}

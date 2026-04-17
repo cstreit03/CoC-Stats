@@ -1,5 +1,13 @@
+/**
+ * Rendering Module
+ * Responsible for generating all dynamic HTML content for the dashboard.
+ */
 import { roleMap, getTHImage, parseCoCDate } from './constants.js';
 
+/**
+ * Renders the member roster list with league icons and donation stats.
+ * @param {Array} list - Array of member objects.
+ */
 export function renderMembers(list) {
     const container = document.getElementById('memberList');
     if (!container) return;
@@ -28,6 +36,9 @@ export function renderMembers(list) {
     }).join('');
 }
 
+/**
+ * Returns a simple string label for TH differentials (Hard, Normal, Easy).
+ */
 function getDifficultyLabel(targetTH, actorTH) {
     if (targetTH === "?" || actorTH === "?") return "Unknown";
     const diff = targetTH - actorTH;
@@ -36,9 +47,13 @@ function getDifficultyLabel(targetTH, actorTH) {
     return "Easy";
 }
 
+/**
+ * Renders a compact attack summary card within the member cards.
+ */
 export function renderAtkSmall(atk, infoMap, isDefense = false, memberTH = "?", attackNum = 1) {
     const label = `Attack #${attackNum}`;
     
+    // Greyed out state for attacks not yet used
     if (!atk) return `
         <div class="flex flex-col gap-1">
             <p class="text-[7px] font-black text-gray-600 uppercase tracking-widest pl-1">${label}</p>
@@ -59,6 +74,7 @@ export function renderAtkSmall(atk, infoMap, isDefense = false, memberTH = "?", 
     const stars = '★'.repeat(atk.stars).padEnd(3, '☆');
     const pct = atk.destructionPercentage;
     
+    // Success-based color coding for results
     let colorClass = "text-green-500";
     let bgColorClass = "bg-green-500";
     if (atk.stars === 2) {
@@ -78,7 +94,7 @@ export function renderAtkSmall(atk, infoMap, isDefense = false, memberTH = "?", 
             <div class="p-2 bg-[#1a1a1a] rounded-lg border border-gray-800 h-[58px] relative">
                 <span class="absolute top-1 right-2 text-[7px] font-black uppercase ${diffColor}">${diffLabel}</span>
                 <div class="flex items-center gap-2 mb-1.5">
-                    <span class="text-[9px] font-mono text-gray-500">#${info.pos}</span>
+                    <span class="text-[9px] font-mono text-gray-600">#${info.pos}</span>
                     <img src="${getTHImage(info.th)}" class="w-6 h-6 object-contain">
                     <div class="flex-1 min-w-0">
                         <p class="text-[9px] text-white font-bold truncate">${info.name} (TH${info.th})</p>
@@ -95,6 +111,9 @@ export function renderAtkSmall(atk, infoMap, isDefense = false, memberTH = "?", 
         </div>`;
 }
 
+/**
+ * Calculates a relative countdown string for War Day or Prep Day.
+ */
 function getCountdown(endTimeStr) {
     const end = parseCoCDate(endTimeStr);
     if (!end) return "00:00:00";
@@ -107,6 +126,7 @@ function getCountdown(endTimeStr) {
     return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
+// Global state for war detail filters (Active/History)
 let countdownInterval = null;
 let currentWarFilters = {
     attacks: 'all',
@@ -117,6 +137,9 @@ let currentWarFilters = {
     strategy: 'Mirror'
 };
 
+/**
+ * Renders the main scrollable list of past and current wars.
+ */
 export function renderWarHistory(warHistory) {
     const container = document.getElementById('warHistoryList');
     if (!container) return;
@@ -125,6 +148,7 @@ export function renderWarHistory(warHistory) {
         return;
     }
     const now = new Date();
+    // Sort logic: Active wars pinned to top, then reverse chronological
     const sorted = [...warHistory].sort((a, b) => {
         const aEnd = parseCoCDate(a.endTime);
         const bEnd = parseCoCDate(b.endTime);
@@ -133,7 +157,10 @@ export function renderWarHistory(warHistory) {
         if (aActive !== bActive) return bActive - aActive;
         return b.startTime.localeCompare(a.startTime);
     });
+    
+    // Clear old timer if exists
     if (countdownInterval) clearInterval(countdownInterval);
+    
     container.innerHTML = sorted.map(war => {
         const totalPossibleAttacks = war.teamSize * war.attacksPerMember;
         const clanAttacks = war.clan.attacks || 0;
@@ -145,13 +172,16 @@ export function renderWarHistory(warHistory) {
         let statusLabel = "";
         let countdownTarget = null;
         let isPinned = now < end;
+        
         if (now < start) { statusLabel = "Preparation Day"; countdownTarget = war.startTime; }
         else if (now < end) { statusLabel = "War Day"; countdownTarget = war.endTime; }
+        
         const pinnedClass = isPinned ? 'border-gold bg-[#2a2618]' : 'border-gray-700 bg-[#252525]';
         const clanStars = war.clan.stars || 0;
         const opponentStars = war.opponent.stars || 0;
         const clanDest = war.clan.destructionPercentage || 0;
         const opponentDest = war.opponent.destructionPercentage || 0;
+        
         let resultLabel = statusLabel;
         let scoreColor = "gold";
         if (!isPinned) {
@@ -194,6 +224,8 @@ export function renderWarHistory(warHistory) {
             </div>
         </div>`;
     }).join('');
+    
+    // Start live countdown timer
     countdownInterval = setInterval(() => {
         document.querySelectorAll('[id^="cd-"]').forEach(el => {
             const warFile = el.id.replace('cd-', '');
@@ -207,6 +239,9 @@ export function renderWarHistory(warHistory) {
     }, 1000);
 }
 
+/**
+ * Generates a card for a clan member in the war detail view.
+ */
 function renderMemberCard(m, infoMap, totalAttacks) {
     const totalStars = (m.attacks || []).reduce((sum, a) => sum + a.stars, 0);
     return `
@@ -236,6 +271,10 @@ function renderMemberCard(m, infoMap, totalAttacks) {
         </div>`;
 }
 
+/**
+ * MATH: Win Probability Simulation
+ * Uses MTD history to project the most likely final score.
+ */
 function calculateWinProbability(warData, history) {
     const buckets = {
         'UP2': { sum: 0, count: 0, def: 0.8 }, 
@@ -244,6 +283,7 @@ function calculateWinProbability(warData, history) {
         'DROP': { sum: 0, count: 0, def: 2.8 }
     };
 
+    // 1. Gather historical data
     history.forEach(w => {
         const oppMap = {};
         w.opponent.members.forEach(om => oppMap[om.tag] = om.townhallLevel || om.townHallLevel);
@@ -271,9 +311,9 @@ function calculateWinProbability(warData, history) {
         return buckets[cat].count > 0 ? buckets[cat].sum / buckets[cat].count : buckets[cat].def;
     };
 
+    // 2. Project Clan Final Score
     const oppMembers = [...warData.opponent.members].sort((a,b) => a.mapPosition - b.mapPosition);
     let clanProjectedStars = warData.clan.stars || 0;
-    
     const offsetMap = { 'Up One': -1, 'Mirror': 0, 'Drop One': 1, 'Drop Two': 2, 'Drop Three': 3 };
     const offset = offsetMap[currentWarFilters.strategy] || 0;
 
@@ -286,13 +326,13 @@ function calculateWinProbability(warData, history) {
             let targetIdx = (m.mapPosition - 1) + offset;
             if (targetIdx < 0) targetIdx = 0;
             if (targetIdx >= oppMembers.length) targetIdx = oppMembers.length - 1;
-            
             const target = oppMembers[targetIdx];
             const diff = (target.townhallLevel || target.townHallLevel) - (m.townhallLevel || m.townHallLevel);
             clanProjectedStars += getExpected(diff);
         }
     });
 
+    // 3. Project Enemy Final Score (based on their current efficiency)
     const oppAttacksUsed = warData.opponent.attacks || 0;
     const oppPossible = warData.teamSize * 2;
     const oppRemaining = oppPossible - oppAttacksUsed;
@@ -304,6 +344,9 @@ function calculateWinProbability(warData, history) {
     return Math.min(99, Math.max(1, Math.round(prob)));
 }
 
+/**
+ * Renders the War Detail View (Summary, Metrics, and Roster/Map).
+ */
 export function renderWarDetail(warData, history = []) {
     const container = document.getElementById('warResults');
     const metricsContainer = document.getElementById('warMetrics');
@@ -311,9 +354,10 @@ export function renderWarDetail(warData, history = []) {
 
     const totalPossibleAttacks = warData.teamSize * warData.attacksPerMember;
 
-    // 1. Math for Metrics
+    // --- METRIC LOGIC ---
     const winProb = calculateWinProbability(warData, history);
     
+    // Technical Power Ratio: Available Clan TH Levels / Opponent TH Levels still needing 3-stars
     const clanTHSum = warData.clan.members.reduce((sum, m) => sum + (m.townhallLevel || m.townHallLevel || 0), 0);
     const oppTHSum = warData.opponent.members.reduce((sum, m) => sum + (m.townhallLevel || m.townHallLevel || 0), 0);
     const initialTHRatio = (clanTHSum / oppTHSum).toFixed(2);
@@ -322,32 +366,32 @@ export function renderWarDetail(warData, history = []) {
         const attacksLeft = 2 - (m.attacks ? m.attacks.length : 0);
         return sum + ((m.townhallLevel || m.townHallLevel || 0) * attacksLeft);
     }, 0);
-    
     const oppBasesNeedsClearingSum = warData.opponent.members
         .filter(m => (m.bestOpponentAttack?.stars || 0) < 3)
         .reduce((sum, m) => sum + (m.townhallLevel || m.townHallLevel || 0), 0);
     const currentTHRatio = oppBasesNeedsClearingSum > 0 ? (clanAvailableTHPower / oppBasesNeedsClearingSum).toFixed(2) : "∞";
 
+    // Map completion: % of enemy bases cleared
     const threeStarredBases = warData.opponent.members.filter(m => (m.bestOpponentAttack?.stars || 0) === 3).length;
     const mapCompletionPct = Math.round((threeStarredBases / warData.teamSize) * 100);
 
+    // Gapped bases: count of bases hit but not 3-starred
     const cleanupNeeded = warData.opponent.members.filter(m => {
         const stars = m.bestOpponentAttack?.stars || 0;
         return stars > 0 && stars < 3;
     }).length;
 
-    // Global toggle function
+    // Global toggle function for tooltips
     window.toggleStatInfo = (type, event) => {
         event.stopPropagation();
         const allTooltips = document.querySelectorAll('.info-tooltip');
         const target = document.getElementById(`tooltip-${type}`);
         const isActive = target.classList.contains('active');
-        
         allTooltips.forEach(t => t.classList.remove('active'));
         if (!isActive) target.classList.add('active');
     };
 
-    // 2. Render Metrics Boxes
+    // --- RENDER TOP TACTICAL BOXES ---
     metricsContainer.innerHTML = `
         <div class="bg-[#1a1a1a] p-3 rounded-xl border border-gray-800 flex flex-col justify-between relative group">
             <button onclick="window.toggleStatInfo('prob', event)" class="absolute top-2 right-2 text-[10px] text-gray-600 hover:text-gold transition-colors">ⓘ</button>
@@ -372,8 +416,8 @@ export function renderWarDetail(warData, history = []) {
         </div>
         <div class="bg-[#1a1a1a] p-3 rounded-xl border border-gray-800 flex flex-col justify-center relative group">
             <button onclick="window.toggleStatInfo('comp', event)" class="absolute top-2 right-2 text-[10px] text-gray-600 hover:text-gold transition-colors">ⓘ</button>
-            <div id="tooltip-comp" class="info-tooltip">Map Completion: The percentage of enemy bases that have been successfully 3-starred.</div>
-            <span class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">Map Completion</span>
+            <div id="tooltip-comp" class="info-tooltip">3-Star Wins: The percentage of enemy bases that have been successfully 3-starred.</div>
+            <span class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">3-Star Wins</span>
             <p class="text-xl font-bold text-green-500 leading-none">${mapCompletionPct}% <span class="text-[9px] text-gray-600 font-normal">${threeStarredBases}/${warData.teamSize}</span></p>
         </div>
         <div class="bg-[#1a1a1a] p-3 rounded-xl border border-gray-800 flex flex-col justify-center relative group">
@@ -384,33 +428,30 @@ export function renderWarDetail(warData, history = []) {
         </div>
     `;
 
-    const probSelect = document.getElementById('probStrategy');
-    if (probSelect) {
-        probSelect.onchange = (e) => {
-            currentWarFilters.strategy = e.target.value;
-            renderWarDetail(warData, history);
-        };
-    }
+    document.getElementById('probStrategy').onchange = (e) => {
+        currentWarFilters.strategy = e.target.value;
+        renderWarDetail(warData, history);
+    };
 
-    // 3. Render Filters Bar
+    // --- RENDER FILTERS & TOGGLES ---
     let filterBar = document.getElementById('warDetailFilters');
     if (!filterBar) {
         const detailView = document.getElementById('warDetailView');
         filterBar = document.createElement('div');
         filterBar.id = 'warDetailFilters';
         filterBar.className = 'flex flex-wrap items-center gap-4 mb-6 p-4 bg-[#1a1a1a] rounded-xl border border-gray-800';
-        detailView.insertBefore(filterBar, container);
+        detailView.insertBefore(filterBar, metricsContainer.nextSibling);
     }
     filterBar.innerHTML = `
         <div class="flex items-center gap-2 w-full lg:w-auto pb-4 lg:pb-0 lg:pr-4 border-b lg:border-b-0 lg:border-r border-gray-800 mr-0 lg:mr-2">
-            <button id="toggleClan" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'clan' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[100px]">
+            <button id="toggleClan" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'clan' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[90px]">
                 <img src="${warData.clan.badgeUrls.small}" class="w-3.5 h-3.5">
                 <span class="text-[9px] font-bold uppercase truncate">${warData.clan.name}</span>
             </button>
-            <button id="toggleMap" class="flex-1 lg:flex-none flex items-center justify-center px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'map' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[80px]">
+            <button id="toggleMap" class="flex-1 lg:flex-none flex items-center justify-center px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'map' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[55px]">
                 <span class="text-[9px] font-bold uppercase">Map</span>
             </button>
-            <button id="toggleOpponent" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'opponent' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[100px]">
+            <button id="toggleOpponent" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'opponent' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[90px]">
                 <img src="${warData.opponent.badgeUrls.small}" class="w-3.5 h-3.5">
                 <span class="text-[9px] font-bold uppercase truncate">${warData.opponent.name}</span>
             </button>
@@ -466,7 +507,7 @@ export function renderWarDetail(warData, history = []) {
         renderWarDetail(warData, history);
     };
 
-    // 4. Update Summary Header
+    // --- UPDATE HEADER SUMMARY ---
     const clanStars = warData.clan.stars || 0;
     const opponentStars = warData.opponent.stars || 0;
     const clanDest = warData.clan.destructionPercentage || 0;
@@ -489,12 +530,14 @@ export function renderWarDetail(warData, history = []) {
         }
     }
 
-    document.getElementById('detailClanBadge').src = warData.clan.badgeUrls.small;
-    document.getElementById('detailOpponentBadge').src = warData.opponent.badgeUrls.small;
-    document.getElementById('clanNameDetail').innerText = warData.clan.name;
-    document.getElementById('opponentNameDetail').innerText = warData.opponent.name;
-    document.getElementById('clanAttacks').innerText = `${warData.clan.attacks || 0}/${totalPossibleAttacks} Attacks`;
-    document.getElementById('opponentAttacks').innerText = `${warData.opponent.attacks || 0}/${totalPossibleAttacks} Attacks`;
+    const cn = document.getElementById('clanNameDetail'); if (cn) cn.innerText = warData.clan.name;
+    const on = document.getElementById('opponentNameDetail'); if (on) on.innerText = warData.opponent.name;
+    const cb = document.getElementById('detailClanBadge'); if (cb) cb.src = warData.clan.badgeUrls.small;
+    const ob = document.getElementById('detailOpponentBadge'); if (ob) ob.src = warData.opponent.badgeUrls.small;
+    
+    // Total attack count update (e.g. 25/50)
+    const ca = document.getElementById('clanAttacks'); if (ca) ca.innerText = `${warData.clan.attacks || 0}/${totalPossibleAttacks} Attacks`;
+    const oa = document.getElementById('opponentAttacks'); if (oa) oa.innerText = `${warData.opponent.attacks || 0}/${totalPossibleAttacks} Attacks`;
 
     const summaryHeader = document.getElementById('warResultHeader');
     if (summaryHeader) {
@@ -504,21 +547,21 @@ export function renderWarDetail(warData, history = []) {
             <p class="text-[8px] md:text-[9px] text-gray-500 mt-1">${clanDest.toFixed(1)}% vs ${opponentDest.toFixed(1)}%</p>`;
     }
 
-    // 5. Render Attacks List
+    // --- RENDER VIEW-SPECIFIC CONTENT ---
     const clanMap = {};
     warData.clan.members.forEach(m => clanMap[m.tag] = { pos: m.mapPosition, th: m.townhallLevel || m.townHallLevel, name: m.name });
     const opponentMap = {};
     warData.opponent.members.forEach(m => opponentMap[m.tag] = { pos: m.mapPosition, th: m.townhallLevel || m.townHallLevel, name: m.name });
 
+    // Special View: Map (Side-by-side technical comparison)
     if (currentWarFilters.selectedClan === 'map') {
         const sortedClan = [...warData.clan.members].sort((a,b) => a.mapPosition - b.mapPosition);
         const sortedOpp = [...warData.opponent.members].sort((a,b) => a.mapPosition - b.mapPosition);
-        
         container.className = "space-y-2";
         container.innerHTML = `
             <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest pl-1 mb-2">War Map Matchup</p>
             ${sortedClan.map((m, idx) => {
-                const opp = sortedOpp[idx] || { name: 'Empty', townhallLevel: 0 };
+                const opp = sortedOpp[idx] || { name: 'Empty', townhallLevel: 0, mapPosition: idx+1 };
                 return `
                 <div class="flex items-center gap-2 p-2 bg-[#252525] rounded-lg border border-gray-800">
                     <div class="flex items-center gap-2 flex-1 min-w-0">
@@ -526,7 +569,7 @@ export function renderWarDetail(warData, history = []) {
                         <img src="${getTHImage(m.townhallLevel || m.townHallLevel)}" class="w-6 h-6 object-contain">
                         <span class="text-[10px] font-bold text-white truncate">${m.name}</span>
                     </div>
-                    <div class="text-[9px] font-black text-gray-700 mx-2 italic">VS</div>
+                    <div class="text-[9px] font-black text-gray-700 mx-1 italic">VS</div>
                     <div class="flex items-center justify-end gap-2 flex-1 min-w-0 text-right">
                         <span class="text-[10px] font-bold text-gray-300 truncate">${opp.name}</span>
                         <img src="${getTHImage(opp.townhallLevel || opp.townHallLevel)}" class="w-6 h-6 object-contain">
@@ -554,18 +597,16 @@ export function renderWarDetail(warData, history = []) {
         return true;
     };
 
-    const sortFunc = (a, b) => {
+    const membersToRender = currentWarFilters.selectedClan === 'clan' ? warData.clan.members : warData.opponent.members;
+    const oppositeMap = currentWarFilters.selectedClan === 'clan' ? opponentMap : clanMap;
+    const filteredMembers = membersToRender.filter(m => filterFunc(m, oppositeMap)).sort((a,b) => {
         if (currentWarFilters.sortBy === 'stars') {
             const aStars = (a.attacks || []).reduce((sum, atk) => sum + atk.stars, 0);
             const bStars = (b.attacks || []).reduce((sum, atk) => sum + atk.stars, 0);
             return bStars - aStars || a.mapPosition - b.mapPosition;
         }
         return a.mapPosition - b.mapPosition;
-    };
-
-    const membersToRender = currentWarFilters.selectedClan === 'clan' ? warData.clan.members : warData.opponent.members;
-    const oppositeMap = currentWarFilters.selectedClan === 'clan' ? opponentMap : clanMap;
-    const filteredMembers = membersToRender.filter(m => filterFunc(m, oppositeMap)).sort(sortFunc);
+    });
 
     container.className = "space-y-3";
     container.innerHTML = `
@@ -575,6 +616,9 @@ export function renderWarDetail(warData, history = []) {
         ${filteredMembers.map(m => renderMemberCard(m, oppositeMap, warData.attacksPerMember)).join('')}`;
 }
 
+/**
+ * Renders the About tab content with clan identity and join requirements.
+ */
 export function renderAbout(clanData) {
     const container = document.getElementById('aboutContent');
     if (!container || !clanData) return;
@@ -594,9 +638,6 @@ export function renderAbout(clanData) {
                                 <h2 class="medieval text-xl md:text-2xl font-bold gold">${clanData.name}</h2>
                                 <div class="flex items-center gap-2 mt-1">
                                     <span class="text-[10px] md:text-xs font-mono text-gray-500">${clanData.tag}</span>
-                                    <button onclick="navigator.clipboard.writeText('${clanData.tag}')" class="p-1 hover:bg-[#252525] rounded transition-colors" title="Copy Tag">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                                    </button>
                                 </div>
                             </div>
                         </div>
