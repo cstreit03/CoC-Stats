@@ -53,7 +53,7 @@ export function renderAtkSmall(atk, infoMap, isDefense = false, memberTH = "?", 
     const info = infoMap[lookupTag] || { name: "Unknown", th: "?", pos: "?" };
     
     const diffLabel = isDefense ? getDifficultyLabel(memberTH, info.th) : getDifficultyLabel(info.th, memberTH);
-    const diffColor = diffLabel === "Hard" ? "text-red-400" : (diffLabel === "Normal" ? "text-gray-400" : "text-green-400");
+    const diffColor = diffLabel === "Hard" ? "text-red-400" : (diffLabel === "Normal" ? "text-yellow-400" : "text-green-400");
 
     const stars = '★'.repeat(atk.stars).padEnd(3, '☆');
     const pct = atk.destructionPercentage;
@@ -152,16 +152,14 @@ export function renderWarHistory(warHistory) {
         
         let statusLabel = "";
         let countdownTarget = null;
-        let isPinned = false;
+        let isPinned = now < end;
 
         if (now < start) {
             statusLabel = "Preparation Day";
             countdownTarget = war.startTime;
-            isPinned = true;
         } else if (now < end) {
             statusLabel = "War Day";
             countdownTarget = war.endTime;
-            isPinned = true;
         }
 
         const pinnedClass = isPinned ? 'border-gold bg-[#2a2618]' : 'border-gray-700 bg-[#252525]';
@@ -197,14 +195,13 @@ export function renderWarHistory(warHistory) {
 
         return `
         <div class="p-4 rounded-xl border ${pinnedClass} hover:border-gold cursor-pointer transition-colors relative overflow-hidden" onclick="window.loadWarDetail('${war.filename}')">
-            ${isPinned ? '<div class="absolute top-0 right-0 bg-gold text-[#121212] text-[8px] font-black px-2 py-0.5 uppercase tracking-tighter">Current War</div>' : ''}
             <div class="flex justify-between items-center mb-2">
                 <div class="flex flex-col">
                     <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">${formattedDate}</span>
                 </div>
             </div>
             <div class="flex justify-between items-center mb-4">
-                <div class="flex items-center gap-2 md:gap-3 w-1/3">
+                <div class="flex items-center gap-2 md:gap-3 w-1/3 text-left">
                     <img src="${war.clan.badgeUrls.small}" class="w-8 h-8 md:w-10 md:h-10">
                     <div class="min-w-0">
                         <p class="text-[11px] md:text-xs font-bold text-white truncate">${war.clan.name}</p>
@@ -213,8 +210,8 @@ export function renderWarHistory(warHistory) {
                 </div>
                 <div class="flex flex-col items-center justify-center w-1/3 text-center px-1">
                     ${countdownTarget ? `<p id="cd-${war.filename}" data-end="${countdownTarget}" class="mb-1 font-mono gold text-[10px] md:text-[11px]">${getCountdown(countdownTarget)}</p>` : ''}
-                    <p class="text-[9px] md:text-[11px] font-black ${isPinned ? 'gold' : scoreColor} uppercase tracking-widest mb-1 leading-tight">${resultLabel}</p>
-                    <p class="medieval ${isPinned ? 'gold' : scoreColor} text-lg md:text-xl">${war.clan.stars} - ${war.opponent.stars}</p>
+                    <p class="text-[10px] md:text-[13px] font-black ${isPinned ? 'gold' : scoreColor} uppercase tracking-widest mb-1 leading-tight">${resultLabel}</p>
+                    <p class="medieval ${isPinned ? 'gold' : scoreColor} text-lg md:text-2xl">${war.clan.stars} - ${war.opponent.stars}</p>
                     <p class="text-[8px] md:text-[9px] text-gray-500 mt-1">${war.clan.destructionPercentage.toFixed(1)}% vs ${war.opponent.destructionPercentage.toFixed(1)}%</p>
                 </div>
                 <div class="flex items-center gap-2 md:gap-3 text-right justify-end w-1/3">
@@ -284,17 +281,17 @@ export function renderWarDetail(warData) {
 
     filterBar.innerHTML = `
         <div class="flex items-center gap-2 w-full lg:w-auto pb-4 lg:pb-0 lg:pr-4 border-b lg:border-b-0 lg:border-r border-gray-800 mr-0 lg:mr-2">
-            <button id="toggleClan" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'clan' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all">
+            <button id="toggleClan" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'clan' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[120px]">
                 <img src="${warData.clan.badgeUrls.small}" class="w-4 h-4">
                 <span class="text-[9px] md:text-[10px] font-bold uppercase truncate">${warData.clan.name}</span>
             </button>
-            <button id="toggleOpponent" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'opponent' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all">
+            <button id="toggleOpponent" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'opponent' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[120px]">
                 <img src="${warData.opponent.badgeUrls.small}" class="w-4 h-4">
                 <span class="text-[9px] md:text-[10px] font-bold uppercase truncate">${warData.opponent.name}</span>
             </button>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-center gap-4 w-full lg:w-auto">
+        <div class="grid grid-cols-2 sm:grid-cols-2 lg:flex lg:items-center gap-4 w-full lg:w-auto">
             <div class="flex items-center gap-2">
                 <span class="text-[10px] font-bold text-gray-500 uppercase">Attacks:</span>
                 <select id="filterAttacks" class="control-base flex-1 h-8">
@@ -315,7 +312,7 @@ export function renderWarDetail(warData) {
                 </select>
             </div>
             <div class="flex items-center gap-2">
-                <span class="text-[10px] font-bold text-gray-500 uppercase">Perf:</span>
+                <span class="text-[10px] font-bold text-gray-500 uppercase">Results:</span>
                 <select id="filterPerformance" class="control-base flex-1 h-8">
                     <option value="all" ${currentWarFilters.performance === 'all' ? 'selected' : ''}>All Stars</option>
                     <option value="0-2" ${currentWarFilters.performance === '0-2' ? 'selected' : ''}>0-2 Stars</option>
@@ -324,13 +321,13 @@ export function renderWarDetail(warData) {
                 </select>
             </div>
             <div class="flex items-center gap-2">
-                <span class="text-[10px] font-bold text-gray-500 uppercase">Sort:</span>
+                <span class="text-[10px] font-bold text-gray-500 uppercase whitespace-nowrap">Map #:</span>
                 <select id="filterSort" class="control-base flex-1 h-8">
-                    <option value="mapPosition" ${currentWarFilters.sortBy === 'mapPosition' ? 'selected' : ''}>Map Pos</option>
+                    <option value="mapPosition" ${currentWarFilters.sortBy === 'mapPosition' ? 'selected' : ''}>Map Position</option>
                     <option value="stars" ${currentWarFilters.sortBy === 'stars' ? 'selected' : ''}>Total Stars</option>
                 </select>
             </div>
-            <button id="clearDetailFilters" class="text-[10px] font-bold text-gray-500 hover:text-gold uppercase transition-colors sm:col-span-2 lg:ml-auto">Clear</button>
+            <button id="clearDetailFilters" class="text-[10px] font-bold text-gray-500 hover:text-gold uppercase transition-colors col-span-2 lg:ml-auto">Clear</button>
         </div>
     `;
 
@@ -345,53 +342,67 @@ export function renderWarDetail(warData) {
         renderWarDetail(warData);
     };
 
-    const clanStars = warData.clan.stars;
-    const opponentStars = warData.opponent.stars;
-    const clanDest = warData.clan.destructionPercentage;
-    const opponentDest = warData.opponent.destructionPercentage;
+    const clanStars = warData.clan.stars || 0;
+    const opponentStars = warData.opponent.stars || 0;
+    const clanDest = warData.clan.destructionPercentage || 0;
+    const opponentDest = warData.opponent.destructionPercentage || 0;
+
+    const start = parseCoCDate(warData.startTime);
+    const end = parseCoCDate(warData.endTime);
+    const now = new Date();
+    let isPinned = now < end;
 
     let resultLabel = "";
     let scoreColor = "gold";
-    if (clanStars > opponentStars) {
-        resultLabel = "Victory";
-        scoreColor = "text-green-500";
-    } else if (clanStars < opponentStars) {
-        resultLabel = "Loss";
-        scoreColor = "text-red-500";
+
+    if (now < start) {
+        resultLabel = "Preparation Day";
+    } else if (now < end) {
+        resultLabel = "War Day";
     } else {
-        if (clanDest > opponentDest) {
+        if (clanStars > opponentStars) {
             resultLabel = "Victory";
             scoreColor = "text-green-500";
-        } else if (clanDest < opponentDest) {
+        } else if (clanStars < opponentStars) {
             resultLabel = "Loss";
             scoreColor = "text-red-500";
         } else {
-            resultLabel = "Draw";
-            scoreColor = "text-gray-400";
+            if (clanDest > opponentDest) {
+                resultLabel = "Victory";
+                scoreColor = "text-green-500";
+            } else if (clanDest < opponentDest) {
+                resultLabel = "Loss";
+                scoreColor = "text-red-500";
+            } else {
+                resultLabel = "Draw";
+                scoreColor = "text-gray-400";
+            }
         }
     }
 
-    const totalStarsEl = document.getElementById('totalStars');
-    totalStarsEl.innerText = clanStars;
-    totalStarsEl.className = `text-xl font-bold ${scoreColor}`;
+    // Reset the header elements specifically by ID
+    const clanScoreEl = document.getElementById('totalStars');
+    const oppScoreEl = document.getElementById('opponentStars');
+    
+    clanScoreEl.innerText = clanStars;
+    clanScoreEl.className = `text-xl font-bold ${isPinned ? 'gold' : scoreColor}`;
+    oppScoreEl.innerText = opponentStars;
+    oppScoreEl.className = `text-xl font-bold ${isPinned ? 'gold' : (scoreColor === "text-green-500" ? "text-red-500" : (scoreColor === "text-red-500" ? "text-green-500" : "text-gray-400"))}`;
+
     document.getElementById('totalDestruction').innerText = clanDest.toFixed(1) + "%";
     document.getElementById('clanAttacks').innerText = `${warData.clan.attacks || 0}/${totalPossibleAttacks} Attacks`;
-    
-    const summaryHeader = document.querySelector('.medieval.gold.text-lg');
-    if (summaryHeader) {
-        summaryHeader.innerHTML = `<div class="flex flex-col items-center">
-            <span class="text-xs font-black text-gray-500 uppercase tracking-widest mb-1">${resultLabel}</span>
-            <span>VS</span>
-        </div>`;
-    }
-
-    document.getElementById('opponentNameDetail').innerText = warData.opponent.name;
-    const opponentStarsEl = document.getElementById('opponentStars');
-    opponentStarsEl.innerText = opponentStars;
-    const oppScoreColor = scoreColor === "text-green-500" ? "text-red-500" : (scoreColor === "text-red-500" ? "text-green-500" : "text-gray-400");
-    opponentStarsEl.className = `text-xl font-bold ${oppScoreColor}`;
     document.getElementById('opponentDestruction').innerText = opponentDest.toFixed(1) + "%";
     document.getElementById('opponentAttacks').innerText = `${warData.opponent.attacks || 0}/${totalPossibleAttacks} Attacks`;
+    document.getElementById('clanNameDetail').innerText = warData.clan.name;
+    document.getElementById('opponentNameDetail').innerText = warData.opponent.name;
+    
+    const summaryHeader = document.getElementById('warResultHeader');
+    if (summaryHeader) {
+        summaryHeader.innerHTML = `
+            <span class="text-[10px] md:text-xs font-black ${isPinned ? 'gold' : scoreColor} uppercase tracking-widest mb-1 leading-none">${resultLabel}</span>
+            <p class="medieval ${isPinned ? 'gold' : scoreColor} text-lg md:text-2xl">${clanStars} - ${opponentStars}</p>
+        `;
+    }
 
     const clanMap = {};
     warData.clan.members.forEach(m => clanMap[m.tag] = { pos: m.mapPosition, th: m.townhallLevel || m.townHallLevel, name: m.name });
@@ -453,14 +464,7 @@ export function renderAbout(clanData) {
 
     container.innerHTML = `
         <div class="panel p-4 md:p-6 space-y-6 md:space-y-8">
-            <!-- Basic Info Row -->
-            <div class="bg-[#1a1a1a] p-4 md:p-6 rounded-xl border border-gray-800 relative overflow-hidden">
-                <div class="absolute top-0 right-0">
-                    <div class="bg-gold/10 text-gold text-[9px] font-black px-3 py-1 uppercase tracking-widest border-b border-l border-gold/20 rounded-bl-lg">
-                        ${clanData.type}
-                    </div>
-                </div>
-                
+            <div class="bg-[#1a1a1a] p-4 md:p-6 rounded-xl border border-gray-800">
                 <div class="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
                     <div class="flex-1 space-y-4 w-full">
                         <div class="flex items-center gap-4">
@@ -470,127 +474,63 @@ export function renderAbout(clanData) {
                                 <div class="flex items-center gap-2 mt-1">
                                     <span class="text-[10px] md:text-xs font-mono text-gray-500">${clanData.tag}</span>
                                     <button onclick="navigator.clipboard.writeText('${clanData.tag}')" class="p-1 hover:bg-[#252525] rounded transition-colors" title="Copy Tag">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <p class="text-[11px] md:text-sm text-gray-300 leading-relaxed italic">"${clanData.description}"</p>
+                        <p class="text-[11px] md:text-sm text-gray-300 leading-relaxed italic">${clanData.description}</p>
                     </div>
                     <div class="grid grid-cols-2 gap-x-4 md:gap-x-8 gap-y-4 w-full md:w-auto md:min-w-[350px]">
-                        <div>
-                            <p class="stat-label">Location</p>
-                            <p class="stat-value text-[11px] md:text-xs">${clanData.location?.name || 'Unknown'}</p>
-                        </div>
-                        <div>
-                            <p class="stat-label">Language</p>
-                            <p class="stat-value text-[11px] md:text-xs">${clanData.chatLanguage?.name || 'English'}</p>
-                        </div>
-                        <div>
-                            <p class="stat-label">Clan Level</p>
-                            <p class="stat-value text-gold text-[11px] md:text-xs">${clanData.clanLevel}</p>
-                        </div>
-                        <div>
-                            <p class="stat-label">Family Friendly</p>
-                            <p class="stat-value text-[11px] md:text-xs">${clanData.isFamilyFriendly ? 'Yes' : 'No'}</p>
-                        </div>
-                        <div class="col-span-2">
-                            <p class="stat-label mb-2">Clan Labels</p>
-                            <div class="flex flex-wrap gap-2">
-                                ${labelsHtml}
-                            </div>
-                        </div>
+                        <div><p class="stat-label">Location</p><p class="stat-value text-[11px] md:text-xs">${clanData.location?.name || 'Unknown'}</p></div>
+                        <div><p class="stat-label">Language</p><p class="stat-value text-[11px] md:text-xs">${clanData.chatLanguage?.name || 'English'}</p></div>
+                        <div><p class="stat-label">Clan Level</p><p class="stat-value text-gold text-[11px] md:text-xs">${clanData.clanLevel}</p></div>
+                        <div><p class="stat-label">Family Friendly</p><p class="stat-value text-[11px] md:text-xs">${clanData.isFamilyFriendly ? 'Yes' : 'No'}</p></div>
+                        <div class="col-span-2"><p class="stat-label mb-2">Clan Labels</p><div class="flex flex-wrap gap-2">${labelsHtml}</div></div>
                     </div>
                 </div>
             </div>
-
-            <!-- Three Columns under it -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- War Info -->
                 <div class="bg-[#1a1a1a] p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]">
-                    <div>
+                    <div class="flex-1 flex flex-col">
                         <h3 class="medieval text-xs md:text-sm font-bold gold mb-4 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                             War Performance
                         </h3>
-                        <div class="space-y-3 md:space-y-4">
-                            <div class="p-3 bg-[#252525] rounded-lg h-[62px] flex flex-col justify-center">
-                                <p class="stat-label">War League</p>
-                                <p class="stat-value text-white text-[11px] md:text-xs">${clanData.warLeague?.name || 'Unranked'}</p>
-                            </div>
+                        <div class="space-y-3 md:space-y-4 flex-1">
+                            <div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">War League</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.warLeague?.name || 'Unranked'}</p></div>
                             <div class="grid grid-cols-3 gap-2">
-                                <div class="text-center p-2 bg-[#252525] rounded-lg h-[54px] flex flex-col justify-center">
-                                    <p class="stat-label">Wins</p>
-                                    <p class="text-green-500 font-bold text-[11px] md:text-xs">${clanData.warWins}</p>
-                                </div>
-                                <div class="text-center p-2 bg-[#252525] rounded-lg h-[54px] flex flex-col justify-center">
-                                    <p class="stat-label">Losses</p>
-                                    <p class="text-red-500 font-bold text-[11px] md:text-xs">${clanData.warLosses}</p>
-                                </div>
-                                <div class="text-center p-2 bg-[#252525] rounded-lg h-[54px] flex flex-col justify-center">
-                                    <p class="stat-label">Ties</p>
-                                    <p class="text-gray-500 font-bold text-[11px] md:text-xs">${clanData.warTies}</p>
-                                </div>
+                                <div class="text-center p-2 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Wins</p><p class="text-green-500 font-bold text-[11px] md:text-xs">${clanData.warWins}</p></div>
+                                <div class="text-center p-2 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Losses</p><p class="text-red-500 font-bold text-[11px] md:text-xs">${clanData.warLosses}</p></div>
+                                <div class="text-center p-2 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Ties</p><p class="text-gray-500 font-bold text-[11px] md:text-xs">${clanData.warTies}</p></div>
                             </div>
+                            <button id="viewWarHistoryBtn" class="w-full py-2 bg-[#252525] border border-gray-700 rounded h-[58px] text-[9px] md:text-[10px] font-bold uppercase hover:border-gold transition-colors">View War History</button>
                         </div>
                     </div>
-                    <button onclick="document.getElementById('tab-war').click()" class="mt-6 w-full py-2 bg-[#252525] border border-gray-700 rounded text-[9px] md:text-[10px] font-bold uppercase hover:border-gold transition-colors">
-                        View War History
-                    </button>
                 </div>
-
-                <!-- Clan Capital -->
                 <div class="bg-[#1a1a1a] p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]">
                     <div>
                         <h3 class="medieval text-xs md:text-sm font-bold gold mb-4 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H5a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m0 10V4m-2 4h1m1 4h1m-3 10a1 1 0 011-1h2a1 1 0 011 1v3a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3z" />
-                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H5a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m0 10V4m-2 4h1m1 4h1m-3 10a1 1 0 011-1h2a1 1 0 011 1v3a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3z" /></svg>
                             Clan Capital
                         </h3>
                         <div class="space-y-3 md:space-y-4">
-                            <div class="p-3 bg-[#252525] rounded-lg h-[62px] flex flex-col justify-center">
-                                <p class="stat-label">Capital League</p>
-                                <p class="stat-value text-white text-[11px] md:text-xs">${clanData.capitalLeague?.name || 'Unranked'}</p>
-                            </div>
-                            <div class="p-3 bg-[#252525] rounded-lg h-[62px] flex flex-col justify-center">
-                                <p class="stat-label">Capital Hall Level</p>
-                                <p class="stat-value text-white text-[11px] md:text-xs">Level ${clanData.clanCapital?.capitalHallLevel || 'Unknown'}</p>
-                            </div>
-                            <div class="p-3 bg-[#252525] rounded-lg h-[62px] flex flex-col justify-center">
-                                <p class="stat-label">Districts Unlocked</p>
-                                <p class="stat-value text-white text-[11px] md:text-xs">${(clanData.clanCapital?.districts || []).length} Districts</p>
-                            </div>
+                            <div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Capital League</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.capitalLeague?.name || 'Unranked'}</p></div>
+                            <div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Capital Hall Level</p><p class="stat-value text-white text-[11px] md:text-xs">Level ${clanData.clanCapital?.capitalHallLevel || 'Unknown'}</p></div>
+                            <div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Districts Unlocked</p><p class="stat-value text-white text-[11px] md:text-xs">${(clanData.clanCapital?.districts || []).length} Districts</p></div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Requirements -->
                 <div class="bg-[#1a1a1a] p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]">
                     <div>
                         <h3 class="medieval text-xs md:text-sm font-bold gold mb-4 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             Join Requirements
                         </h3>
                         <div class="space-y-3 md:space-y-4">
-                            <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[62px]">
-                                <p class="stat-label">Required Trophies</p>
-                                <p class="stat-value text-white text-[11px] md:text-xs">${clanData.requiredTrophies.toLocaleString()}</p>
-                            </div>
-                            <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[62px]">
-                                <p class="stat-label">Min. Town Hall</p>
-                                <p class="stat-value text-white text-[11px] md:text-xs">TH${clanData.requiredTownhallLevel}</p>
-                            </div>
-                            <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[62px]">
-                                <p class="stat-label">Builder Trophies</p>
-                                <p class="stat-value text-white text-[11px] md:text-xs">${clanData.requiredBuilderBaseTrophies.toLocaleString()}</p>
-                            </div>
+                            <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Required Trophies</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.requiredTrophies.toLocaleString()}</p></div>
+                            <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Min. Town Hall</p><p class="stat-value text-white text-[11px] md:text-xs">TH${clanData.requiredTownhallLevel}</p></div>
+                            <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Builder Trophies</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.requiredBuilderBaseTrophies.toLocaleString()}</p></div>
                         </div>
                     </div>
                 </div>
@@ -605,23 +545,22 @@ export function renderInfractions(warHistory) {
         container.innerHTML = `<p class="text-center text-gray-600 italic py-10 font-light text-sm">No war data available.</p>`;
         return;
     }
-
     const last5 = [...warHistory].sort((a, b) => b.startTime.localeCompare(a.startTime)).slice(0, 5);
+    const now = new Date();
     const infractionMap = {}; 
-
     last5.forEach(war => {
         const teamSize = war.teamSize;
         const totalAttacks = teamSize * 2;
+        const end = parseCoCDate(war.endTime);
+        const isWarOver = now > end;
         const hitMap = {}; 
-        
         const allAttacks = [];
         war.clan.members.forEach(m => {
             if (m.attacks) {
-                m.attacks.forEach(a => allAttacks.push({ ...a, attackerName: m.name, attackerTH: m.townhallLevel || m.townHallLevel }));
+                m.attacks.forEach(a => allAttacks.push({ ...a, attackerTag: m.tag, attackerName: m.name, attackerTH: m.townhallLevel || m.townHallLevel }));
             }
         });
         allAttacks.sort((a, b) => a.order - b.order);
-
         const freshHitsByOrder = {}; 
         allAttacks.forEach(a => {
             if (!hitMap[a.defenderTag]) {
@@ -629,84 +568,84 @@ export function renderInfractions(warHistory) {
                 hitMap[a.defenderTag] = true;
             }
         });
-
+        const opponentMap = {};
+        war.opponent.members.forEach(om => opponentMap[om.tag] = om);
         war.clan.members.forEach(m => {
             const th = m.townhallLevel || m.townHallLevel;
             const attacks = m.attacks || [];
-            
+            const isDone = attacks.length === 2 || isWarOver;
+            if (!isDone) return; 
             if (!infractionMap[m.tag]) infractionMap[m.tag] = { name: m.name, th, list: [] };
-
-            if (attacks.length < 2) {
+            if (isWarOver && attacks.length < 2) {
                 const missed = 2 - attacks.length;
                 infractionMap[m.tag].list.push({
-                    type: missed === 2 ? 'Missed both attacks' : 'Missed 2nd attack',
+                    type: missed === 2 ? 'Missed first and second attacks' : 'Missed second attack',
+                    explanation: missed === 2 ? 'Failed to perform any attacks in a completed war.' : 'Used only one of two available attacks in a completed war.',
                     war: war.startTime,
+                    warFile: war.filename,
                     severity: 'high'
                 });
             }
-
             if (attacks.length === 2) {
-                const atk2 = attacks.sort((a,b) => a.order - b.order)[1];
+                const sortedAtks = [...attacks].sort((a,b) => a.order - b.order);
+                const atk2 = sortedAtks[1];
                 const isEarly = atk2.order < (totalAttacks * 0.7);
                 const isFresh = freshHitsByOrder[atk2.order];
-                
                 if (isEarly && isFresh) {
+                    const defender = opponentMap[atk2.defenderTag];
                     infractionMap[m.tag].list.push({
                         type: 'Premature 2nd attack on fresh base',
+                        explanation: `Attack #2 was used on an un-hit base (#${defender?.mapPosition || '?'}) before the 8-hour window (approx. 70% of roster attacks).`,
+                        detail: { targetPos: defender?.mapPosition || '?', targetName: defender?.name || 'Unknown', targetTH: defender?.townhallLevel || defender?.townHallLevel || '?', duration: atk2.duration, atkNum: 2, stars: atk2.stars },
                         war: war.startTime,
+                        warFile: war.filename,
                         severity: 'medium'
                     });
                 }
             }
-
-            attacks.forEach(a => {
-                const defender = war.opponent.members.find(om => om.tag === a.defenderTag);
+            attacks.forEach((a) => {
+                const defender = opponentMap[a.defenderTag];
                 const defTH = defender ? (defender.townhallLevel || defender.townHallLevel) : 0;
-                
-                if (th - defTH > 1 && a.stars === 3 && a.duration < 90) {
+                const sortedAtks = [...attacks].sort((a,b) => a.order - b.order);
+                const atkNum = sortedAtks.findIndex(sa => sa.order === a.order) + 1;
+                if (th - defTH >= 2 && a.stars === 3 && a.duration < 90) {
                     infractionMap[m.tag].list.push({
-                        type: `Bullying (Crushed TH${defTH} in ${a.duration}s)`,
+                        type: 'Bullying',
+                        explanation: `Attack #${atkNum} targeted a base ${th - defTH} Town Halls lower and cleared it in only ${a.duration}s.`,
+                        detail: { targetPos: defender?.mapPosition || '?', targetName: defender?.name || 'Unknown', targetTH: defTH, duration: a.duration, atkNum: atkNum, stars: a.stars },
                         war: war.startTime,
+                        warFile: war.filename,
                         severity: 'low'
                     });
                 }
             });
         });
     });
-
-    const players = Object.values(infractionMap)
-        .filter(p => p.list.length > 0)
-        .sort((a, b) => b.list.length - a.list.length);
-
+    const players = Object.values(infractionMap).filter(p => p.list.length > 0).sort((a, b) => b.list.length - a.list.length);
     if (players.length === 0) {
-        container.innerHTML = `<p class="text-center text-gray-600 italic py-10 font-light text-sm">No infractions found in recent wars. Excellent discipline!</p>`;
+        container.innerHTML = `<p class="text-center text-gray-600 italic py-10 font-light text-sm">No infractions found. Excellent discipline!</p>`;
         return;
     }
-
     container.innerHTML = players.map(p => `
         <div class="p-4 bg-[#252525] rounded-xl border border-gray-800">
             <div class="flex justify-between items-start mb-3">
                 <div class="flex items-center gap-3">
                     <img src="${getTHImage(p.th)}" class="w-8 h-8">
-                    <div>
-                        <p class="font-bold text-white text-sm">${p.name}</p>
-                        <p class="text-[9px] text-gray-500 uppercase font-black">TH${p.th}</p>
-                    </div>
+                    <div><p class="font-bold text-white text-sm">${p.name}</p><p class="text-[9px] text-gray-500 uppercase font-black">TH${p.th}</p></div>
                 </div>
-                <div class="bg-red-500/10 text-red-500 text-[9px] font-black px-2 py-0.5 rounded border border-red-500/20 uppercase">
-                    ${p.list.length} Violation${p.list.length > 1 ? 's' : ''}
-                </div>
+                <div class="bg-red-500/10 text-red-500 text-[9px] font-black px-2 py-0.5 rounded border border-red-500/20 uppercase">${p.list.length} Violation${p.list.length > 1 ? 's' : ''}</div>
             </div>
-            <div class="space-y-2">
+            <div class="space-y-3">
                 ${p.list.map(inf => {
                     const d = inf.war;
                     const date = `${d.substring(4,6)}/${d.substring(6,8)}`;
                     const color = inf.severity === 'high' ? 'text-red-400' : (inf.severity === 'medium' ? 'text-yellow-400' : 'text-blue-400');
-                    return `
-                    <div class="flex justify-between items-center text-[10px] p-2 bg-[#1a1a1a] rounded border border-gray-800">
-                        <span class="font-medium ${color}">${inf.type}</span>
-                        <span class="text-gray-600 font-mono">${date}</span>
-                    </div>`;
+                    let detailHtml = "";
+                    if (inf.detail) {
+                        const stars = '★'.repeat(inf.detail.stars).padEnd(3, '☆');
+                        detailHtml = `<div class="mt-2 p-2 bg-black/20 rounded border border-gray-800/50 space-y-2"><div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="text-[8px] font-mono text-gray-500">Target #${inf.detail.targetPos}</span><img src="${getTHImage(inf.detail.targetTH)}" class="w-4 h-4 object-contain"><span class="text-[9px] text-gray-300 font-bold">${inf.detail.targetName} (TH${inf.detail.targetTH})</span></div><span class="text-[9px] gold font-mono">${stars}</span></div></div>`;
+                    }
+                    return `<div class="flex flex-col p-2 bg-[#1a1a1a] rounded border border-gray-800"><div class="flex justify-between items-center mb-1"><div class="flex items-center gap-2"><span class="text-[9px] font-black text-gray-600 uppercase">Attack #${inf.detail ? inf.detail.atkNum : 'Missed'}</span><span class="text-[10px] font-bold ${color}">${inf.type}</span></div><div class="flex items-center gap-3"><span class="text-gray-600 font-mono text-[9px]">${date}</span><button onclick="window.loadWarDetailFromInfraction('${inf.warFile}')" class="text-[8px] font-black gold hover:underline uppercase">View War</button></div></div><p class="text-[9px] text-gray-500 leading-tight">${inf.explanation}</p>${detailHtml}</div>`;
                 }).join('')}
             </div>
         </div>

@@ -6,7 +6,6 @@
     <title>CoC War Stats</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <!-- Flatpickr for advanced calendar control -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -18,65 +17,23 @@
         .th-icon { width: 36px; height: 36px; object-fit: contain; }
         @media (min-width: 768px) { .th-icon { width: 44px; height: 44px; } }
         .gold { color: #d4af37; }
-        
         .tab-btn { flex: 1; text-align: center; padding: 12px 8px; font-size: 10px; font-weight: bold; color: #666; border-bottom: 2px solid #222; transition: 0.3s; background: #1a1a1a; cursor: pointer; white-space: nowrap; }
         @media (min-width: 768px) { .tab-btn { padding: 14px; font-size: 12px; } }
         .tab-btn.active { color: #d4af37; border-bottom-color: #d4af37; background: #222; }
-
         .sub-tab-btn { padding: 8px 12px; font-size: 10px; font-weight: bold; color: #555; border-radius: 6px; transition: 0.2s; cursor: pointer; border: 1px solid transparent; }
         .sub-tab-btn.active { color: #d4af37; background: rgba(212, 175, 55, 0.1); border-color: rgba(212, 175, 55, 0.3); }
-
         .hidden-section { display: none !important; }
-
-        .control-base { 
-            background: #252525; 
-            border: 1px solid #333; 
-            border-radius: 6px; 
-            padding: 6px 10px; 
-            font-size: 10px; 
-            font-weight: 600; 
-            color: #ccc; 
-            outline: none; 
-            transition: all 0.2s;
-            height: 32px;
-            display: flex;
-            align-items: center;
-        }
+        .control-base { background: #252525; border: 1px solid #333; border-radius: 6px; padding: 6px 10px; font-size: 10px; font-weight: 600; color: #ccc; outline: none; transition: all 0.2s; height: 32px; display: flex; align-items: center; }
         .control-base:focus { border-color: #d4af37; }
-        
-        .btn-role { 
-            font-size: 9px; 
-            font-weight: bold; 
-            border: 1px solid #333; 
-            border-radius: 6px; 
-            padding: 0 10px; 
-            cursor: pointer; 
-            color: #777; 
-            background: #1e1e1e; 
-            height: 32px;
-            transition: 0.2s;
-            white-space: nowrap;
-        }
+        .btn-role { font-size: 9px; font-weight: bold; border: 1px solid #333; border-radius: 6px; padding: 0 10px; cursor: pointer; color: #777; background: #1e1e1e; height: 32px; transition: 0.2s; white-space: nowrap; }
         @media (min-width: 768px) { .btn-role { font-size: 10px; padding: 0 12px; } }
-        .btn-role:hover { border-color: #555; color: #aaa; }
         .btn-role.active { border-color: #d4af37; color: #d4af37; background: rgba(212, 175, 55, 0.1); }
-        
         .stat-label { font-size: 8px; color: #777; text-transform: uppercase; font-weight: bold; }
         .stat-value { font-size: 10px; font-weight: 600; color: #ccc; }
-
-        /* Custom Select styling to hide default arrow in some browsers and ensure consistency */
-        select.control-base {
-            appearance: none;
-            padding-right: 24px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23777'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 8px center;
-            background-size: 12px;
-        }
+        select.control-base { appearance: none; padding-right: 24px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23777'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; background-size: 12px; }
     </style>
 </head>
 <body class="p-3 md:p-10">
-
     <div class="max-w-7xl mx-auto mb-6 flex flex-col items-center text-center">
         <div id="headerContent" class="flex items-center gap-3 md:gap-4">
             <img id="clanBadge" class="w-10 h-10 md:w-16 md:h-16 hidden" alt="Clan Badge">
@@ -84,21 +41,15 @@
         </div>
         <div class="h-1 w-16 bg-[#d4af37] mt-2"></div>
     </div>
-
     <div class="flex mb-6 rounded-t-lg overflow-hidden border border-[#333]">
         <button id="tab-about" class="tab-btn active medieval uppercase tracking-widest">About</button>
         <button id="tab-members" class="tab-btn medieval uppercase tracking-widest">Members</button>
         <button id="tab-war" class="tab-btn medieval uppercase tracking-widest">War</button>
     </div>
-
     <div class="max-w-7xl mx-auto">
-        
-        <!-- About Section -->
         <div id="section-about" class="lg:col-span-12">
             <div id="aboutContent"></div>
         </div>
-
-        <!-- Members Section -->
         <div id="section-members" class="lg:col-span-12 hidden-section">
             <div class="panel p-3 md:p-6">
                 <div class="flex flex-col gap-4 md:gap-6 mb-6">
@@ -106,14 +57,10 @@
                         <h2 id="memberTitle" class="medieval text-base md:text-lg font-bold">Current Members</h2>
                         <span id="memberCount" class="text-[9px] md:text-[10px] font-mono text-gray-500">0 / 50</span>
                     </div>
-
                     <div class="flex flex-col gap-4 p-3 md:p-4 bg-[#1a1a1a] rounded-xl border border-gray-800">
-                        <!-- Filters -->
                         <div class="flex flex-col md:flex-row md:items-center gap-3">
                             <div class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
                                 <span class="text-[10px] font-bold text-gray-500 uppercase">Role:</span>
                             </div>
                             <div class="flex flex-wrap gap-2">
@@ -124,20 +71,14 @@
                                 <button data-role="member" class="btn-role">MEMBER</button>
                             </div>
                         </div>
-                        
-                        <!-- Controls -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-center gap-4 lg:gap-6">
                             <div class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 <span class="text-[10px] font-bold text-gray-500 uppercase">Date:</span>
                                 <input type="text" id="memberDate" class="control-base flex-1 md:w-32 font-mono" placeholder="Select Date...">
                             </div>
                             <div class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
                                 <span class="text-[10px] font-bold text-gray-500 uppercase">Sort:</span>
                                 <select id="sortBy" class="control-base flex-1">
                                     <option value="league" selected>League + Trophies</option>
@@ -149,32 +90,26 @@
                                     <option value="role">Role</option>
                                 </select>
                             </div>
-                            <button id="clearMembersFilters" class="text-[10px] font-bold text-gray-500 hover:text-gold uppercase transition-colors sm:col-span-2 lg:ml-auto">Clear Filters</button>
+                            <button id="clearMembersFilters" class="text-[10px] font-bold text-gray-500 hover:text-gold uppercase transition-colors sm:col-span-2 lg:ml-auto">Clear</button>
                         </div>
                     </div>
                 </div>
                 <div id="memberList" class="space-y-2"></div>
             </div>
         </div>
-
-        <!-- War Section -->
         <div id="section-war" class="lg:col-span-12 hidden-section">
             <div class="panel p-3 md:p-6">
-                <!-- War Sub Tabs -->
                 <div class="flex items-center gap-2 mb-6 p-1 bg-[#1a1a1a] rounded-lg w-fit border border-gray-800">
                     <button id="subtab-history" class="sub-tab-btn active uppercase tracking-wider">History</button>
                     <button id="subtab-stats" class="sub-tab-btn uppercase tracking-wider">Stats</button>
                     <button id="subtab-infractions" class="sub-tab-btn uppercase tracking-wider">Infractions</button>
                 </div>
-
                 <div id="warListView">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 px-1">
                         <h2 class="medieval text-base md:text-lg font-bold">War History</h2>
                         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
                             <div class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 <span class="text-[10px] font-bold text-gray-500 uppercase">Date Range:</span>
                             </div>
                             <div class="flex items-center gap-2 w-full sm:w-auto">
@@ -185,12 +120,8 @@
                             </div>
                         </div>
                     </div>
-                    <div id="warHistoryList" class="space-y-4">
-                        <!-- War history items will be rendered here -->
-                    </div>
+                    <div id="warHistoryList" class="space-y-4"></div>
                 </div>
-
-                <!-- War Stats View (Formerly separate section) -->
                 <div id="warStatsView" class="hidden">
                     <h2 class="medieval text-base md:text-lg font-bold mb-6">War Analytics</h2>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -199,28 +130,20 @@
                             <canvas id="starsTrendChart"></canvas>
                         </div>
                         <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
-                            <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Top 10 Performers (MTD)</h3>
+                            <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Top 10 Performers MTD</h3>
                             <canvas id="topPerformersChart"></canvas>
                         </div>
                     </div>
                 </div>
-
-                <!-- War Infractions View -->
                 <div id="warInfractionsView" class="hidden">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="medieval text-base md:text-lg font-bold">War Infractions</h2>
                         <span class="text-[9px] font-bold text-gray-500 uppercase italic">Last 5 Wars Analyzed</span>
                     </div>
-                    <div id="infractionsList" class="space-y-4">
-                        <!-- Infractions will be rendered here -->
-                    </div>
+                    <div id="infractionsList" class="space-y-4"></div>
                 </div>
-
                 <div id="warDetailView" class="hidden">
-                    <button id="backToWarList" class="mb-4 text-xs gold hover:underline flex items-center gap-1">
-                        ← Back to History
-                    </button>
-                    
+                    <button id="backToWarList" class="mb-4 text-xs gold hover:underline flex items-center gap-1">← Back to History</button>
                     <div id="warSummary" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-[#252525] rounded-xl border border-dashed border-gray-700">
                         <div class="text-center">
                             <p class="stat-label" id="clanNameDetail">Clan</p>
@@ -228,7 +151,7 @@
                             <p id="totalDestruction" class="text-sm font-bold text-gray-400">0%</p>
                             <p id="clanAttacks" class="text-[10px] text-gray-500">0/0 Attacks</p>
                         </div>
-                        <div class="flex flex-col items-center justify-center">
+                        <div id="warResultHeader" class="flex flex-col items-center justify-center">
                             <span class="medieval gold text-lg">VS</span>
                         </div>
                         <div class="text-center">
@@ -238,15 +161,11 @@
                             <p id="opponentAttacks" class="text-[10px] text-gray-500">0/0 Attacks</p>
                         </div>
                     </div>
-
-                    <div id="warResults" class="space-y-4">
-                        <!-- War detail content will now be a single column of wide rows -->
-                    </div>
+                    <div id="warResults" class="space-y-4"></div>
                 </div>
             </div>
         </div>
     </div>
-
     <script type="module" src="js/app.js"></script>
 </body>
 </html>

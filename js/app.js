@@ -39,6 +39,7 @@ async function init() {
 
         // Default: About tab
         renderAbout(latestClanData);
+        bindAboutPageEvents();
 
         // Update Header with Clan Info
         updateHeader(clanData.name, clanData.badgeUrls?.medium || clanData.badgeUrls?.small);
@@ -99,6 +100,16 @@ async function init() {
 
     } catch (e) {
         console.error("Data error.", e);
+    }
+}
+
+function bindAboutPageEvents() {
+    const btn = document.getElementById('viewWarHistoryBtn');
+    if (btn) {
+        btn.onclick = () => {
+            switchView('war');
+            switchSubView('history');
+        };
     }
 }
 
@@ -189,12 +200,23 @@ async function loadWarDetail(filename) {
     }
 }
 
+function loadWarDetailFromInfraction(filename) {
+    switchView('war');
+    switchSubView('history');
+    loadWarDetail(filename);
+}
+
 function showWarList() {
     document.getElementById('warListView').classList.remove('hidden');
     document.getElementById('warDetailView').classList.add('hidden');
 }
 
 window.loadWarDetail = loadWarDetail;
+window.loadWarDetailFromInfraction = loadWarDetailFromInfraction;
+window.loadWarDetailFromAbout = () => {
+    switchView('war');
+    switchSubView('history');
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     init();
@@ -202,6 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('tab-about').addEventListener('click', () => {
         switchView('about');
         renderAbout(latestClanData);
+        bindAboutPageEvents();
     });
     document.getElementById('tab-members').addEventListener('click', () => switchView('members'));
     document.getElementById('tab-war').addEventListener('click', () => switchView('war'));
