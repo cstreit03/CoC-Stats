@@ -11,6 +11,7 @@ export function switchView(view) {
     };
 
     Object.keys(sections).forEach(key => {
+        if (!sections[key] || !tabs[key]) return;
         if (key === view) {
             sections[key].classList.remove('hidden-section');
             tabs[key].classList.add('active');
@@ -24,16 +25,15 @@ export function switchView(view) {
 export function switchSubView(subview) {
     const views = {
         history: document.getElementById('warListView'),
-        stats: document.getElementById('warStatsView'),
-        infractions: document.getElementById('warInfractionsView')
+        stats: document.getElementById('warStatsView')
     };
     const btns = {
         history: document.getElementById('subtab-history'),
-        stats: document.getElementById('subtab-stats'),
-        infractions: document.getElementById('subtab-infractions')
+        stats: document.getElementById('subtab-stats')
     };
 
     Object.keys(views).forEach(key => {
+        if (!views[key] || !btns[key]) return;
         if (key === subview) {
             views[key].classList.remove('hidden');
             btns[key].classList.add('active');
@@ -43,8 +43,8 @@ export function switchSubView(subview) {
         }
     });
     
-    // Ensure war detail view is hidden when switching sub-tabs
-    document.getElementById('warDetailView').classList.add('hidden');
+    const detailView = document.getElementById('warDetailView');
+    if (detailView) detailView.classList.add('hidden');
 }
 
 export function updateHeader(name, badgeUrl) {
@@ -64,5 +64,6 @@ export function updateMemberCount(count) {
 }
 
 export function updatePageTitle(title) {
-    document.getElementById('pageTitle').innerText = title;
+    const el = document.getElementById('pageTitle');
+    if (el) el.innerText = title;
 }

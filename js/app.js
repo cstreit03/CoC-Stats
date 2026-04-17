@@ -10,8 +10,7 @@ import {
     renderMembers, 
     renderWarHistory, 
     renderWarDetail, 
-    renderAbout,
-    renderInfractions
+    renderAbout
 } from './render.js';
 import { renderCharts } from './charts.js';
 import { 
@@ -31,20 +30,16 @@ let fp = null;
 
 async function init() {
     try {
-        // Load Current Data
         const clanData = await fetchClanData();
         latestClanData = clanData;
         allMembers = clanData.memberList || [];
         updateDisplay();
 
-        // Default: About tab
         renderAbout(latestClanData);
         bindAboutPageEvents();
 
-        // Update Header with Clan Info
         updateHeader(clanData.name, clanData.badgeUrls?.medium || clanData.badgeUrls?.small);
 
-        // Load Member Index for calendar restrictions
         const memberIndex = await fetchMembersIndex();
         const todayStr = new Date().toISOString().split('T')[0];
         
@@ -57,7 +52,6 @@ async function init() {
             availableMemberDates.push(todayStr);
         }
 
-        // Initialize Flatpickr for Member Date
         fp = flatpickr("#memberDate", {
             defaultDate: todayStr,
             enable: availableMemberDates,
@@ -67,7 +61,6 @@ async function init() {
             }
         });
 
-        // Initialize Flatpickr for War Dates
         const startPicker = flatpickr("#warStartDate", {
             dateFormat: "Y-m-d",
             onChange: function(selectedDates, dateStr) {
@@ -83,7 +76,6 @@ async function init() {
             }
         });
 
-        // Load War History
         const warIndex = await fetchWarIndex();
         const warDataPromises = warIndex.reverse().map(async (filename) => {
             try {
@@ -146,7 +138,7 @@ function filterWarHistory() {
     let filtered = fullWarHistory.filter(w => {
         const now = new Date();
         const year = w.endTime.substring(0, 4);
-        const month = w.endTime.substring(4, 6) - 1;
+        const month = parseInt(w.endTime.substring(4, 6)) - 1;
         const day = w.endTime.substring(6, 8);
         const hour = w.endTime.substring(9, 11);
         const min = w.endTime.substring(11, 13);
@@ -200,23 +192,12 @@ async function loadWarDetail(filename) {
     }
 }
 
-function loadWarDetailFromInfraction(filename) {
-    switchView('war');
-    switchSubView('history');
-    loadWarDetail(filename);
-}
-
 function showWarList() {
     document.getElementById('warListView').classList.remove('hidden');
     document.getElementById('warDetailView').classList.add('hidden');
 }
 
 window.loadWarDetail = loadWarDetail;
-window.loadWarDetailFromInfraction = loadWarDetailFromInfraction;
-window.loadWarDetailFromAbout = () => {
-    switchView('war');
-    switchSubView('history');
-};
 
 document.addEventListener('DOMContentLoaded', () => {
     init();
@@ -227,17 +208,15 @@ document.addEventListener('DOMContentLoaded', () => {
         bindAboutPageEvents();
     });
     document.getElementById('tab-members').addEventListener('click', () => switchView('members'));
-    document.getElementById('tab-war').addEventListener('click', () => switchView('war'));
+    document.getElementById('tab-war').addEventListener('click', () => {
+        switchView('war');
+        switchSubView('history');
+    });
 
-    // War Sub-tabs
     document.getElementById('subtab-history').addEventListener('click', () => switchSubView('history'));
     document.getElementById('subtab-stats').addEventListener('click', () => {
         switchSubView('stats');
         renderCharts(fullWarHistory);
-    });
-    document.getElementById('subtab-infractions').addEventListener('click', () => {
-        switchSubView('infractions');
-        renderInfractions(fullWarHistory);
     });
     
     document.getElementById('sortBy').addEventListener('change', updateDisplay);

@@ -47,11 +47,9 @@
         <button id="tab-war" class="tab-btn medieval uppercase tracking-widest">War</button>
     </div>
     <div class="max-w-7xl mx-auto">
-        <!-- About Section -->
         <div id="section-about" class="lg:col-span-12">
             <div id="aboutContent"></div>
         </div>
-        <!-- Members Section -->
         <div id="section-members" class="lg:col-span-12 hidden-section">
             <div class="panel p-3 md:p-6">
                 <div class="flex flex-col gap-4 md:gap-6 mb-6">
@@ -99,13 +97,11 @@
                 <div id="memberList" class="space-y-2"></div>
             </div>
         </div>
-        <!-- War Section -->
         <div id="section-war" class="lg:col-span-12 hidden-section">
             <div class="panel p-3 md:p-6">
                 <div class="flex items-center gap-2 mb-6 p-1 bg-[#1a1a1a] rounded-lg w-fit border border-gray-800">
                     <button id="subtab-history" class="sub-tab-btn active uppercase tracking-wider">History</button>
                     <button id="subtab-stats" class="sub-tab-btn uppercase tracking-wider">Stats</button>
-                    <button id="subtab-infractions" class="sub-tab-btn uppercase tracking-wider">Infractions</button>
                 </div>
                 <div id="warListView">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 px-1">
@@ -136,13 +132,11 @@
                         </div>
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
-                                <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Stars Earned / Matchup Difficulty</h3>
-                                <div id="topPerformersContainer">
-                                    <canvas id="topPerformersChart"></canvas>
-                                </div>
+                                <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Stars Earned Breakdown</h3>
+                                <div id="topPerformersContainer" class="overflow-x-auto"></div>
                             </div>
                             <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
-                                <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Stars Earned / Conversion Rate</h3>
+                                <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Stars Conversion Rates</h3>
                                 <div id="efficiencyContainer">
                                     <canvas id="efficiencyChart"></canvas>
                                 </div>
@@ -150,30 +144,24 @@
                         </div>
                     </div>
                 </div>
-                <div id="warInfractionsView" class="hidden">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="medieval text-base md:text-lg font-bold">War Infractions</h2>
-                        <span class="text-[9px] font-bold text-gray-500 uppercase italic">Last 5 Wars Analyzed</span>
-                    </div>
-                    <div id="infractionsList" class="space-y-4"></div>
-                </div>
                 <div id="warDetailView" class="hidden">
                     <button id="backToWarList" class="mb-4 text-xs gold hover:underline flex items-center gap-1">← Back to History</button>
-                    <div id="warSummary" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-[#252525] rounded-xl border border-dashed border-gray-700">
-                        <div class="text-center">
-                            <p class="stat-label" id="clanNameDetail">Clan</p>
-                            <p id="totalStars" class="text-xl font-bold">0</p>
-                            <p id="totalDestruction" class="text-sm font-bold text-gray-400">0%</p>
-                            <p id="clanAttacks" class="text-[10px] text-gray-500">0/0 Attacks</p>
+                    <div id="warSummary" class="flex flex-row items-center justify-between gap-2 p-4 bg-[#252525] rounded-xl border border-dashed border-gray-700 min-h-[100px]">
+                        <div class="flex items-center gap-2 md:gap-3 w-1/3 text-left">
+                            <img id="detailClanBadge" src="" class="w-8 h-8 md:w-10 md:h-10">
+                            <div class="min-w-0">
+                                <p id="clanNameDetail" class="text-[11px] md:text-xs font-bold text-white truncate">Clan</p>
+                                <p id="clanAttacks" class="text-[8px] md:text-[9px] text-gray-500">0/0 Attacks</p>
+                            </div>
                         </div>
-                        <div id="warResultHeader" class="flex flex-col items-center justify-center">
-                            <span class="medieval gold text-lg">VS</span>
+                        <div id="warResultHeader" class="flex flex-col items-center justify-center w-1/3 text-center px-1">
                         </div>
-                        <div class="text-center">
-                            <p class="stat-label" id="opponentNameDetail">Opponent</p>
-                            <p id="opponentStars" class="text-xl font-bold">0</p>
-                            <p id="opponentDestruction" class="text-sm font-bold text-gray-400">0%</p>
-                            <p id="opponentAttacks" class="text-[10px] text-gray-500">0/0 Attacks</p>
+                        <div class="flex items-center gap-2 md:gap-3 text-right justify-end w-1/3">
+                            <div class="min-w-0">
+                                <p id="opponentNameDetail" class="text-[11px] md:text-xs font-bold text-white truncate">Opponent</p>
+                                <p id="opponentAttacks" class="text-[8px] md:text-[9px] text-gray-500">0/0 Attacks</p>
+                            </div>
+                            <img id="detailOpponentBadge" src="" class="w-8 h-8 md:w-10 md:h-10">
                         </div>
                     </div>
                     <div id="warResults" class="space-y-4"></div>

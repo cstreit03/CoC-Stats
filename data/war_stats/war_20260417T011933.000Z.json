@@ -1,5 +1,5 @@
 {
-    "state": "preparation",
+    "state": "inWar",
     "teamSize": 25,
     "attacksPerMember": 2,
     "battleModifier": "none",
@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 0,
-        "stars": 0,
-        "destructionPercentage": 0.0,
+        "attacks": 3,
+        "stars": 8,
+        "destructionPercentage": 11.72,
         "members": [
             {
                 "tag": "#9C229UGJ",
@@ -31,6 +31,24 @@
                 "name": "M M 1960",
                 "townhallLevel": 18,
                 "mapPosition": 2,
+                "attacks": [
+                    {
+                        "attackerTag": "#2PULPGL90",
+                        "defenderTag": "#82CCPYVV",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 2,
+                        "duration": 113
+                    },
+                    {
+                        "attackerTag": "#2PULPGL90",
+                        "defenderTag": "#20YPV89VV",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 3,
+                        "duration": 90
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -192,6 +210,16 @@
                 "name": "nofreelunch",
                 "townhallLevel": 18,
                 "mapPosition": 12,
+                "attacks": [
+                    {
+                        "attackerTag": "#2P8LYJCUR",
+                        "defenderTag": "#LGUUUP88",
+                        "stars": 2,
+                        "destructionPercentage": 93,
+                        "order": 1,
+                        "duration": 176
+                    }
+                ],
                 "opponentAttacks": 0
             }
         ]
@@ -228,7 +256,15 @@
                 "name": "whisperingeye13",
                 "townhallLevel": 18,
                 "mapPosition": 4,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2PULPGL90",
+                    "defenderTag": "#82CCPYVV",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 2,
+                    "duration": 113
+                }
             },
             {
                 "tag": "#8Y2CUL00",
@@ -263,7 +299,15 @@
                 "name": "CHASE",
                 "townhallLevel": 18,
                 "mapPosition": 14,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2P8LYJCUR",
+                    "defenderTag": "#LGUUUP88",
+                    "stars": 2,
+                    "destructionPercentage": 93,
+                    "order": 1,
+                    "duration": 176
+                }
             },
             {
                 "tag": "#Q9YY8VVP",
@@ -277,7 +321,15 @@
                 "name": "sILLy",
                 "townhallLevel": 18,
                 "mapPosition": 1,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2PULPGL90",
+                    "defenderTag": "#20YPV89VV",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 3,
+                    "duration": 90
+                }
             },
             {
                 "tag": "#LP29YRRL",

@@ -1,5 +1,6 @@
+import { parseCoCDate } from './constants.js';
+
 let starsChart = null;
-let topPerformersChart = null;
 let efficiencyChart = null;
 
 export function renderCharts(warHistory) {
@@ -10,27 +11,10 @@ export function renderCharts(warHistory) {
     renderEfficiencyChart(warHistory);
 }
 
-function parseCoCDate(dateStr) {
-    if (!dateStr) return null;
-    const year = dateStr.substring(0, 4);
-    const month = dateStr.substring(4, 6) - 1;
-    const day = dateStr.substring(6, 8);
-    const hour = dateStr.substring(9, 11);
-    const min = dateStr.substring(11, 13);
-    const sec = dateStr.substring(13, 15);
-    return new Date(Date.UTC(year, month, day, hour, min, sec));
-}
-
-function getDifficulty(targetTH, attackerTH) {
-    if (!targetTH || !attackerTH) return "Normal";
-    const diff = targetTH - attackerTH;
-    if (diff > 0) return "Hard";
-    if (diff === 0) return "Normal";
-    return "Easy";
-}
-
 function renderStarsTrend(warHistory) {
-    const ctx = document.getElementById('starsTrendChart').getContext('2d');
+    const canvas = document.getElementById('starsTrendChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
     const now = new Date();
 
     const finishedWars = warHistory.filter(w => {
@@ -38,12 +22,19 @@ function renderStarsTrend(warHistory) {
         return end && now > end;
     });
     
+    if (finishedWars.length === 0) {
+        // If no wars finished, show an empty state or message on the canvas parent
+        if (starsChart) starsChart.destroy();
+        return;
+    }
+
     const sortedHistory = finishedWars.sort((a, b) => a.startTime.localeCompare(b.startTime));
     const last10 = sortedHistory.slice(-10);
     
     const labels = last10.map(w => w.startTime.substring(4, 6) + '/' + w.startTime.substring(6, 8));
     const data = last10.map(w => {
-        const totalPossibleStars = w.teamSize * 3;
+        const totalPossibleStars = (w.teamSize || 0) * 3;
+        if (totalPossibleStars === 0) return 0;
         return ((w.clan.stars / totalPossibleStars) * 100).toFixed(1);
     });
 
@@ -75,72 +66,90 @@ function renderStarsTrend(warHistory) {
 }
 
 function renderTopPerformers(warHistory) {
-    const ctx = document.getElementById('topPerformersChart').getContext('2d');
+    const container = document.getElementById('topPerformersContainer');
+    if (!container) return;
     const now = new Date();
     const currentMonthStr = now.toISOString().substring(0, 4) + now.toISOString().substring(5, 7);
-    const monthWars = warHistory.filter(w => w.startTime.substring(0, 6) === currentMonthStr);
     
-    const performanceMap = {};
+    const monthWars = warHistory.filter(w => {
+        if (!w.startTime) return false;
+        return w.startTime.substring(0, 6) === currentMonthStr;
+    });
+    
+    const statsMap = {}; 
 
     monthWars.forEach(war => {
-        const opponentMap = {};
-        war.opponent.members.forEach(om => opponentMap[om.tag] = om.townhallLevel || om.townHallLevel);
-
+        if (!war.clan || !war.clan.members) return;
         war.clan.members.forEach(m => {
-            if (!performanceMap[m.tag]) {
-                performanceMap[m.tag] = { name: m.name, Easy: 0, Normal: 0, Hard: 0, total: 0 };
-            }
-            const attackerTH = m.townhallLevel || m.townHallLevel;
+            if (!statsMap[m.tag]) statsMap[m.tag] = { name: m.name, s3: 0, s2: 0, s1: 0, s0: 0, totalStars: 0 };
             (m.attacks || []).forEach(atk => {
-                const diff = getDifficulty(opponentMap[atk.defenderTag], attackerTH);
-                performanceMap[m.tag][diff] += atk.stars;
-                performanceMap[m.tag].total += atk.stars;
+                statsMap[m.tag].totalStars += atk.stars;
+                if (atk.stars === 3) statsMap[m.tag].s3++;
+                else if (atk.stars === 2) statsMap[m.tag].s2++;
+                else if (atk.stars === 1) statsMap[m.tag].s1++;
+                else statsMap[m.tag].s0++;
             });
         });
     });
 
-    const top20 = Object.values(performanceMap)
-        .sort((a, b) => b.total - a.total)
+    const topPerformers = Object.values(statsMap)
+        .filter(p => (p.s3 + p.s2 + p.s1 + p.s0) > 0)
+        .sort((a, b) => b.totalStars - a.totalStars || b.s3 - a.s3)
         .slice(0, 20);
 
-    const labels = top20.map(p => p.name);
-    const datasets = [
-        { label: 'Hard', data: top20.map(p => p.Hard), backgroundColor: '#f87171' }, // Red
-        { label: 'Normal', data: top20.map(p => p.Normal), backgroundColor: '#facc15' }, // Yellow
-        { label: 'Easy', data: top20.map(p => p.Easy), backgroundColor: '#4ade80' } // Green
-    ];
+    if (topPerformers.length === 0) {
+        container.innerHTML = `<p class="text-center text-gray-600 py-10 text-[10px]">No attack data for this month yet.</p>`;
+        return;
+    }
 
-    if (topPerformersChart) topPerformersChart.destroy();
+    let html = `
+        <table class="w-full text-[10px] text-left border-collapse">
+            <thead>
+                <tr class="border-b border-gray-800 text-gray-500 uppercase font-black">
+                    <th class="py-2 pl-1">Player</th>
+                    <th class="py-2 text-center text-green-500">3★</th>
+                    <th class="py-2 text-center text-yellow-500">2★</th>
+                    <th class="py-2 text-center text-red-500">1★</th>
+                    <th class="py-2 text-center text-gray-500">0★</th>
+                    <th class="py-2 text-right pr-1 gold">Total</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-800/30">
+    `;
 
-    topPerformersChart = new Chart(ctx, {
-        type: 'bar',
-        data: { labels, datasets },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: { stacked: true, beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#777', font: { size: 9 } } },
-                y: { stacked: true, grid: { display: false }, ticks: { color: '#ccc', font: { size: 10, weight: 'bold' } } }
-            },
-            plugins: {
-                legend: { position: 'bottom', labels: { color: '#777', font: { size: 9 }, boxWidth: 10, padding: 15 } }
-            }
-        }
+    topPerformers.forEach(p => {
+        html += `
+            <tr class="hover:bg-white/5 transition-colors">
+                <td class="py-2 pl-1 font-bold text-gray-300">${p.name}</td>
+                <td class="py-2 text-center font-mono">${p.s3}</td>
+                <td class="py-2 text-center font-mono">${p.s2}</td>
+                <td class="py-2 text-center font-mono">${p.s1}</td>
+                <td class="py-2 text-center font-mono">${p.s0}</td>
+                <td class="py-2 text-right pr-1 font-bold gold">${p.totalStars}</td>
+            </tr>
+        `;
     });
 
-    document.getElementById('topPerformersContainer').style.height = `${top20.length * 28 + 60}px`;
+    html += `</tbody></table>`;
+    container.innerHTML = html;
 }
 
 function renderEfficiencyChart(warHistory) {
-    const ctx = document.getElementById('efficiencyChart').getContext('2d');
+    const canvas = document.getElementById('efficiencyChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
     const now = new Date();
     const currentMonthStr = now.toISOString().substring(0, 4) + now.toISOString().substring(5, 7);
-    const monthWars = warHistory.filter(w => w.startTime.substring(0, 6) === currentMonthStr);
+    
+    const monthWars = warHistory.filter(w => {
+        if (!w.startTime) return false;
+        return w.startTime.substring(0, 6) === currentMonthStr;
+    });
 
     const statsMap = {}; 
 
     monthWars.forEach(war => {
+        if (!war.clan || !war.clan.members) return;
         war.clan.members.forEach(m => {
             if (!statsMap[m.tag]) statsMap[m.tag] = { name: m.name, s3: 0, s2: 0, s1: 0, s0: 0, total: 0 };
             (m.attacks || []).forEach(atk => {
@@ -158,12 +167,17 @@ function renderEfficiencyChart(warHistory) {
         .sort((a, b) => (b.s3/b.total) - (a.s3/a.total) || b.total - a.total)
         .slice(0, 20);
 
+    if (top20.length === 0) {
+        if (efficiencyChart) efficiencyChart.destroy();
+        return;
+    }
+
     const labels = top20.map(p => p.name);
     const datasets = [
         { label: '3-Star %', data: top20.map(p => (p.s3/p.total*100).toFixed(1)), backgroundColor: '#4ade80' }, // Green
         { label: '2-Star %', data: top20.map(p => (p.s2/p.total*100).toFixed(1)), backgroundColor: '#facc15' }, // Yellow
         { label: '1-Star %', data: top20.map(p => (p.s1/p.total*100).toFixed(1)), backgroundColor: '#ef4444' }, // Red
-        { label: 'Fail %', data: top20.map(p => (p.s0/p.total*100).toFixed(1)), backgroundColor: '#7f1d1d' } // Dark Red
+        { label: 'Fail %', data: top20.map(p => (p.s0/p.total*100).toFixed(1)), backgroundColor: '#9ca3af' }  // Grey
     ];
 
     if (efficiencyChart) efficiencyChart.destroy();
@@ -186,5 +200,8 @@ function renderEfficiencyChart(warHistory) {
         }
     });
 
-    document.getElementById('efficiencyContainer').style.height = `${top20.length * 28 + 60}px`;
+    const container = document.getElementById('efficiencyContainer');
+    if (container) {
+        container.style.height = `${top20.length * 28 + 60}px`;
+    }
 }
