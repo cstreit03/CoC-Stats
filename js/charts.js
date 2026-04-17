@@ -64,6 +64,7 @@ function renderStarsTrend(warHistory) {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 y: { beginAtZero: true, max: 100, grid: { color: '#333' }, ticks: { color: '#777', font: { size: 9 } } },
                 x: { grid: { color: '#333' }, ticks: { color: '#777', font: { size: 9 } } }
@@ -104,9 +105,9 @@ function renderTopPerformers(warHistory) {
 
     const labels = top20.map(p => p.name);
     const datasets = [
-        { label: 'Hard', data: top20.map(p => p.Hard), backgroundColor: '#f87171' },
-        { label: 'Normal', data: top20.map(p => p.Normal), backgroundColor: '#facc15' },
-        { label: 'Easy', data: top20.map(p => p.Easy), backgroundColor: '#4ade80' }
+        { label: 'Hard', data: top20.map(p => p.Hard), backgroundColor: '#f87171' }, // Red
+        { label: 'Normal', data: top20.map(p => p.Normal), backgroundColor: '#facc15' }, // Yellow
+        { label: 'Easy', data: top20.map(p => p.Easy), backgroundColor: '#4ade80' } // Green
     ];
 
     if (topPerformersChart) topPerformersChart.destroy();
@@ -128,7 +129,7 @@ function renderTopPerformers(warHistory) {
         }
     });
 
-    ctx.canvas.parentNode.style.height = `${top20.length * 28 + 60}px`;
+    document.getElementById('topPerformersContainer').style.height = `${top20.length * 28 + 60}px`;
 }
 
 function renderEfficiencyChart(warHistory) {
@@ -137,7 +138,7 @@ function renderEfficiencyChart(warHistory) {
     const currentMonthStr = now.toISOString().substring(0, 4) + now.toISOString().substring(5, 7);
     const monthWars = warHistory.filter(w => w.startTime.substring(0, 6) === currentMonthStr);
 
-    const statsMap = {}; // tag -> { name, s3:0, s2:0, s1:0, s0:0, total: 0 }
+    const statsMap = {}; 
 
     monthWars.forEach(war => {
         war.clan.members.forEach(m => {
@@ -159,10 +160,10 @@ function renderEfficiencyChart(warHistory) {
 
     const labels = top20.map(p => p.name);
     const datasets = [
-        { label: '3-Star %', data: top20.map(p => (p.s3/p.total*100).toFixed(1)), backgroundColor: '#4ade80' },
-        { label: '2-Star %', data: top20.map(p => (p.s2/p.total*100).toFixed(1)), backgroundColor: '#facc15' },
-        { label: '1-Star %', data: top20.map(p => (p.s1/p.total*100).toFixed(1)), backgroundColor: '#9ca3af' },
-        { label: 'Fail %', data: top20.map(p => (p.s0/p.total*100).toFixed(1)), backgroundColor: '#f87171' }
+        { label: '3-Star %', data: top20.map(p => (p.s3/p.total*100).toFixed(1)), backgroundColor: '#4ade80' }, // Green
+        { label: '2-Star %', data: top20.map(p => (p.s2/p.total*100).toFixed(1)), backgroundColor: '#facc15' }, // Yellow
+        { label: '1-Star %', data: top20.map(p => (p.s1/p.total*100).toFixed(1)), backgroundColor: '#ef4444' }, // Red
+        { label: 'Fail %', data: top20.map(p => (p.s0/p.total*100).toFixed(1)), backgroundColor: '#7f1d1d' } // Dark Red
     ];
 
     if (efficiencyChart) efficiencyChart.destroy();
@@ -185,5 +186,5 @@ function renderEfficiencyChart(warHistory) {
         }
     });
 
-    ctx.canvas.parentNode.style.height = `${top20.length * 28 + 60}px`;
+    document.getElementById('efficiencyContainer').style.height = `${top20.length * 28 + 60}px`;
 }

@@ -47,9 +47,11 @@
         <button id="tab-war" class="tab-btn medieval uppercase tracking-widest">War</button>
     </div>
     <div class="max-w-7xl mx-auto">
+        <!-- About Section -->
         <div id="section-about" class="lg:col-span-12">
             <div id="aboutContent"></div>
         </div>
+        <!-- Members Section -->
         <div id="section-members" class="lg:col-span-12 hidden-section">
             <div class="panel p-3 md:p-6">
                 <div class="flex flex-col gap-4 md:gap-6 mb-6">
@@ -97,6 +99,7 @@
                 <div id="memberList" class="space-y-2"></div>
             </div>
         </div>
+        <!-- War Section -->
         <div id="section-war" class="lg:col-span-12 hidden-section">
             <div class="panel p-3 md:p-6">
                 <div class="flex items-center gap-2 mb-6 p-1 bg-[#1a1a1a] rounded-lg w-fit border border-gray-800">
@@ -124,19 +127,25 @@
                 </div>
                 <div id="warStatsView" class="hidden">
                     <h2 class="medieval text-base md:text-lg font-bold mb-6">War Stats</h2>
-                    <div class="flex flex-col gap-8">
+                    <div class="space-y-8">
                         <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
                             <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">War Stars Achieved (%)</h3>
-                            <canvas id="starsTrendChart"></canvas>
+                            <div id="starsTrendContainer" style="height: 180px;">
+                                <canvas id="starsTrendChart"></canvas>
+                            </div>
                         </div>
-                        <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
-                            <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Top Performers (MTD)</h3>
-                            <canvas id="topPerformersChart"></canvas>
-                        </div>
-                        <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
-                            <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Efficiency Metrics (MTD)</h3>
-                            <div class="relative w-full overflow-x-hidden">
-                                <canvas id="efficiencyChart"></canvas>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
+                                <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Stars Earned / Matchup Difficulty</h3>
+                                <div id="topPerformersContainer">
+                                    <canvas id="topPerformersChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
+                                <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Stars Earned / Conversion Rate</h3>
+                                <div id="efficiencyContainer">
+                                    <canvas id="efficiencyChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>

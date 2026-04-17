@@ -2,6 +2,7 @@ import { roleMap, getTHImage } from './constants.js';
 
 export function renderMembers(list) {
     const container = document.getElementById('memberList');
+    if (!container) return;
     container.innerHTML = list.map(m => {
         const leagueIcon = m.leagueTier?.iconUrls?.small || m.league?.iconUrls?.small || '';
         return `
@@ -57,9 +58,19 @@ export function renderAtkSmall(atk, infoMap, isDefense = false, memberTH = "?", 
 
     const stars = '★'.repeat(atk.stars).padEnd(3, '☆');
     const pct = atk.destructionPercentage;
-    const isRed = atk.stars <= 1;
-    const colorClass = isRed ? "text-red-500" : (atk.stars === 3 ? "text-green-500" : "text-yellow-500");
-    const bgColorClass = isRed ? "bg-red-500" : (atk.stars === 3 ? "bg-green-500" : "bg-yellow-500");
+    
+    let colorClass = "text-green-500";
+    let bgColorClass = "bg-green-500";
+    if (atk.stars === 2) {
+        colorClass = "text-yellow-500";
+        bgColorClass = "bg-yellow-500";
+    } else if (atk.stars === 1) {
+        colorClass = "text-red-500";
+        bgColorClass = "bg-red-500";
+    } else if (atk.stars === 0) {
+        colorClass = "text-red-900";
+        bgColorClass = "bg-red-900";
+    }
 
     return `
         <div class="flex flex-col gap-1">
@@ -87,7 +98,7 @@ export function renderAtkSmall(atk, infoMap, isDefense = false, memberTH = "?", 
 function parseCoCDate(dateStr) {
     if (!dateStr) return null;
     const year = dateStr.substring(0, 4);
-    const month = dateStr.substring(4, 6) - 1;
+    const month = parseInt(dateStr.substring(4, 6)) - 1;
     const day = dateStr.substring(6, 8);
     const hour = dateStr.substring(9, 11);
     const min = dateStr.substring(11, 13);
@@ -100,35 +111,30 @@ function getCountdown(endTimeStr) {
     if (!end) return "00:00:00";
     const now = new Date();
     const diff = end - now;
-
     if (diff <= 0) return "00:00:00";
-
     const h = Math.floor(diff / 3600000);
     const m = Math.floor((diff % 3600000) / 60000);
     const s = Math.floor((diff % 60000) / 1000);
-
     return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
 let countdownInterval = null;
-
 let currentWarFilters = {
     attacks: 'all',
     difficulty: 'all',
     performance: 'all',
     sortBy: 'mapPosition',
-    selectedClan: 'clan' // 'clan' or 'opponent'
+    selectedClan: 'clan'
 };
 
 export function renderWarHistory(warHistory) {
     const container = document.getElementById('warHistoryList');
+    if (!container) return;
     if (warHistory.length === 0) {
         container.innerHTML = `<p class="text-center text-gray-600 italic py-10 font-light text-sm">No wars found for this range.</p>`;
         return;
     }
-    
     const now = new Date();
-    
     const sorted = [...warHistory].sort((a, b) => {
         const aEnd = parseCoCDate(a.endTime);
         const bEnd = parseCoCDate(b.endTime);
@@ -137,62 +143,36 @@ export function renderWarHistory(warHistory) {
         if (aActive !== bActive) return bActive - aActive;
         return b.startTime.localeCompare(a.startTime);
     });
-
     if (countdownInterval) clearInterval(countdownInterval);
-
     container.innerHTML = sorted.map(war => {
         const totalPossibleAttacks = war.teamSize * war.attacksPerMember;
         const clanAttacks = war.clan.attacks || 0;
         const opponentAttacks = war.opponent.attacks || 0;
         const d = war.startTime;
         const formattedDate = `${d.substring(0,4)}-${d.substring(4,6)}-${d.substring(6,8)}`;
-        
         const start = parseCoCDate(war.startTime);
         const end = parseCoCDate(war.endTime);
-        
         let statusLabel = "";
         let countdownTarget = null;
         let isPinned = now < end;
-
-        if (now < start) {
-            statusLabel = "Preparation Day";
-            countdownTarget = war.startTime;
-        } else if (now < end) {
-            statusLabel = "War Day";
-            countdownTarget = war.endTime;
-        }
-
+        if (now < start) { statusLabel = "Preparation Day"; countdownTarget = war.startTime; }
+        else if (now < end) { statusLabel = "War Day"; countdownTarget = war.endTime; }
         const pinnedClass = isPinned ? 'border-gold bg-[#2a2618]' : 'border-gray-700 bg-[#252525]';
-
         const clanStars = war.clan.stars || 0;
         const opponentStars = war.opponent.stars || 0;
         const clanDest = war.clan.destructionPercentage || 0;
         const opponentDest = war.opponent.destructionPercentage || 0;
-
         let resultLabel = statusLabel;
         let scoreColor = "gold";
-
         if (!isPinned) {
-            if (clanStars > opponentStars) {
-                resultLabel = "Victory";
-                scoreColor = "text-green-500";
-            } else if (clanStars < opponentStars) {
-                resultLabel = "Loss";
-                scoreColor = "text-red-500";
-            } else {
-                if (clanDest > opponentDest) {
-                    resultLabel = "Victory";
-                    scoreColor = "text-green-500";
-                } else if (clanDest < opponentDest) {
-                    resultLabel = "Loss";
-                    scoreColor = "text-red-500";
-                } else {
-                    resultLabel = "Draw";
-                    scoreColor = "text-gray-400";
-                }
+            if (clanStars > opponentStars) { resultLabel = "Victory"; scoreColor = "text-green-500"; }
+            else if (clanStars < opponentStars) { resultLabel = "Loss"; scoreColor = "text-red-500"; }
+            else {
+                if (clanDest > opponentDest) { resultLabel = "Victory"; scoreColor = "text-green-500"; }
+                else if (clanDest < opponentDest) { resultLabel = "Loss"; scoreColor = "text-red-500"; }
+                else { resultLabel = "Draw"; scoreColor = "text-gray-400"; }
             }
         }
-
         return `
         <div class="p-4 rounded-xl border ${pinnedClass} hover:border-gold cursor-pointer transition-colors relative overflow-hidden" onclick="window.loadWarDetail('${war.filename}')">
             <div class="flex justify-between items-center mb-2">
@@ -224,11 +204,14 @@ export function renderWarHistory(warHistory) {
             </div>
         </div>`;
     }).join('');
-
     countdownInterval = setInterval(() => {
         document.querySelectorAll('[id^="cd-"]').forEach(el => {
-            const end = el.getAttribute('data-end');
-            el.innerText = getCountdown(end);
+            const warFile = el.id.replace('cd-', '');
+            const warObj = warHistory.find(w => w.filename === warFile);
+            if (warObj) {
+                const target = now < parseCoCDate(warObj.startTime) ? warObj.startTime : warObj.endTime;
+                el.innerText = getCountdown(target);
+            }
         });
     }, 1000);
 }
@@ -251,24 +234,21 @@ function renderMemberCard(m, infoMap, totalAttacks) {
                     <p class="text-lg font-bold gold leading-none">${totalStars}</p>
                 </div>
             </div>
-            
             <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
                 ${renderAtkSmall(m.attacks ? m.attacks[0] : null, infoMap, false, m.townhallLevel || m.townHallLevel, 1)}
                 ${renderAtkSmall(m.attacks && m.attacks[1] ? m.attacks[1] : null, infoMap, false, m.townhallLevel || m.townHallLevel, 2)}
             </div>
-
             <div class="hidden lg:block text-right min-w-[50px]">
                 <p class="text-[8px] font-black text-gray-500 uppercase tracking-widest">Stars</p>
                 <p class="text-lg font-bold gold leading-none">${totalStars}</p>
             </div>
-        </div>
-    `;
+        </div>`;
 }
 
 export function renderWarDetail(warData) {
     const container = document.getElementById('warResults');
+    if (!container) return;
     const totalPossibleAttacks = warData.teamSize * warData.attacksPerMember;
-    
     let filterBar = document.getElementById('warDetailFilters');
     if (!filterBar) {
         const detailView = document.getElementById('warDetailView');
@@ -278,7 +258,6 @@ export function renderWarDetail(warData) {
         filterBar.className = 'flex flex-wrap items-center gap-4 mb-6 p-4 bg-[#1a1a1a] rounded-xl border border-gray-800';
         detailView.insertBefore(filterBar, summary.nextSibling);
     }
-
     filterBar.innerHTML = `
         <div class="flex items-center gap-2 w-full lg:w-auto pb-4 lg:pb-0 lg:pr-4 border-b lg:border-b-0 lg:border-r border-gray-800 mr-0 lg:mr-2">
             <button id="toggleClan" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'clan' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[120px]">
@@ -290,7 +269,6 @@ export function renderWarDetail(warData) {
                 <span class="text-[9px] md:text-[10px] font-bold uppercase truncate">${warData.opponent.name}</span>
             </button>
         </div>
-
         <div class="grid grid-cols-2 sm:grid-cols-2 lg:flex lg:items-center gap-4 w-full lg:w-auto">
             <div class="flex items-center gap-2">
                 <span class="text-[10px] font-bold text-gray-500 uppercase">Attacks:</span>
@@ -328,9 +306,7 @@ export function renderWarDetail(warData) {
                 </select>
             </div>
             <button id="clearDetailFilters" class="text-[10px] font-bold text-gray-500 hover:text-gold uppercase transition-colors col-span-2 lg:ml-auto">Clear</button>
-        </div>
-    `;
-
+        </div>`;
     document.getElementById('toggleClan').onclick = () => { currentWarFilters.selectedClan = 'clan'; renderWarDetail(warData); };
     document.getElementById('toggleOpponent').onclick = () => { currentWarFilters.selectedClan = 'opponent'; renderWarDetail(warData); };
     document.getElementById('filterAttacks').onchange = (e) => { currentWarFilters.attacks = e.target.value; renderWarDetail(warData); };
@@ -341,83 +317,56 @@ export function renderWarDetail(warData) {
         currentWarFilters = { attacks: 'all', difficulty: 'all', performance: 'all', sortBy: 'mapPosition', selectedClan: 'clan' };
         renderWarDetail(warData);
     };
-
     const clanStars = warData.clan.stars || 0;
     const opponentStars = warData.opponent.stars || 0;
     const clanDest = warData.clan.destructionPercentage || 0;
     const opponentDest = warData.opponent.destructionPercentage || 0;
-
     const start = parseCoCDate(warData.startTime);
     const end = parseCoCDate(warData.endTime);
     const now = new Date();
     let isPinned = now < end;
-
     let resultLabel = "";
     let scoreColor = "gold";
-
-    if (now < start) {
-        resultLabel = "Preparation Day";
-    } else if (now < end) {
-        resultLabel = "War Day";
-    } else {
-        if (clanStars > opponentStars) {
-            resultLabel = "Victory";
-            scoreColor = "text-green-500";
-        } else if (clanStars < opponentStars) {
-            resultLabel = "Loss";
-            scoreColor = "text-red-500";
-        } else {
-            if (clanDest > opponentDest) {
-                resultLabel = "Victory";
-                scoreColor = "text-green-500";
-            } else if (clanDest < opponentDest) {
-                resultLabel = "Loss";
-                scoreColor = "text-red-500";
-            } else {
-                resultLabel = "Draw";
-                scoreColor = "text-gray-400";
-            }
+    if (now < start) { resultLabel = "Preparation Day"; }
+    else if (now < end) { resultLabel = "War Day"; }
+    else {
+        if (clanStars > opponentStars) { resultLabel = "Victory"; scoreColor = "text-green-500"; }
+        else if (clanStars < opponentStars) { resultLabel = "Loss"; scoreColor = "text-red-500"; }
+        else {
+            if (clanDest > opponentDest) { resultLabel = "Victory"; scoreColor = "text-green-500"; }
+            else if (clanDest < opponentDest) { resultLabel = "Loss"; scoreColor = "text-red-500"; }
+            else { resultLabel = "Draw"; scoreColor = "text-gray-400"; }
         }
     }
-
-    // Reset the header elements specifically by ID
     const clanScoreEl = document.getElementById('totalStars');
     const oppScoreEl = document.getElementById('opponentStars');
-    
     clanScoreEl.innerText = clanStars;
     clanScoreEl.className = `text-xl font-bold ${isPinned ? 'gold' : scoreColor}`;
     oppScoreEl.innerText = opponentStars;
     oppScoreEl.className = `text-xl font-bold ${isPinned ? 'gold' : (scoreColor === "text-green-500" ? "text-red-500" : (scoreColor === "text-red-500" ? "text-green-500" : "text-gray-400"))}`;
-
     document.getElementById('totalDestruction').innerText = clanDest.toFixed(1) + "%";
     document.getElementById('clanAttacks').innerText = `${warData.clan.attacks || 0}/${totalPossibleAttacks} Attacks`;
     document.getElementById('opponentDestruction').innerText = opponentDest.toFixed(1) + "%";
     document.getElementById('opponentAttacks').innerText = `${warData.opponent.attacks || 0}/${totalPossibleAttacks} Attacks`;
     document.getElementById('clanNameDetail').innerText = warData.clan.name;
     document.getElementById('opponentNameDetail').innerText = warData.opponent.name;
-    
     const summaryHeader = document.getElementById('warResultHeader');
     if (summaryHeader) {
         summaryHeader.innerHTML = `
             <span class="text-[10px] md:text-xs font-black ${isPinned ? 'gold' : scoreColor} uppercase tracking-widest mb-1 leading-none">${resultLabel}</span>
-            <p class="medieval ${isPinned ? 'gold' : scoreColor} text-lg md:text-2xl">${clanStars} - ${opponentStars}</p>
-        `;
+            <p class="medieval ${isPinned ? 'gold' : scoreColor} text-lg md:text-2xl">${clanStars} - ${opponentStars}</p>`;
     }
-
     const clanMap = {};
     warData.clan.members.forEach(m => clanMap[m.tag] = { pos: m.mapPosition, th: m.townhallLevel || m.townHallLevel, name: m.name });
     const opponentMap = {};
     warData.opponent.members.forEach(m => opponentMap[m.tag] = { pos: m.mapPosition, th: m.townhallLevel || m.townHallLevel, name: m.name });
-
     const filterFunc = (m, sideMap) => {
         const attackCount = m.attacks ? m.attacks.length : 0;
         const totalStars = (m.attacks || []).reduce((sum, a) => sum + a.stars, 0);
-        
         if (currentWarFilters.attacks === 'atk1used' && attackCount < 1) return false;
         if (currentWarFilters.attacks === 'atk2used' && attackCount < 2) return false;
         if (currentWarFilters.attacks === 'atk1unused' && attackCount > 0) return false;
         if (currentWarFilters.attacks === 'atk2unused' && attackCount !== 1) return false;
-        
         if (currentWarFilters.performance === '0-2' && totalStars > 2) return false;
         if (currentWarFilters.performance === '3-5' && (totalStars < 3 || totalStars > 5)) return false;
         if (currentWarFilters.performance === '6' && totalStars < 6) return false;
@@ -427,7 +376,6 @@ export function renderWarDetail(warData) {
         }
         return true;
     };
-
     const sortFunc = (a, b) => {
         if (currentWarFilters.sortBy === 'stars') {
             const aStars = (a.attacks || []).reduce((sum, atk) => sum + atk.stars, 0);
@@ -436,32 +384,25 @@ export function renderWarDetail(warData) {
         }
         return a.mapPosition - b.mapPosition;
     };
-
     const membersToRender = currentWarFilters.selectedClan === 'clan' ? warData.clan.members : warData.opponent.members;
     const oppositeMap = currentWarFilters.selectedClan === 'clan' ? opponentMap : clanMap;
-
     const filteredMembers = membersToRender.filter(m => filterFunc(m, oppositeMap)).sort(sortFunc);
-
     container.className = "space-y-3";
     container.innerHTML = `
         <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest pl-1">
             ${currentWarFilters.selectedClan === 'clan' ? warData.clan.name : warData.opponent.name} Roster
         </p>
-        ${filteredMembers.map(m => renderMemberCard(m, oppositeMap, warData.attacksPerMember)).join('')}
-    `;
+        ${filteredMembers.map(m => renderMemberCard(m, oppositeMap, warData.attacksPerMember)).join('')}`;
 }
 
 export function renderAbout(clanData) {
     const container = document.getElementById('aboutContent');
-    if (!clanData) return;
-
+    if (!container || !clanData) return;
     const labelsHtml = (clanData.labels || []).map(l => `
         <div class="flex items-center gap-1.5 bg-[#252525] px-2 py-1 rounded border border-gray-800">
             <img src="${l.iconUrls.small}" class="w-3.5 h-3.5">
             <span class="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase">${l.name}</span>
-        </div>
-    `).join('');
-
+        </div>`).join('');
     container.innerHTML = `
         <div class="panel p-4 md:p-6 space-y-6 md:space-y-8">
             <div class="bg-[#1a1a1a] p-4 md:p-6 rounded-xl border border-gray-800">
@@ -535,12 +476,12 @@ export function renderAbout(clanData) {
                     </div>
                 </div>
             </div>
-        </div>
-    `;
+        </div>`;
 }
 
 export function renderInfractions(warHistory) {
     const container = document.getElementById('infractionsList');
+    if (!container) return;
     if (!warHistory || warHistory.length === 0) {
         container.innerHTML = `<p class="text-center text-gray-600 italic py-10 font-light text-sm">No war data available.</p>`;
         return;
@@ -648,6 +589,5 @@ export function renderInfractions(warHistory) {
                     return `<div class="flex flex-col p-2 bg-[#1a1a1a] rounded border border-gray-800"><div class="flex justify-between items-center mb-1"><div class="flex items-center gap-2"><span class="text-[9px] font-black text-gray-600 uppercase">Attack #${inf.detail ? inf.detail.atkNum : 'Missed'}</span><span class="text-[10px] font-bold ${color}">${inf.type}</span></div><div class="flex items-center gap-3"><span class="text-gray-600 font-mono text-[9px]">${date}</span><button onclick="window.loadWarDetailFromInfraction('${inf.warFile}')" class="text-[8px] font-black gold hover:underline uppercase">View War</button></div></div><p class="text-[9px] text-gray-500 leading-tight">${inf.explanation}</p>${detailHtml}</div>`;
                 }).join('')}
             </div>
-        </div>
-    `).join('');
+        </div>`).join('');
 }
