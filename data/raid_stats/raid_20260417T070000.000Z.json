@@ -1918,9 +1918,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/SrqxOOYOnUx7gKcG1-FXEfXBN_LzCimToms3cgVq9wU.png"
                 }
             },
-            "attackCount": 2,
+            "attackCount": 8,
             "districtCount": 9,
-            "districtsDestroyed": 0,
+            "districtsDestroyed": 2,
             "districts": [
                 {
                     "id": 70000000,
@@ -1980,19 +1980,71 @@
                     "id": 70000006,
                     "name": "Golem Quarry",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11406,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#898YJ2UP2",
+                                "name": "\u25cfInO\u25cf"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#898YJ2UP2",
+                                "name": "\u25cfInO\u25cf"
+                            },
+                            "destructionPercent": 62,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#898YJ2UP2",
+                                "name": "\u25cfInO\u25cf"
+                            },
+                            "destructionPercent": 40,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000007,
                     "name": "Skeleton Park",
                     "districtHallLevel": 4,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 12152,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#898YJ2UP2",
+                                "name": "\u25cfInO\u25cf"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#898YJ2UP2",
+                                "name": "\u25cfInO\u25cf"
+                            },
+                            "destructionPercent": 70,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#898YJ2UP2",
+                                "name": "\u25cfInO\u25cf"
+                            },
+                            "destructionPercent": 16,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000008,
