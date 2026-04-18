@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260417T070000.000Z",
     "endTime": "20260420T070000.000Z",
-    "capitalTotalLoot": 456760,
+    "capitalTotalLoot": 468421,
     "raidsCompleted": 5,
-    "totalAttacks": 102,
-    "enemyDistrictsDestroyed": 40,
+    "totalAttacks": 105,
+    "enemyDistrictsDestroyed": 41,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -160,6 +160,14 @@
             "attackLimit": 5,
             "bonusAttackLimit": 1,
             "capitalResourcesLooted": 12128
+        },
+        {
+            "tag": "#2VYVULCVL",
+            "name": "family buffalo",
+            "attacks": 3,
+            "attackLimit": 5,
+            "bonusAttackLimit": 1,
+            "capitalResourcesLooted": 11661
         },
         {
             "tag": "#2P8LYJCUR",
@@ -1366,9 +1374,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/DOGWBrxEaC9DiCfiERm0rxWm3iPQyRpVdUhlkMjY8co.png"
                 }
             },
-            "attackCount": 12,
+            "attackCount": 15,
             "districtCount": 9,
-            "districtsDestroyed": 4,
+            "districtsDestroyed": 5,
             "districts": [
                 {
                     "id": 70000000,
@@ -1383,10 +1391,36 @@
                     "id": 70000001,
                     "name": "Barbarian Camp",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11661,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#2VYVULCVL",
+                                "name": "family buffalo"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2VYVULCVL",
+                                "name": "family buffalo"
+                            },
+                            "destructionPercent": 64,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2VYVULCVL",
+                                "name": "family buffalo"
+                            },
+                            "destructionPercent": 40,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000002,
@@ -1918,9 +1952,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/SrqxOOYOnUx7gKcG1-FXEfXBN_LzCimToms3cgVq9wU.png"
                 }
             },
-            "attackCount": 11,
+            "attackCount": 14,
             "districtCount": 9,
-            "districtsDestroyed": 3,
+            "districtsDestroyed": 4,
             "districts": [
                 {
                     "id": 70000000,
@@ -1953,10 +1987,28 @@
                     "id": 70000003,
                     "name": "Balloon Lagoon",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 42,
+                    "stars": 1,
+                    "attackCount": 2,
+                    "totalLooted": 5125,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#G82VL8J8Q",
+                                "name": "NINJA"
+                            },
+                            "destructionPercent": 42,
+                            "stars": 1
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#G82VL8J8Q",
+                                "name": "NINJA"
+                            },
+                            "destructionPercent": 22,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000004,
@@ -2076,11 +2128,19 @@
                     "id": 70000008,
                     "name": "Goblin Mines",
                     "districtHallLevel": 4,
-                    "destructionPercent": 66,
-                    "stars": 2,
-                    "attackCount": 2,
-                    "totalLooted": 6235,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11799,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#G82VL8J8Q",
+                                "name": "NINJA"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
                         {
                             "attacker": {
                                 "tag": "#9C9Q0CJR",
