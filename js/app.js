@@ -56,10 +56,17 @@ function switchSubView(subviewId, updateHash = true) {
     document.getElementById('warListView')?.classList.toggle('hidden', !isHistory);
     document.getElementById('warStatsView')?.classList.toggle('hidden', isHistory);
     document.getElementById('warDetailView')?.classList.add('hidden');
+
+    // Toggle header controls
+    document.getElementById('warHistoryControls')?.classList.toggle('hidden', !isHistory);
+    document.getElementById('warStatsControls')?.classList.toggle('hidden', isHistory);
+
     document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(`subtab-${subviewId}`)?.classList.add('active');
+
     if (updateHash) window.location.hash = `war/${subviewId}`;
 }
+
 
 function switchRaidSubView(subviewId, updateHash = true) {
     document.getElementById('raidSummaryView')?.classList.toggle('hidden', subviewId !== 'summary');
