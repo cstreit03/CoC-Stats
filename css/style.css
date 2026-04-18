@@ -245,3 +245,8 @@ select.control-base {
     background: rgba(212, 175, 55, 0.2);
     transform: scale(0.96);
 }
+
+/* Prevent table text wrapping on mobile */
+table th, table td {
+    white-space: nowrap;
+}
