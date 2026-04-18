@@ -62,16 +62,14 @@
                     </div>
 
                     <!-- Header Controls (Mobile: 3rd, Desktop: top-right) -->
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 lg:ml-auto order-3 lg:order-2">
-                        <div class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                            <span class="text-[10px] font-bold text-gray-500 uppercase">Date:</span>
-                            <input type="text" id="memberDate" class="control-base w-32 font-mono text-center" placeholder="Select Date...">
+                    <div class="flex flex-row items-end gap-2 lg:gap-4 lg:ml-auto order-3 lg:order-2">
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Date</span>
+                            <input type="text" id="memberDate" class="control-base w-24 sm:w-32 font-mono text-center" placeholder="Select...">
                         </div>
-                        <div class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
-                            <span class="text-[10px] font-bold text-gray-500 uppercase">Sort:</span>
-                            <select id="sortBy" class="control-base h-8 min-w-[140px]">
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Sort</span>
+                            <select id="sortBy" class="control-base h-8 w-28 sm:min-w-[140px]">
                                 <option value="league" selected>League + Trophies</option>
                                 <option value="trophies">Trophies Only</option>
                                 <option value="townHallLevel">Town Hall</option>
@@ -81,7 +79,7 @@
                                 <option value="role">Role</option>
                             </select>
                         </div>
-                        <button id="resetMembersFilters" class="btn-reset">Reset</button>
+                        <button id="resetMembersFilters" class="btn-reset h-8">Reset</button>
                     </div>
                 </div>
                 <div id="memberList" class="space-y-2"></div>
@@ -102,19 +100,18 @@
                     </div>
 
                     <!-- Header Controls (Mobile: 3rd, Desktop: top-right) -->
-                    <div class="flex items-center gap-4 lg:ml-auto order-3 lg:order-2">
+                    <div class="flex flex-row items-end gap-2 lg:gap-4 lg:ml-auto order-3 lg:order-2">
                         <!-- Controls for History -->
-                        <div id="warHistoryControls" class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                            <div class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                <span class="text-[10px] font-bold text-gray-500 uppercase">Date Range:</span>
+                        <div id="warHistoryControls" class="flex flex-row items-end gap-2 sm:gap-3">
+                            <div class="flex flex-col gap-1">
+                                <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Date Range</span>
+                                <div class="flex items-center gap-1">
+                                    <input type="text" id="warStartDate" class="control-base w-20 sm:w-32 font-mono text-center" placeholder="Start">
+                                    <span class="text-gray-600 text-[10px]">-</span>
+                                    <input type="text" id="warEndDate" class="control-base w-20 sm:w-32 font-mono text-center" placeholder="End">
+                                </div>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <input type="text" id="warStartDate" class="control-base w-28 sm:w-32 font-mono text-center" placeholder="Start Date">
-                                <span class="text-gray-600 text-[10px]">-</span>
-                                <input type="text" id="warEndDate" class="control-base w-28 sm:w-32 font-mono text-center" placeholder="End Date">
-                            </div>
-                            <button id="resetWarFilters" class="btn-reset">Reset</button>
+                            <button id="resetWarFilters" class="btn-reset h-8">Reset</button>
                         </div>
                     </div>
 
@@ -180,10 +177,10 @@
                     </div>
 
                     <!-- Header Controls -->
-                    <div class="flex items-center gap-4 lg:ml-auto">
-                        <div class="flex items-center gap-3">
-                            <span class="text-[10px] font-bold text-gray-500 uppercase">Time Range:</span>
-                            <select id="statsTimeRange" class="control-base h-8">
+                    <div class="flex flex-row items-end gap-2 lg:gap-4 lg:ml-auto">
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Time Range</span>
+                            <select id="statsTimeRange" class="control-base h-8 w-32">
                                 <option value="month">This Month</option>
                                 <option value="week">This Week</option>
                                 <option value="prev">Previous War</option>
@@ -226,14 +223,14 @@
                         </button>
                     </div>
                     
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 lg:ml-auto order-3 lg:order-2">
-                        <div class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                            <span class="text-[10px] font-bold text-gray-500 uppercase">Date:</span>
-                            <input type="text" id="raidWeekendCalendar" class="control-base h-8 w-40 font-mono text-center" placeholder="Select Date...">
+                    <div class="flex flex-row items-end gap-2 lg:gap-4 lg:ml-auto order-3 lg:order-2">
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Date</span>
+                            <input type="text" id="raidWeekendCalendar" class="control-base h-8 w-32 sm:w-40 font-mono text-center" placeholder="Select Date...">
                         </div>
-                        <button id="resetRaidSort" class="btn-reset">Reset</button>
+                        <button id="resetRaidSort" class="btn-reset h-8">Reset</button>
                     </div>
+
 
                     <div class="w-full order-2 lg:order-3 lg:mt-2">
                         <div class="flex items-center gap-2 p-1 bg-[#1a1a1a] rounded-lg border border-gray-800 w-fit">

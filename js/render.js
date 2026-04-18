@@ -465,42 +465,45 @@ export function renderWarDetail(warData, history = []) {
     `;
 
     controlsContainer.innerHTML = `
-        <div class="flex items-center gap-2 pb-4 lg:pb-0 lg:pr-4 border-b lg:border-b-0 lg:border-r border-gray-800 mr-0 lg:mr-2">
-            <button id="toggleClan" class="flex items-center justify-center gap-2 px-3 py-1 rounded-lg border ${currentWarFilters.selectedClan === 'clan' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all">
-                <img src="${warData.clan.badgeUrls.small}" class="w-4 h-4"><span class="text-[9px] font-bold uppercase truncate">${warData.clan.name}</span>
-            </button>
-            <button id="toggleOpponent" class="flex items-center justify-center gap-2 px-3 py-1 rounded-lg border ${currentWarFilters.selectedClan === 'opponent' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all">
-                <img src="${warData.opponent.badgeUrls.small}" class="w-4 h-4"><span class="text-[9px] font-bold uppercase truncate">${warData.opponent.name}</span>
-            </button>
+        <div class="flex flex-col gap-1 pr-2">
+            <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Side</span>
+            <div class="flex items-center gap-1.5">
+                <button id="toggleClan" class="flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-lg border ${currentWarFilters.selectedClan === 'clan' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all h-8">
+                    <img src="${warData.clan.badgeUrls.small}" class="w-4 h-4"><span class="text-[9px] font-bold uppercase truncate max-w-[60px]">${warData.clan.name}</span>
+                </button>
+                <button id="toggleOpponent" class="flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-lg border ${currentWarFilters.selectedClan === 'opponent' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all h-8">
+                    <img src="${warData.opponent.badgeUrls.small}" class="w-4 h-4"><span class="text-[9px] font-bold uppercase truncate max-w-[60px]">${warData.opponent.name}</span>
+                </button>
+            </div>
         </div>
-        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <div class="flex items-center gap-2">
-                <span class="text-[10px] font-bold text-gray-500 uppercase">Attacks:</span>
-                <select id="filterAttacks" class="control-base h-8">
-                    <option value="all" ${currentWarFilters.attacks === 'all' ? 'selected' : ''}>All Members</option>
-                    <option value="atk1used" ${currentWarFilters.attacks === 'atk1used' ? 'selected' : ''}>Attack #1 Used</option>
-                    <option value="atk2used" ${currentWarFilters.attacks === 'atk2used' ? 'selected' : ''}>Attack #2 Used</option>
-                    <option value="atk1unused" ${currentWarFilters.attacks === 'atk1unused' ? 'selected' : ''}>Attack #1 Unused</option>
-                    <option value="atk2unused" ${currentWarFilters.attacks === 'atk2unused' ? 'selected' : ''}>Attack #2 Unused</option>
+        <div class="flex flex-row items-end gap-2 lg:gap-4 overflow-x-auto no-scrollbar">
+            <div class="flex flex-col gap-1">
+                <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Attacks</span>
+                <select id="filterAttacks" class="control-base h-8 w-24">
+                    <option value="all" ${currentWarFilters.attacks === 'all' ? 'selected' : ''}>All</option>
+                    <option value="atk1used" ${currentWarFilters.attacks === 'atk1used' ? 'selected' : ''}>#1 Used</option>
+                    <option value="atk2used" ${currentWarFilters.attacks === 'atk2used' ? 'selected' : ''}>#2 Used</option>
+                    <option value="atk1unused" ${currentWarFilters.attacks === 'atk1unused' ? 'selected' : ''}>#1 Unused</option>
+                    <option value="atk2unused" ${currentWarFilters.attacks === 'atk2unused' ? 'selected' : ''}>#2 Unused</option>
                 </select>
             </div>
-            <div class="flex items-center gap-2">
-                <span class="text-[10px] font-bold text-gray-500 uppercase">Results:</span>
-                <select id="filterPerformance" class="control-base h-8">
+            <div class="flex flex-col gap-1">
+                <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Results</span>
+                <select id="filterPerformance" class="control-base h-8 w-24">
                     <option value="all" ${currentWarFilters.performance === 'all' ? 'selected' : ''}>All Stars</option>
                     <option value="0-2" ${currentWarFilters.performance === '0-2' ? 'selected' : ''}>0-2 Stars</option>
                     <option value="3-5" ${currentWarFilters.performance === '3-5' ? 'selected' : ''}>3-5 Stars</option>
                     <option value="6" ${currentWarFilters.performance === '6' ? 'selected' : ''}>Perfect (6)</option>
                 </select>
             </div>
-            <div class="flex items-center gap-2">
-                <span class="text-[10px] font-bold text-gray-500 uppercase whitespace-nowrap">Sort:</span>
-                <select id="filterSort" class="control-base h-8">
-                    <option value="mapPosition" ${currentWarFilters.sortBy === 'mapPosition' ? 'selected' : ''}>Map Position</option>
+            <div class="flex flex-col gap-1">
+                <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Sort</span>
+                <select id="filterSort" class="control-base h-8 w-24">
+                    <option value="mapPosition" ${currentWarFilters.sortBy === 'mapPosition' ? 'selected' : ''}>Map Pos</option>
                     <option value="stars" ${currentWarFilters.sortBy === 'stars' ? 'selected' : ''}>Total Stars</option>
                 </select>
             </div>
-            <button id="resetDetailFilters" class="btn-reset">Reset</button>
+            <button id="resetDetailFilters" class="btn-reset h-8">Reset</button>
         </div>`;
 
     document.getElementById('toggleClan').onclick = () => { currentWarFilters.selectedClan = 'clan'; renderWarDetail(warData, history); };
