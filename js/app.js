@@ -151,8 +151,6 @@ async function init() {
             defaultDate: bestDefaultDate, enable: availableMemberDates, dateFormat: "Y-m-d",
             onChange: function(selectedDates, dateStr) { handleMemberDateChange(dateStr); }
         });
-        const titleEl = document.getElementById('memberTitle');
-        if (titleEl) titleEl.innerText = bestDefaultDate === todayStr ? "Current Members" : `Members: ${bestDefaultDate}`;
     } catch (e) { console.warn("Could not setup member date filters.", e); }
 
     try {
@@ -329,7 +327,7 @@ function updateDisplay() {
 
 function setRoleFilter(role, btn) {
     currentRoleFilter = role;
-    document.querySelectorAll('.btn-role').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#section-members .sub-tab-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active'); updateDisplay();
 }
 
@@ -357,7 +355,13 @@ window.loadWarDetail = loadWarDetail;
 document.addEventListener('DOMContentLoaded', () => {
     preRoute(); init();
     document.getElementById('tab-about')?.addEventListener('click', () => { switchView('about'); if (latestClanData) renderAbout(latestClanData); bindAboutPageEvents(); });
-    document.getElementById('tab-members')?.addEventListener('click', () => switchView('members'));
+    document.getElementById('tab-members')?.addEventListener('click', () => {
+        switchView('members');
+        currentRoleFilter = 'all';
+        document.querySelectorAll('#section-members .sub-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('#section-members [data-role="all"]')?.classList.add('active');
+        updateDisplay();
+    });
     document.getElementById('tab-war')?.addEventListener('click', () => { switchView('war'); switchSubView('history'); });
     document.getElementById('tab-raids')?.addEventListener('click', () => { switchView('raids'); switchRaidSubView('summary'); });
     document.getElementById('raid-subtab-summary')?.addEventListener('click', () => switchRaidSubView('summary'));
@@ -386,8 +390,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('sortBy')?.addEventListener('change', updateDisplay);
     document.getElementById('backToWarList')?.addEventListener('click', showWarList);
     document.getElementById('resetMembersFilters')?.addEventListener('click', () => {
-        currentRoleFilter = 'all'; document.querySelectorAll('.btn-role').forEach(b => b.classList.remove('active'));
-        document.querySelector('[data-role="all"]')?.classList.add('active');
+        currentRoleFilter = 'all'; 
+        document.querySelectorAll('#section-members .sub-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('#section-members [data-role="all"]')?.classList.add('active');
         document.getElementById('sortBy').value = 'league';
         updateDisplay();
     });
@@ -399,6 +404,10 @@ document.addEventListener('DOMContentLoaded', () => {
         warHistoryPickers.forEach(p => { p.clear(); p.set('minDate', null); p.set('maxDate', null); });
         filterWarHistory();
     });
-    document.querySelectorAll('.btn-role').forEach(btn => { btn.addEventListener('click', () => setRoleFilter(btn.getAttribute('data-role'), btn)); });
+    document.querySelectorAll('#section-members .sub-tab-btn').forEach(btn => { 
+        if (btn.hasAttribute('data-role')) {
+            btn.addEventListener('click', () => setRoleFilter(btn.getAttribute('data-role'), btn)); 
+        }
+    });
     document.addEventListener('click', () => { document.querySelectorAll('.info-tooltip').forEach(t => t.classList.remove('active')); });
 });

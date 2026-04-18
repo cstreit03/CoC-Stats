@@ -43,37 +43,32 @@
         <!-- Section: Members -->
         <div id="section-members" class="lg:col-span-12 hidden-section">
             <div class="panel p-3 md:p-6">
-                <div class="flex flex-col gap-4 md:gap-6 mb-6">
-                    <div class="flex justify-between items-center px-1">
-                        <h2 id="memberTitle" class="medieval text-base md:text-lg font-bold">Current Members</h2>
+                <!-- Shared Members Header -->
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6 px-1">
+                    <div class="flex items-center gap-3">
+                        <h2 id="memberTitle" class="medieval text-base md:text-lg font-bold uppercase">Clan Members</h2>
+                        <div class="flex items-center gap-2 p-1 bg-[#1a1a1a] rounded-lg border border-gray-800">
+                            <button data-role="all" class="sub-tab-btn active uppercase tracking-wider">All</button>
+                            <button data-role="leader" class="sub-tab-btn uppercase tracking-wider">Leader</button>
+                            <button data-role="coLeader" class="sub-tab-btn uppercase tracking-wider">Co-Leader</button>
+                            <button data-role="admin" class="sub-tab-btn uppercase tracking-wider">Elder</button>
+                            <button data-role="member" class="sub-tab-btn uppercase tracking-wider">Member</button>
+                        </div>
                         <span id="memberCount" class="text-[9px] md:text-[10px] font-mono text-gray-500">0 / 50</span>
                     </div>
-                    
-                    <!-- Member Filters -->
-                    <div class="flex flex-col gap-4 p-3 md:p-4 bg-[#1a1a1a] rounded-xl border border-gray-800">
-                        <div class="flex flex-col md:flex-row md:items-center gap-3">
-                            <div class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
-                                <span class="text-[10px] font-bold text-gray-500 uppercase">Role:</span>
-                            </div>
-                            <div class="flex flex-wrap gap-2">
-                                <button data-role="all" class="btn-role active">ALL</button>
-                                <button data-role="leader" class="btn-role">LEADER</button>
-                                <button data-role="coLeader" class="btn-role">CO-LEADER</button>
-                                <button data-role="admin" class="btn-role">ELDER</button>
-                                <button data-role="member" class="btn-role">MEMBER</button>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-center gap-4 lg:gap-6">
+
+                    <!-- Header Controls -->
+                    <div class="flex items-center gap-4 lg:ml-auto">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                             <div class="flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 <span class="text-[10px] font-bold text-gray-500 uppercase">Date:</span>
-                                <input type="text" id="memberDate" class="control-base flex-1 md:w-32 font-mono" placeholder="Select Date...">
+                                <input type="text" id="memberDate" class="control-base w-32 font-mono text-center" placeholder="Select Date...">
                             </div>
                             <div class="flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
                                 <span class="text-[10px] font-bold text-gray-500 uppercase">Sort:</span>
-                                <select id="sortBy" class="control-base flex-1">
+                                <select id="sortBy" class="control-base h-8 min-w-[140px]">
                                     <option value="league" selected>League + Trophies</option>
                                     <option value="trophies">Trophies Only</option>
                                     <option value="townHallLevel">Town Hall</option>
@@ -83,7 +78,7 @@
                                     <option value="role">Role</option>
                                 </select>
                             </div>
-                            <button id="resetMembersFilters" class="btn-reset sm:col-span-2 lg:ml-auto">Reset</button>
+                            <button id="resetMembersFilters" class="btn-reset">Reset</button>
                         </div>
                     </div>
                 </div>
