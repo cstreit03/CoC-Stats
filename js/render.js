@@ -263,86 +263,160 @@ function renderMemberCard(m, infoMap, totalAttacks, warAttacksMap = {}) {
  * MATH: Win Probability Logic with Resource-Weighted Simulation
  */
 function calculateWinProbability(warData, history) {
-    const buckets = {
-        'UP2': { sum: 0, count: 0, def: 0.8 }, 
-        'UP1': { sum: 0, count: 0, def: 1.5 },
-        'SAME': { sum: 0, count: 0, def: 2.2 },
-        'DROP': { sum: 0, count: 0, def: 2.8 }
-    };
-
-    history.forEach(w => {
-        const oppMap = {};
-        w.opponent.members.forEach(om => oppMap[om.tag] = om.townhallLevel || om.townHallLevel);
-        w.clan.members.forEach(m => {
-            const attackerTH = m.townhallLevel || m.townHallLevel;
-            (m.attacks || []).forEach(a => {
-                const targetTH = oppMap[a.defenderTag];
-                if (!targetTH) return;
-                const diff = targetTH - attackerTH;
-                let cat = 'SAME';
-                if (diff >= 2) cat = 'UP2';
-                else if (diff === 1) cat = 'UP1';
-                else if (diff <= -1) cat = 'DROP';
-                buckets[cat].sum += a.stars;
-                buckets[cat].count++;
-            });
-        });
-    });
-
-    const getExpected = (diff) => {
-        let cat = 'SAME';
-        if (diff >= 2) cat = 'UP2';
-        else if (diff === 1) cat = 'UP1';
-        else if (diff <= -1) cat = 'DROP';
-        return buckets[cat].count > 0 ? buckets[cat].sum / buckets[cat].count : buckets[cat].def;
-    };
-
-    const oppMembers = [...warData.opponent.members].sort((a,b) => a.mapPosition - b.mapPosition);
-    const clanMembers = [...warData.clan.members].sort((a,b) => a.mapPosition - b.mapPosition);
     const totalPossibleAtks = warData.teamSize * 2;
     const clanStars = warData.clan.stars || 0;
     const oppStars = warData.opponent.stars || 0;
     const clanAtksUsed = warData.clan.attacks || 0;
     const oppAtksUsed = warData.opponent.attacks || 0;
+    const clanAtksRemaining = totalPossibleAtks - clanAtksUsed;
+    const oppAtksRemaining = totalPossibleAtks - oppAtksUsed;
 
     const now = new Date();
     const isFinished = now > parseCoCDate(warData.endTime);
-    
-    if (isFinished || (clanAtksUsed === totalPossibleAtks && oppAtksUsed === totalPossibleAtks)) {
-        if (clanStars > oppStars) return 100;
-        return 0;
+
+    // Terminal Conditions - if war is finished or both out of attacks
+    if (isFinished || (clanAtksRemaining === 0 && oppAtksRemaining === 0)) {
+        return clanStars > oppStars ? 100 : 0; // Win only if strictly ahead, draw = 0%
     }
 
-    if (clanAtksUsed === totalPossibleAtks && clanStars <= oppStars) return 0;
-    if (oppAtksUsed === totalPossibleAtks && clanStars > oppStars) return 100;
+    // Our Defeat: Clan out of attacks and not winning (equal or losing)
+    if (clanAtksRemaining === 0) {
+        return clanStars > oppStars ? 100 : 0;
+    }
 
-    let clanProjected = clanStars;
-    let clanHighPower = 0; 
-    let oppHighTargets = 0;
+    // Our Victory: Opponent out of attacks and we're winning
+    if (oppAtksRemaining === 0) {
+        return clanStars > oppStars ? 100 : 0;
+    }
 
-    clanMembers.forEach(m => {
-        const th = m.townhallLevel || m.townHallLevel;
-        const left = 2 - (m.attacks ? m.attacks.length : 0);
-        if (th >= 15) clanHighPower += left;
-        for (let i = 0; i < left; i++) {
-            let targetIdx = (m.mapPosition - 1);
-            if (targetIdx < 0) targetIdx = 0;
-            if (targetIdx >= oppMembers.length) targetIdx = oppMembers.length - 1;
-            clanProjected += getExpected((oppMembers[targetIdx].townhallLevel || oppMembers[targetIdx].townHallLevel) - th);
+    // Build player MTD stat maps from history
+    const playerMTDMap = {};
+    history.forEach(w => {
+        w.clan.members.forEach(m => {
+            if (!playerMTDMap[m.tag]) playerMTDMap[m.tag] = { sum: 0, count: 0 };
+            const oppMap = {};
+            w.opponent.members.forEach(om => oppMap[om.tag] = om.townhallLevel || om.townHallLevel);
+            (m.attacks || []).forEach(a => {
+                playerMTDMap[m.tag].sum += a.stars;
+                playerMTDMap[m.tag].count++;
+            });
+        });
+    });
+
+    const getPlayerMTDAvg = (playerTag) => {
+        return playerMTDMap[playerTag] && playerMTDMap[playerTag].count > 0 
+            ? playerMTDMap[playerTag].sum / playerMTDMap[playerTag].count 
+            : 2.2; // Default expected value
+    };
+
+    // Calculate realistic star potential for clan
+    let clanProjectedStars = clanStars;
+    let clanMaxPotentialStars = clanStars;
+    let clanWeakenedPotential = false;
+
+    warData.clan.members.forEach(m => {
+        const attackerTH = m.townhallLevel || m.townHallLevel;
+        const atksUsed = m.attacks ? m.attacks.length : 0;
+        const atksLeft = 2 - atksUsed;
+
+        for (let i = 0; i < atksLeft; i++) {
+            // Find target at mapPosition (wrapping if needed)
+            const targetIdx = (m.mapPosition - 1) % warData.opponent.members.length;
+            const target = warData.opponent.members[targetIdx];
+            const targetTH = target.townhallLevel || target.townHallLevel;
+            const targetStars = target.bestOpponentAttack?.stars || 0;
+
+            // Hard-cap logic: if attacker is 4+ TH levels below target, cap at 1-2 stars
+            let maxStars = 3;
+            if (targetTH - attackerTH >= 4) {
+                maxStars = 1 + Math.random(); // 1-2 stars
+                clanWeakenedPotential = true;
+            } else if (targetTH - attackerTH === 3) {
+                maxStars = 2.5; // Usually 2-3 stars
+            }
+
+            // Use player's MTD average as EV, capped by hard cap
+            const playerAvg = getPlayerMTDAvg(m.tag);
+            const expectedStars = Math.min(playerAvg, maxStars);
+
+            if (targetStars < 3) {
+                clanProjectedStars += expectedStars;
+                clanMaxPotentialStars += maxStars;
+            }
         }
     });
 
-    oppMembers.forEach(m => {
-        if ((m.townhallLevel || m.townHallLevel) >= 15 && (m.bestOpponentAttack?.stars || 0) < 3) oppHighTargets++;
+    // Calculate opponent's projected stars
+    const oppAvgStarsPerAtk = oppAtksUsed > 0 ? (oppStars / oppAtksUsed) : 2.2;
+    let oppProjectedStars = oppStars;
+
+    // Count opponent's high-level threats remaining
+    let oppHighThreats = 0;
+    warData.opponent.members.forEach(m => {
+        const oppTH = m.townhallLevel || m.townHallLevel;
+        const atksUsed = m.attacks ? m.attacks.length : 0;
+        const atksLeft = 2 - atksUsed;
+
+        if (oppTH >= 16 && atksLeft > 0) oppHighThreats += atksLeft;
+
+        for (let i = 0; i < atksLeft; i++) {
+            oppProjectedStars += oppAvgStarsPerAtk;
+        }
     });
 
-    if (oppHighTargets > clanHighPower) clanProjected -= (oppHighTargets - clanHighPower) * 0.5;
+    // Defense Insurance: If we're leading and opponent lacks high-level threats
+    let defenseBonus = 0;
+    if (clanStars >= oppStars) {
+        let clanHighDef = warData.clan.members.filter(m => {
+            const th = m.townhallLevel || m.townHallLevel;
+            const stars = m.bestOpponentAttack?.stars || 0;
+            return th >= 16 && stars < 3;
+        }).length;
 
-    const oppEfficiency = oppAtksUsed > 0 ? (oppStars / oppAtksUsed) : 2.2;
-    const oppProjected = oppStars + ((totalPossibleAtks - oppAtksUsed) * oppEfficiency);
+        if (oppHighThreats === 0 && clanHighDef > 0) {
+            defenseBonus = 15; // Significant insurance bonus
+        } else if (oppHighThreats < clanHighDef / 2) {
+            defenseBonus = 8; // Moderate insurance bonus
+        }
+    }
 
-    const prob = Math.round((clanProjected / (clanProjected + oppProjected)) * 100);
-    return Math.max(1, Math.min(99, prob));
+    // Late-war volatility: increase sensitivity as attacks decrease
+    const attacksRemaining = Math.min(clanAtksRemaining, oppAtksRemaining);
+    const totalAttacksPossible = totalPossibleAtks;
+    const volatilityMultiplier = 1 + ((totalAttacksPossible - attacksRemaining) / totalAttacksPossible) * 0.5;
+
+    // Score gap vs potential: weigh current gap against possible remaining stars
+    const currentStarGap = clanStars - oppStars;
+    const maxPossibleGap = clanMaxPotentialStars - oppProjectedStars;
+    
+    let winProbability = 50;
+    
+    if (maxPossibleGap > 0) {
+        // We can win
+        if (currentStarGap >= 0) {
+            // We're already ahead or tied
+            const gapRatio = Math.min(1, currentStarGap / Math.max(1, maxPossibleGap));
+            winProbability = 50 + (gapRatio * 40); // 50-90%
+        } else {
+            // We're behind but can catch up
+            const deficit = Math.abs(currentStarGap);
+            const maxDeficit = Math.abs(maxPossibleGap);
+            const catchupPotential = 1 - (deficit / Math.max(1, maxDeficit));
+            winProbability = 50 + (catchupPotential * 40); // 10-50%
+        }
+    } else if (maxPossibleGap < 0) {
+        // We cannot win
+        winProbability = Math.max(10, 50 + (maxPossibleGap / Math.max(1, Math.abs(maxPossibleGap)) * 40));
+    }
+
+    // Apply volatility multiplier
+    winProbability = 50 + ((winProbability - 50) * volatilityMultiplier);
+
+    // Apply defense bonus
+    winProbability += defenseBonus;
+
+    // Clamp to 0-100
+    return Math.max(0, Math.min(100, Math.round(winProbability)));
 }
 
 /**
