@@ -2012,9 +2012,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/SrqxOOYOnUx7gKcG1-FXEfXBN_LzCimToms3cgVq9wU.png"
                 }
             },
-            "attackCount": 14,
+            "attackCount": 20,
             "districtCount": 9,
-            "districtsDestroyed": 4,
+            "districtsDestroyed": 6,
             "districts": [
                 {
                     "id": 70000000,
@@ -2029,29 +2029,81 @@
                     "id": 70000001,
                     "name": "Barbarian Camp",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
+                    "destructionPercent": 42,
                     "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "attackCount": 1,
+                    "totalLooted": 2325,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#2PPL0GG9U",
+                                "name": "Raja Ngayau"
+                            },
+                            "destructionPercent": 42,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000002,
                     "name": "Wizard Valley",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 10418,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#2PPL0GG9U",
+                                "name": "Raja Ngayau"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2PPL0GG9U",
+                                "name": "Raja Ngayau"
+                            },
+                            "destructionPercent": 64,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2PPL0GG9U",
+                                "name": "Raja Ngayau"
+                            },
+                            "destructionPercent": 28,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000003,
                     "name": "Balloon Lagoon",
                     "districtHallLevel": 5,
-                    "destructionPercent": 42,
-                    "stars": 1,
-                    "attackCount": 2,
-                    "totalLooted": 5125,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 4,
+                    "totalLooted": 11748,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#2PPL0GG9U",
+                                "name": "Raja Ngayau"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2PPL0GG9U",
+                                "name": "Raja Ngayau"
+                            },
+                            "destructionPercent": 91,
+                            "stars": 2
+                        },
                         {
                             "attacker": {
                                 "tag": "#G82VL8J8Q",
