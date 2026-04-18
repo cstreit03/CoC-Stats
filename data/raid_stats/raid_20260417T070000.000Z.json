@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260417T070000.000Z",
     "endTime": "20260420T070000.000Z",
-    "capitalTotalLoot": 528567,
+    "capitalTotalLoot": 557116,
     "raidsCompleted": 6,
-    "totalAttacks": 120,
-    "enemyDistrictsDestroyed": 46,
+    "totalAttacks": 126,
+    "enemyDistrictsDestroyed": 48,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -138,6 +138,14 @@
             "capitalResourcesLooted": 31543
         },
         {
+            "tag": "#LPU0GGCJQ",
+            "name": "night dragon",
+            "attacks": 3,
+            "attackLimit": 5,
+            "bonusAttackLimit": 1,
+            "capitalResourcesLooted": 16259
+        },
+        {
             "tag": "#8RJ8CC8LU",
             "name": "COBRA",
             "attacks": 6,
@@ -180,10 +188,10 @@
         {
             "tag": "#2VYVULCVL",
             "name": "family buffalo",
-            "attacks": 3,
+            "attacks": 6,
             "attackLimit": 5,
             "bonusAttackLimit": 1,
-            "capitalResourcesLooted": 11661
+            "capitalResourcesLooted": 23951
         },
         {
             "tag": "#2P8LYJCUR",
@@ -1722,9 +1730,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/KWHa85DQN2x_BWL1TyvvRiV03gsfno88c2XzNwZGTX4.png"
                 }
             },
-            "attackCount": 3,
+            "attackCount": 9,
             "districtCount": 9,
-            "districtsDestroyed": 1,
+            "districtsDestroyed": 3,
             "districts": [
                 {
                     "id": 70000000,
@@ -1739,10 +1747,20 @@
                     "id": 70000001,
                     "name": "Barbarian Camp",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 53,
+                    "stars": 1,
+                    "attackCount": 1,
+                    "totalLooted": 5015,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#LPU0GGCJQ",
+                                "name": "night dragon"
+                            },
+                            "destructionPercent": 53,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000002,
@@ -1757,19 +1775,63 @@
                     "id": 70000003,
                     "name": "Balloon Lagoon",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 2,
+                    "totalLooted": 11244,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#LPU0GGCJQ",
+                                "name": "night dragon"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#LPU0GGCJQ",
+                                "name": "night dragon"
+                            },
+                            "destructionPercent": 38,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000004,
                     "name": "Builder's Workshop",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 12290,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#2VYVULCVL",
+                                "name": "family buffalo"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2VYVULCVL",
+                                "name": "family buffalo"
+                            },
+                            "destructionPercent": 84,
+                            "stars": 1
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2VYVULCVL",
+                                "name": "family buffalo"
+                            },
+                            "destructionPercent": 43,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000005,
