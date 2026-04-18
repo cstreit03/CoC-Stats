@@ -30,8 +30,9 @@
     <div class="flex mb-6 rounded-t-lg overflow-hidden border border-[#333]">
         <button id="tab-about" class="tab-btn medieval uppercase tracking-widest">About</button>
         <button id="tab-members" class="tab-btn medieval uppercase tracking-widest">Members</button>
-        <button id="tab-war" class="tab-btn medieval uppercase tracking-widest">War</button>
+        <button id="tab-war" class="tab-btn medieval uppercase tracking-widest">Wars</button>
         <button id="tab-raids" class="tab-btn medieval uppercase tracking-widest">Raids</button>
+        <button id="tab-stats" class="tab-btn medieval uppercase tracking-widest">Stats</button>
     </div>
 
     <div class="max-w-7xl mx-auto">
@@ -94,9 +95,12 @@
                     <div class="flex items-center gap-3">
                         <h2 class="medieval text-base md:text-lg font-bold uppercase">Clan Wars</h2>
                         <div class="flex items-center gap-2 p-1 bg-[#1a1a1a] rounded-lg border border-gray-800">
-                            <button id="subtab-history" class="sub-tab-btn active uppercase tracking-wider">History</button>
-                            <button id="subtab-stats" class="sub-tab-btn uppercase tracking-wider">Stats</button>
+                            <button data-war-filter="all" class="sub-tab-btn active uppercase tracking-wider">All</button>
+                            <button data-war-filter="victory" class="sub-tab-btn uppercase tracking-wider">Victory</button>
+                            <button data-war-filter="loss" class="sub-tab-btn uppercase tracking-wider">Defeat</button>
+                            <button data-war-filter="draw" class="sub-tab-btn uppercase tracking-wider">Draw</button>
                         </div>
+                        <span id="warCount" class="text-[9px] md:text-[10px] font-mono text-gray-500">0 / 0</span>
                         <button onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Sync Data">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                         </button>
@@ -117,9 +121,68 @@
                             </div>
                             <button id="resetWarFilters" class="btn-reset">Reset</button>
                         </div>
+                    </div>
+                </div>
 
-                        <!-- Controls for Stats -->
-                        <div id="warStatsControls" class="hidden flex items-center gap-3">
+                <!-- View: War History List -->
+                <div id="warListView">
+                    <div id="warHistoryList" class="space-y-4"></div>
+                </div>
+
+                <!-- View: War Details (Hidden by default) -->
+                <div id="warDetailView" class="hidden">
+                    <button id="backToWarList" class="mb-4 text-xs gold hover:underline flex items-center gap-1">← Back to History</button>
+                    
+                    <div class="flex items-center gap-3 mb-6 px-1">
+                        <h2 class="medieval text-base md:text-lg font-bold">War Details</h2>
+                        <button id="syncDetailBtn" onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Sync Data">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                        </button>
+                    </div>
+
+                    <!-- War Summary Card -->
+                    <div id="warSummary" class="flex flex-row items-center justify-between gap-2 p-4 bg-[#252525] rounded-xl border border-dashed border-gray-700 min-h-[100px]">
+                        <div class="flex items-center gap-2 md:gap-3 w-1/3 text-left">
+                            <img id="detailClanBadge" src="" class="w-8 h-8 md:w-10 md:h-10">
+                            <div class="min-w-0">
+                                <p id="clanNameDetail" class="text-[11px] md:text-xs font-bold text-white truncate">Clan</p>
+                                <p id="clanAttacks" class="text-[8px] md:text-[9px] text-gray-500">0/0 Attacks</p>
+                            </div>
+                        </div>
+                        <div id="warResultHeader" class="flex flex-col items-center justify-center w-1/3 text-center px-1"></div>
+                        <div class="flex items-center gap-2 md:gap-3 text-right justify-end w-1/3">
+                            <div class="min-w-0">
+                                <p id="opponentNameDetail" class="text-[11px] md:text-xs font-bold text-white truncate">Opponent</p>
+                                <p id="opponentAttacks" class="text-[8px] md:text-[9px] text-gray-500">0/0 Attacks</p>
+                            </div>
+                            <img id="detailOpponentBadge" src="" class="w-8 h-8 md:w-10 md:h-10">
+                        </div>
+                    </div>
+                    
+                    <!-- War Metrics Container -->
+                    <div id="warMetrics" class="grid grid-cols-2 md:grid-cols-5 gap-4 my-6"></div>
+                    
+                    <!-- Attacks/Map container -->
+                    <div id="warResults" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Stats -->
+        <div id="section-stats" class="lg:col-span-12 hidden-section">
+            <div class="panel p-3 md:p-6">
+                <!-- Shared Stats Header -->
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6 px-1">
+                    <div class="flex items-center gap-3">
+                        <h2 class="medieval text-base md:text-lg font-bold uppercase">Clan Stats</h2>
+                        <button onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Sync Data">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                        </button>
+                    </div>
+
+                    <!-- Header Controls -->
+                    <div class="flex items-center gap-4 lg:ml-auto">
+                        <div class="flex items-center gap-3">
                             <span class="text-[10px] font-bold text-gray-500 uppercase">Time Range:</span>
                             <select id="statsTimeRange" class="control-base h-8">
                                 <option value="month">This Month</option>
@@ -130,34 +193,28 @@
                     </div>
                 </div>
 
-                <!-- View: War History List -->
-                <div id="warListView">
-                    <div id="warHistoryList" class="space-y-4"></div>
-                </div>
-
-                <!-- View: War Analytics -->
-                <div id="warStatsView" class="hidden">
-                    <div class="space-y-8">
-                        <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
-                            <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">War Stars Achieved (%)</h3>
-                            <div id="starsTrendContainer" style="height: 180px;">
-                                <canvas id="starsTrendChart"></canvas>
-                            </div>
+                <div class="space-y-8">
+                    <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
+                        <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">War Stars Achieved (%)</h3>
+                        <div id="starsTrendContainer" style="height: 180px;">
+                            <canvas id="starsTrendChart"></canvas>
                         </div>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
-                                <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Stars Earned Breakdown</h3>
-                                <div id="topPerformersContainer" class="overflow-x-auto"></div>
-                            </div>
-                            <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
-                                <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Stars Conversion Rates</h3>
-                                <div id="efficiencyContainer">
-                                    <canvas id="efficiencyChart"></canvas>
-                                </div>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
+                            <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Stars Earned Breakdown</h3>
+                            <div id="topPerformersContainer" class="overflow-x-auto"></div>
+                        </div>
+                        <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
+                            <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Stars Conversion Rates</h3>
+                            <div id="efficiencyContainer">
+                                <canvas id="efficiencyChart"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
                 <!-- View: War Details (Hidden by default) -->
                 <div id="warDetailView" class="hidden">

@@ -29,6 +29,7 @@ import { renderCharts } from './charts.js';
 let allMembers = [];           
 let latestClanData = null;     
 let currentRoleFilter = 'all'; 
+let currentWarFilter = 'all';  
 let fullWarHistory = [];       
 let fullRaidHistory = [];      
 let availableMemberDates = []; 
@@ -56,17 +57,12 @@ function switchSubView(subviewId, updateHash = true) {
     document.getElementById('warListView')?.classList.toggle('hidden', !isHistory);
     document.getElementById('warStatsView')?.classList.toggle('hidden', isHistory);
     document.getElementById('warDetailView')?.classList.add('hidden');
-
-    // Toggle header controls
     document.getElementById('warHistoryControls')?.classList.toggle('hidden', !isHistory);
     document.getElementById('warStatsControls')?.classList.toggle('hidden', isHistory);
-
     document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(`subtab-${subviewId}`)?.classList.add('active');
-
     if (updateHash) window.location.hash = `war/${subviewId}`;
 }
-
 
 function switchRaidSubView(subviewId, updateHash = true) {
     document.getElementById('raidSummaryView')?.classList.toggle('hidden', subviewId !== 'summary');
@@ -86,6 +82,11 @@ function switchRaidSubView(subviewId, updateHash = true) {
 function updateMemberCount(count) {
     const el = document.getElementById('memberCount');
     if (el) el.innerText = `${count} / 50`;
+}
+
+function updateWarCount(filtered, total) {
+    const el = document.getElementById('warCount');
+    if (el) el.innerText = `${filtered} / ${total}`;
 }
 
 function updateHeader(name, badgeUrl) {
@@ -117,12 +118,14 @@ function preRoute() {
     const tabAbout = document.getElementById('tab-about');
     const tabMembers = document.getElementById('tab-members');
     const tabWar = document.getElementById('tab-war');
+    const tabStats = document.getElementById('tab-stats');
     const tabRaids = document.getElementById('tab-raids');
-    if (!tabAbout || !tabMembers || !tabWar || !tabRaids) return;
-    [tabAbout, tabMembers, tabWar, tabRaids].forEach(t => t.classList.remove('active'));
+    if (!tabAbout || !tabMembers || !tabWar || !tabStats || !tabRaids) return;
+    [tabAbout, tabMembers, tabWar, tabStats, tabRaids].forEach(t => t.classList.remove('active'));
     if (!hash || hash === 'about') tabAbout.classList.add('active');
     else if (hash === 'members') tabMembers.classList.add('active');
     else if (hash.startsWith('war')) tabWar.classList.add('active');
+    else if (hash === 'stats') tabStats.classList.add('active');
     else if (hash.startsWith('raids')) tabRaids.classList.add('active');
 }
 
@@ -162,7 +165,7 @@ async function init() {
             } catch (e) { return null; }
         });
         fullWarHistory = (await Promise.all(warDataPromises)).filter(w => w !== null);
-        renderWarHistory(fullWarHistory);
+        filterWarHistory();
         setupWarHistoryPickers();
     } catch (e) { console.error("Could not load war history.", e); }
 
@@ -261,6 +264,10 @@ function handleInitialRoute() {
     const hash = window.location.hash.replace('#', '');
     if (!hash || hash === 'about') { switchView('about', false); return; }
     if (hash === 'members') { switchView(hash, false); }
+    else if (hash === 'stats') {
+        switchView('stats', false);
+        renderCharts(fullWarHistory, document.getElementById('statsTimeRange')?.value || 'month');
+    }
     else if (hash.startsWith('raids')) {
         const parts = hash.split('/');
         const subview = parts[1] || 'summary';
@@ -269,21 +276,16 @@ function handleInitialRoute() {
     }
     else if (hash.startsWith('war/')) {
         const parts = hash.split('/');
-        const subview = parts[1];
         let detailFile = parts[2];
         if (detailFile && !detailFile.endsWith('.json')) detailFile += '.json';
         switchView('war', false);
         if (detailFile) loadWarDetail(detailFile, false); 
-        else {
-            switchSubView(subview, false);
-            if (subview === 'stats') renderCharts(fullWarHistory, document.getElementById('statsTimeRange')?.value || 'month');
-        }
-    } else if (hash === 'war') { switchView('war', false); switchSubView('history', false); }
+    } else if (hash === 'war') { switchView('war', false); }
 }
 
 function bindAboutPageEvents() {
     const btn = document.getElementById('viewWarHistoryBtn');
-    if (btn) btn.onclick = () => { switchView('war'); switchSubView('history'); };
+    if (btn) btn.onclick = () => { switchView('war'); };
 }
 
 async function handleMemberDateChange(dateValue, shouldFetch = true) {
@@ -305,8 +307,27 @@ function filterWarHistory() {
         const warDate = w.startTime.substring(0, 8);
         if (startVal && warDate < startVal) return false;
         if (endVal && warDate > endVal) return false;
+        
+        if (currentWarFilter !== 'all') {
+            const clanStars = w.clan.stars || 0;
+            const oppStars = w.opponent.stars || 0;
+            const clanDest = w.clan.destructionPercentage || 0;
+            const oppDest = w.opponent.destructionPercentage || 0;
+            
+            let result = 'draw';
+            if (clanStars > oppStars) result = 'victory';
+            else if (clanStars < oppStars) result = 'loss';
+            else {
+                if (clanDest > oppDest) result = 'victory';
+                else if (clanDest < oppDest) result = 'loss';
+            }
+            
+            if (result !== currentWarFilter) return false;
+        }
+        
         return true;
     });
+    updateWarCount(filtered.length, fullWarHistory.length);
     renderWarHistory(filtered);
 }
 
@@ -331,6 +352,13 @@ function setRoleFilter(role, btn) {
     btn.classList.add('active'); updateDisplay();
 }
 
+function setWarResultFilter(filter, btn) {
+    currentWarFilter = filter;
+    document.querySelectorAll('#section-war .sub-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filterWarHistory();
+}
+
 async function loadWarDetail(filename, updateHash = true) {
     const warData = fullWarHistory.find(w => w.filename === filename);
     if (warData) {
@@ -338,6 +366,7 @@ async function loadWarDetail(filename, updateHash = true) {
         document.getElementById('warListView')?.classList.add('hidden');
         document.getElementById('warStatsView')?.classList.add('hidden');
         document.getElementById('warDetailView')?.classList.remove('hidden');
+        document.getElementById('warHistoryControls')?.classList.add('hidden');
         renderWarDetail(warData, fullWarHistory);
         if (updateHash) window.location.hash = `war/details/${filename.replace('.json', '')}`;
     }
@@ -347,7 +376,8 @@ function showWarList() {
     activeWarFilename = null;
     document.getElementById('warListView')?.classList.remove('hidden');
     document.getElementById('warDetailView')?.classList.add('hidden');
-    window.location.hash = `war/history`;
+    document.getElementById('warHistoryControls')?.classList.remove('hidden');
+    window.location.hash = `war`;
 }
 
 window.loadWarDetail = loadWarDetail;
@@ -362,7 +392,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#section-members [data-role="all"]')?.classList.add('active');
         updateDisplay();
     });
-    document.getElementById('tab-war')?.addEventListener('click', () => { switchView('war'); switchSubView('history'); });
+    document.getElementById('tab-war')?.addEventListener('click', () => { 
+        switchView('war');
+        currentWarFilter = 'all';
+        document.querySelectorAll('#section-war .sub-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('#section-war [data-war-filter="all"]')?.classList.add('active');
+        filterWarHistory();
+    });
+    document.getElementById('tab-stats')?.addEventListener('click', () => { 
+        switchView('stats'); 
+        renderCharts(fullWarHistory, document.getElementById('statsTimeRange')?.value || 'month');
+    });
     document.getElementById('tab-raids')?.addEventListener('click', () => { switchView('raids'); switchRaidSubView('summary'); });
     document.getElementById('raid-subtab-summary')?.addEventListener('click', () => switchRaidSubView('summary'));
     document.getElementById('raid-subtab-attacks')?.addEventListener('click', () => switchRaidSubView('attacks'));
@@ -384,8 +424,6 @@ document.addEventListener('DOMContentLoaded', () => {
         switchRaidSubView(activeSubTab, false);
     });
 
-    document.getElementById('subtab-history')?.addEventListener('click', () => switchSubView('history'));
-    document.getElementById('subtab-stats')?.addEventListener('click', () => { switchSubView('stats'); renderCharts(fullWarHistory, document.getElementById('statsTimeRange')?.value || 'month'); });
     document.getElementById('statsTimeRange')?.addEventListener('change', (e) => { renderCharts(fullWarHistory, e.target.value); });
     document.getElementById('sortBy')?.addEventListener('change', updateDisplay);
     document.getElementById('backToWarList')?.addEventListener('click', showWarList);
@@ -402,11 +440,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (start) start.value = '';
         if (end) end.value = '';
         warHistoryPickers.forEach(p => { p.clear(); p.set('minDate', null); p.set('maxDate', null); });
+        currentWarFilter = 'all';
+        document.querySelectorAll('#section-war .sub-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('#section-war [data-war-filter="all"]')?.classList.add('active');
         filterWarHistory();
     });
     document.querySelectorAll('#section-members .sub-tab-btn').forEach(btn => { 
         if (btn.hasAttribute('data-role')) {
             btn.addEventListener('click', () => setRoleFilter(btn.getAttribute('data-role'), btn)); 
+        }
+    });
+    document.querySelectorAll('#section-war .sub-tab-btn').forEach(btn => {
+        if (btn.hasAttribute('data-war-filter')) {
+            btn.addEventListener('click', () => setWarResultFilter(btn.getAttribute('data-war-filter'), btn));
         }
     });
     document.addEventListener('click', () => { document.querySelectorAll('.info-tooltip').forEach(t => t.classList.remove('active')); });
