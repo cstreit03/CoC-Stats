@@ -376,21 +376,55 @@ export function renderWarDetail(warData, history = []) {
     const container = document.getElementById('warResults');
     const summaryContainer = document.getElementById('warDetailSummaryCard');
     const metricsContainer = document.getElementById('warMetrics');
-    if (!container || !summaryContainer || !metricsContainer) return;
+    const controlsContainer = document.getElementById('warDetailControls');
+    if (!container || !summaryContainer || !metricsContainer || !controlsContainer) return;
 
     window.activeWarData = warData; // For countdown interval
     if (currentWarFilters.selectedClan === 'map') currentWarFilters.selectedClan = 'clan';
 
     const clanAtksUsed = warData.clan.attacks || 0;
     const avgStarsAtk = clanAtksUsed > 0 ? (warData.clan.stars / clanAtksUsed).toFixed(2) : "0.00";
+    
+    let totalDest = 0;
+    warData.clan.members.forEach(m => {
+        (m.attacks || []).forEach(a => {
+            totalDest += a.destructionPercentage;
+        });
+    });
+    const avgDestAtk = clanAtksUsed > 0 ? (totalDest / clanAtksUsed).toFixed(1) : "0.0";
+
     const winProb = calculateWinProbability(warData, history);
+    
+    // Dynamic Colors for Metrics
+    const avgStarsVal = parseFloat(avgStarsAtk);
+    let avgStarsColor = "text-white";
+    if (avgStarsVal <= 1.0) avgStarsColor = "text-red-500";
+    else if (avgStarsVal <= 2.0) avgStarsColor = "text-yellow-500";
+    else if (avgStarsVal > 2.0) avgStarsColor = "text-green-500";
+
+    const avgDestVal = parseFloat(avgDestAtk);
+    let avgDestColor = "text-white";
+    if (avgDestVal < 80) avgDestColor = "text-red-500";
+    else if (avgDestVal < 90) avgDestColor = "text-yellow-500";
+    else if (avgDestVal >= 90) avgDestColor = "text-green-500";
+
+    let winProbColor = "text-gold";
+    if (winProb < 50) winProbColor = "text-red-500";
+    else if (winProb === 50) winProbColor = "text-yellow-500";
+    else if (winProb > 50) winProbColor = "text-green-500";
+
+    const cleanupNeeded = warData.opponent.members.filter(m => { const s = m.bestOpponentAttack?.stars || 0; return s > 0 && s < 3; }).length;
+    let cleanupColor = "text-gray-500";
+    if (cleanupNeeded === 0) cleanupColor = "text-green-500";
+    else if (cleanupNeeded <= 2) cleanupColor = "text-yellow-500";
+    else if (cleanupNeeded > 2) cleanupColor = "text-red-500";
+
     const clanAvailablePower = warData.clan.members.reduce((sum, m) => sum + ((m.townhallLevel || m.townHallLevel || 0) * (2 - (m.attacks ? m.attacks.length : 0))), 0);
     const oppNeedsClearingSum = warData.opponent.members.filter(m => (m.bestOpponentAttack?.stars || 0) < 3).reduce((sum, m) => sum + (m.townhallLevel || m.townHallLevel || 0), 0);
     const currentTHRatio = oppNeedsClearingSum > 0 ? (clanAvailablePower / oppNeedsClearingSum).toFixed(2) : "∞";
     const startTHRatio = (warData.clan.members.reduce((sum, m) => sum + (m.townhallLevel || m.townHallLevel || 0), 0) * 2 / (warData.opponent.members.reduce((sum, m) => sum + (m.townhallLevel || m.townHallLevel || 0), 0) * 1)).toFixed(2);
     const clearedBases = warData.opponent.members.filter(m => (m.bestOpponentAttack?.stars || 0) === 3).length;
     const mapCompletionPct = Math.round((clearedBases / warData.teamSize) * 100);
-    const cleanupNeeded = warData.opponent.members.filter(m => { const s = m.bestOpponentAttack?.stars || 0; return s > 0 && s < 3; }).length;
 
     window.toggleStatInfo = (type, event) => {
         event.stopPropagation();
@@ -404,59 +438,45 @@ export function renderWarDetail(warData, history = []) {
     summaryContainer.innerHTML = getWarSummaryHtml(warData, new Date());
 
     metricsContainer.innerHTML = `
-        <div class="bg-[#1a1a1a] p-3 rounded-xl border border-gray-800 flex flex-col justify-between relative">
-            <button onclick="window.toggleStatInfo('avg', event)" class="absolute top-2 right-2 text-[10px] text-gray-600 hover:text-gold transition-colors">ⓘ</button>
-            <div id="tooltip-avg" class="info-tooltip">Avg Stars / Atk: The current efficiency of used attacks for your clan (Stars ÷ Attacks).</div>
-            <span class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">Avg Stars/Atk</span>
-            <p class="text-xl font-bold text-white leading-none">${avgStarsAtk}</p>
+        <div onclick="window.toggleStatInfo('avg', event)" class="flex flex-col justify-center items-center bg-[#1a1a1a] px-3 py-1 rounded-lg border border-gray-800 relative min-w-[80px] h-10 flex-1 cursor-pointer hover:bg-[#222] transition-colors">
+            <button class="absolute top-1 right-1 text-[8px] text-gray-500 pointer-events-none">ⓘ</button>
+            <div id="tooltip-avg" class="info-tooltip">Average Stars: The current efficiency of used attacks for your clan (Stars ÷ Attacks).</div>
+            <span class="text-[7px] font-black text-gray-500 uppercase tracking-tighter leading-none mb-0.5">Avg Stars</span>
+            <p class="text-[11px] font-bold ${avgStarsColor} leading-none">${avgStarsAtk}</p>
         </div>
-        <div class="bg-[#1a1a1a] p-3 rounded-xl border border-gray-800 flex flex-col justify-center relative">
-            <button onclick="window.toggleStatInfo('probWin', event)" class="absolute top-2 right-2 text-[10px] text-gray-600 hover:text-gold transition-colors">ⓘ</button>
-            <div id="tooltip-probWin" class="info-tooltip">Chance of Win: A weighted probability factoring in stars earned, Technical Capacity remaining, and resource exhaustion.</div>
-            <span class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">Chance of Win</span>
-            <p class="text-xl font-bold gold leading-none">${winProb}%</p>
+        <div onclick="window.toggleStatInfo('avgDest', event)" class="flex flex-col justify-center items-center bg-[#1a1a1a] px-3 py-1 rounded-lg border border-gray-800 relative min-w-[80px] h-10 flex-1 cursor-pointer hover:bg-[#222] transition-colors">
+            <button class="absolute top-1 right-1 text-[8px] text-gray-500 pointer-events-none">ⓘ</button>
+            <div id="tooltip-avgDest" class="info-tooltip">Average %: The average destruction percentage achieved per used attack (Total Destruction ÷ Used Attacks).</div>
+            <span class="text-[7px] font-black text-gray-500 uppercase tracking-tighter leading-none mb-0.5">Avg %</span>
+            <p class="text-[11px] font-bold ${avgDestColor} leading-none">${avgDestAtk}%</p>
         </div>
-        <div class="bg-[#1a1a1a] p-3 rounded-xl border border-gray-800 flex flex-col justify-center relative">
-            <button onclick="window.toggleStatInfo('ratio', event)" class="absolute top-2 right-2 text-[10px] text-gray-600 hover:text-gold transition-colors">ⓘ</button>
-            <div id="tooltip-ratio" class="info-tooltip">TH Power Ratio: Available Clan TH power for remaining attacks vs remaining targets to clear.</div>
-            <span class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">TH Power Ratio</span>
-            <p class="text-xl font-bold text-white leading-none">${currentTHRatio} <span class="text-[9px] text-gray-600 font-normal">Start: ${startTHRatio}</span></p>
+        <div onclick="window.toggleStatInfo('probWin', event)" class="flex flex-col justify-center items-center bg-[#1a1a1a] px-3 py-1 rounded-lg border border-gray-800 relative min-w-[80px] h-10 flex-1 cursor-pointer hover:bg-[#222] transition-colors">
+            <button class="absolute top-1 right-1 text-[8px] text-gray-500 pointer-events-none">ⓘ</button>
+            <div id="tooltip-probWin" class="info-tooltip">Win Probability: A weighted calculation of the likelihood of victory factoring in score and resource exhaustion (Simulated Outcomes).</div>
+            <span class="text-[7px] font-black text-gray-500 uppercase tracking-tighter leading-none mb-0.5">Win Prob.</span>
+            <p class="text-[11px] font-bold ${winProbColor} leading-none">${winProb}%</p>
         </div>
-        <div class="bg-[#1a1a1a] p-3 rounded-xl border border-gray-800 flex flex-col justify-center relative">
-            <button onclick="window.toggleStatInfo('comp', event)" class="absolute top-2 right-2 text-[10px] text-gray-600 hover:text-gold transition-colors">ⓘ</button>
-            <div id="tooltip-comp" class="info-tooltip">Map Completion: The percentage of enemy bases that have been successfully 3-starred.</div>
-            <span class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">Map Completion</span>
-            <p class="text-xl font-bold text-green-500 leading-none">${mapCompletionPct}% <span class="text-[9px] text-gray-600 font-normal">${clearedBases}/${warData.teamSize}</span></p>
-        </div>
-        <div class="bg-[#1a1a1a] p-3 rounded-xl border border-gray-800 flex flex-col justify-center relative">
-            <button onclick="window.toggleStatInfo('clean', event)" class="absolute top-2 right-2 text-[10px] text-gray-600 hover:text-gold transition-colors">ⓘ</button>
-            <div id="tooltip-clean" class="info-tooltip">Clean-up Needed: Count of enemy bases attacked but only partially cleared (1 or 2 stars).</div>
-            <span class="text-[8px] font-black text-gray-500 uppercase tracking-widest mb-1">Clean-up Needed</span>
-            <p class="text-xl font-bold ${cleanupNeeded > 0 ? 'text-yellow-500' : 'text-gray-600'} leading-none">${cleanupNeeded}</p>
+        <div onclick="window.toggleStatInfo('clean', event)" class="flex flex-col justify-center items-center bg-[#1a1a1a] px-3 py-1 rounded-lg border border-gray-800 relative min-w-[80px] h-10 flex-1 cursor-pointer hover:bg-[#222] transition-colors">
+            <button class="absolute top-1 right-1 text-[8px] text-gray-500 pointer-events-none">ⓘ</button>
+            <div id="tooltip-clean" class="info-tooltip">Cleanup Needed: The count of enemy bases that have been attacked but not 3-starred (1-2 Star Bases Count).</div>
+            <span class="text-[7px] font-black text-gray-500 uppercase tracking-tighter leading-none mb-0.5">Cleanup</span>
+            <p class="text-[11px] font-bold ${cleanupColor} leading-none">${cleanupNeeded}</p>
         </div>
     `;
 
-    let filterBar = document.getElementById('warDetailFilters');
-    if (!filterBar) {
-        filterBar = document.createElement('div');
-        filterBar.id = 'warDetailFilters';
-        filterBar.className = 'flex flex-wrap items-center gap-4 mb-6 p-4 bg-[#1a1a1a] rounded-xl border border-gray-800';
-        document.getElementById('warDetailView').insertBefore(filterBar, container);
-    }
-    
-    filterBar.innerHTML = `
-        <div class="flex items-center gap-2 w-full lg:w-auto pb-4 lg:pb-0 lg:pr-4 border-b lg:border-b-0 lg:border-r border-gray-800 mr-0 lg:mr-2">
-            <button id="toggleClan" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'clan' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[120px]">
+    controlsContainer.innerHTML = `
+        <div class="flex items-center gap-2 pb-4 lg:pb-0 lg:pr-4 border-b lg:border-b-0 lg:border-r border-gray-800 mr-0 lg:mr-2">
+            <button id="toggleClan" class="flex items-center justify-center gap-2 px-3 py-1 rounded-lg border ${currentWarFilters.selectedClan === 'clan' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all">
                 <img src="${warData.clan.badgeUrls.small}" class="w-4 h-4"><span class="text-[9px] font-bold uppercase truncate">${warData.clan.name}</span>
             </button>
-            <button id="toggleOpponent" class="flex-1 lg:flex-none flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg border ${currentWarFilters.selectedClan === 'opponent' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all min-w-[120px]">
+            <button id="toggleOpponent" class="flex items-center justify-center gap-2 px-3 py-1 rounded-lg border ${currentWarFilters.selectedClan === 'opponent' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all">
                 <img src="${warData.opponent.badgeUrls.small}" class="w-4 h-4"><span class="text-[9px] font-bold uppercase truncate">${warData.opponent.name}</span>
             </button>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-2 lg:flex lg:items-center gap-4 w-full lg:w-auto">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div class="flex items-center gap-2">
                 <span class="text-[10px] font-bold text-gray-500 uppercase">Attacks:</span>
-                <select id="filterAttacks" class="control-base flex-1 h-8">
+                <select id="filterAttacks" class="control-base h-8">
                     <option value="all" ${currentWarFilters.attacks === 'all' ? 'selected' : ''}>All Members</option>
                     <option value="atk1used" ${currentWarFilters.attacks === 'atk1used' ? 'selected' : ''}>Attack #1 Used</option>
                     <option value="atk2used" ${currentWarFilters.attacks === 'atk2used' ? 'selected' : ''}>Attack #2 Used</option>
@@ -466,7 +486,7 @@ export function renderWarDetail(warData, history = []) {
             </div>
             <div class="flex items-center gap-2">
                 <span class="text-[10px] font-bold text-gray-500 uppercase">Results:</span>
-                <select id="filterPerformance" class="control-base flex-1 h-8">
+                <select id="filterPerformance" class="control-base h-8">
                     <option value="all" ${currentWarFilters.performance === 'all' ? 'selected' : ''}>All Stars</option>
                     <option value="0-2" ${currentWarFilters.performance === '0-2' ? 'selected' : ''}>0-2 Stars</option>
                     <option value="3-5" ${currentWarFilters.performance === '3-5' ? 'selected' : ''}>3-5 Stars</option>
@@ -475,12 +495,12 @@ export function renderWarDetail(warData, history = []) {
             </div>
             <div class="flex items-center gap-2">
                 <span class="text-[10px] font-bold text-gray-500 uppercase whitespace-nowrap">Sort:</span>
-                <select id="filterSort" class="control-base flex-1 h-8">
+                <select id="filterSort" class="control-base h-8">
                     <option value="mapPosition" ${currentWarFilters.sortBy === 'mapPosition' ? 'selected' : ''}>Map Position</option>
                     <option value="stars" ${currentWarFilters.sortBy === 'stars' ? 'selected' : ''}>Total Stars</option>
                 </select>
             </div>
-            <button id="resetDetailFilters" class="btn-reset col-span-2 lg:ml-auto">Reset</button>
+            <button id="resetDetailFilters" class="btn-reset">Reset</button>
         </div>`;
 
     document.getElementById('toggleClan').onclick = () => { currentWarFilters.selectedClan = 'clan'; renderWarDetail(warData, history); };
@@ -631,12 +651,35 @@ let raidSort = {
 export function setRaidSort(table, column) {
     if (raidSort[table].col === column) raidSort[table].dir *= -1;
     else { raidSort[table].col = column; raidSort[table].dir = -1; }
+    updateSortHeaders(table);
 }
 
 export function resetRaidSort(table) {
     if (table === 'summary') raidSort.summary = { col: 'loot', dir: -1 };
     else if (table === 'attacks') raidSort.attacks = { col: 'index', dir: -1 };
     else if (table === 'defenses') raidSort.defenses = { col: 'index', dir: -1 };
+    updateSortHeaders(table);
+}
+
+function updateSortHeaders(table) {
+    const s = raidSort[table];
+    document.querySelectorAll(`.raid-sort-btn[data-table="${table}"]`).forEach(th => {
+        const isSelected = th.getAttribute('data-sort') === s.col;
+        const icon = th.querySelector('svg');
+        if (isSelected) {
+            th.classList.add('text-gold');
+            if (icon) {
+                icon.classList.remove('opacity-20');
+                icon.classList.add('opacity-100');
+            }
+        } else {
+            th.classList.remove('text-gold');
+            if (icon) {
+                icon.classList.add('opacity-20');
+                icon.classList.remove('opacity-100');
+            }
+        }
+    });
 }
 
 /**
@@ -646,6 +689,8 @@ export function renderRaidSummary(raidData, membersLookup = []) {
     const tableBody = document.getElementById('raidSummaryTableBody');
     if (!tableBody) return;
     if (!raidData || !raidData.members) { tableBody.innerHTML = `<tr><td colspan="6" class="p-10 text-center text-gray-600 italic">No raid data available.</td></tr>`; return; }
+
+    updateSortHeaders('summary');
 
     const memberMap = {};
     membersLookup.forEach(m => memberMap[m.tag] = m);
@@ -713,6 +758,10 @@ export function renderRaidSummary(raidData, membersLookup = []) {
 export function renderRaidAttacks(raidData) {
     const tableBody = document.getElementById('raidAttacksTableBody');
     if (!tableBody) return;
+    if (!raidData) return;
+
+    updateSortHeaders('attacks');
+
     const log = (raidData.attackLog || []).map((r, i) => {
         const isDefeated = r.districtsDestroyed === r.districtCount;
         return { ...r, index: i + 1, status: isDefeated ? 'Defeated' : 'In-Progress' };
@@ -745,6 +794,10 @@ export function renderRaidAttacks(raidData) {
 export function renderRaidDefenses(raidData) {
     const tableBody = document.getElementById('raidDefensesTableBody');
     if (!tableBody) return;
+    if (!raidData) return;
+
+    updateSortHeaders('defenses');
+
     const log = (raidData.defenseLog || []).map((r, i) => {
         const isDefeated = r.districtsDestroyed === r.districtCount;
         return { ...r, index: i + 1, status: isDefeated ? 'Defeated' : 'In-Progress' };

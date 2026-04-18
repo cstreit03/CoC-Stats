@@ -169,7 +169,7 @@ select.control-base {
     line-height: 1.4;
     color: #bbb;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    z-index: 50;
+    z-index: 999;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.2s;
