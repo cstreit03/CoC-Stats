@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260417T070000.000Z",
     "endTime": "20260420T070000.000Z",
-    "capitalTotalLoot": 557116,
+    "capitalTotalLoot": 590042,
     "raidsCompleted": 6,
-    "totalAttacks": 126,
-    "enemyDistrictsDestroyed": 48,
+    "totalAttacks": 134,
+    "enemyDistrictsDestroyed": 51,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -98,6 +98,14 @@
             "capitalResourcesLooted": 23036
         },
         {
+            "tag": "#9G92CY9L",
+            "name": "brandondepalma",
+            "attacks": 6,
+            "attackLimit": 5,
+            "bonusAttackLimit": 1,
+            "capitalResourcesLooted": 26112
+        },
+        {
             "tag": "#99VC2CU9",
             "name": "Polaris",
             "attacks": 6,
@@ -140,10 +148,10 @@
         {
             "tag": "#LPU0GGCJQ",
             "name": "night dragon",
-            "attacks": 3,
+            "attacks": 5,
             "attackLimit": 5,
             "bonusAttackLimit": 1,
-            "capitalResourcesLooted": 16259
+            "capitalResourcesLooted": 23073
         },
         {
             "tag": "#8RJ8CC8LU",
@@ -1730,9 +1738,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/KWHa85DQN2x_BWL1TyvvRiV03gsfno88c2XzNwZGTX4.png"
                 }
             },
-            "attackCount": 9,
+            "attackCount": 17,
             "districtCount": 9,
-            "districtsDestroyed": 3,
+            "districtsDestroyed": 6,
             "districts": [
                 {
                     "id": 70000000,
@@ -1747,11 +1755,27 @@
                     "id": 70000001,
                     "name": "Barbarian Camp",
                     "districtHallLevel": 5,
-                    "destructionPercent": 53,
-                    "stars": 1,
-                    "attackCount": 1,
-                    "totalLooted": 5015,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11829,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#LPU0GGCJQ",
+                                "name": "night dragon"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#LPU0GGCJQ",
+                                "name": "night dragon"
+                            },
+                            "destructionPercent": 74,
+                            "stars": 2
+                        },
                         {
                             "attacker": {
                                 "tag": "#LPU0GGCJQ",
@@ -1766,10 +1790,28 @@
                     "id": 70000002,
                     "name": "Wizard Valley",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 2,
+                    "totalLooted": 10289,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#9G92CY9L",
+                                "name": "brandondepalma"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#9G92CY9L",
+                                "name": "brandondepalma"
+                            },
+                            "destructionPercent": 38,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000003,
@@ -1837,19 +1879,55 @@
                     "id": 70000005,
                     "name": "Dragon Cliffs",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11468,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#9G92CY9L",
+                                "name": "brandondepalma"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#9G92CY9L",
+                                "name": "brandondepalma"
+                            },
+                            "destructionPercent": 61,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#9G92CY9L",
+                                "name": "brandondepalma"
+                            },
+                            "destructionPercent": 34,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000006,
                     "name": "Golem Quarry",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 55,
+                    "stars": 1,
+                    "attackCount": 1,
+                    "totalLooted": 4355,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#9G92CY9L",
+                                "name": "brandondepalma"
+                            },
+                            "destructionPercent": 55,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000007,
