@@ -2,7 +2,7 @@
 
 A sophisticated dashboard for tracking Clash of Clans performance with advanced analytics and real-time win probability calculations. This project uses a Python scraper and GitHub Actions to automatically update data on a recurring schedule.
 
-See live example: http://clash.kenaz.dev
+See live example: https://clash.kenaz.dev
 
 ## Features
 
