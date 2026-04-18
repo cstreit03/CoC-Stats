@@ -363,6 +363,7 @@ async function loadWarDetail(filename, updateHash = true) {
     const warData = fullWarHistory.find(w => w.filename === filename);
     if (warData) {
         activeWarFilename = filename;
+        document.getElementById('warMainHeader')?.classList.add('hidden');
         document.getElementById('warListView')?.classList.add('hidden');
         document.getElementById('warStatsView')?.classList.add('hidden');
         document.getElementById('warDetailView')?.classList.remove('hidden');
@@ -374,6 +375,8 @@ async function loadWarDetail(filename, updateHash = true) {
 
 function showWarList() {
     activeWarFilename = null;
+    switchView('war', false);
+    document.getElementById('warMainHeader')?.classList.remove('hidden');
     document.getElementById('warListView')?.classList.remove('hidden');
     document.getElementById('warDetailView')?.classList.add('hidden');
     document.getElementById('warHistoryControls')?.classList.remove('hidden');
@@ -393,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDisplay();
     });
     document.getElementById('tab-war')?.addEventListener('click', () => { 
-        switchView('war');
+        showWarList();
         currentWarFilter = 'all';
         document.querySelectorAll('#section-war .sub-tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelector('#section-war [data-war-filter="all"]')?.classList.add('active');

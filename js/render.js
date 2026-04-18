@@ -126,6 +126,69 @@ let currentWarFilters = {
     strategy: 'Mirror'
 };
 
+/**
+ * Reusable function to generate the war summary card HTML
+ */
+function getWarSummaryHtml(war, now) {
+    const totalPossibleAttacks = war.teamSize * war.attacksPerMember;
+    const clanAttacks = war.clan.attacks || 0;
+    const opponentAttacks = war.opponent.attacks || 0;
+    const d = war.startTime;
+    const formattedDate = `${d.substring(0,4)}-${d.substring(4,6)}-${d.substring(6,8)}`;
+    const start = parseCoCDate(war.startTime);
+    const end = parseCoCDate(war.endTime);
+    let statusLabel = "";
+    let countdownTarget = null;
+    let isPinned = now < end;
+    if (now < start) { statusLabel = "Preparation Day"; countdownTarget = war.startTime; }
+    else if (now < end) { statusLabel = "War Day"; countdownTarget = war.endTime; }
+    const pinnedClass = isPinned ? 'border-gold bg-[#2a2618]' : 'border-gray-700 bg-[#252525]';
+    const clanStars = war.clan.stars || 0;
+    const opponentStars = war.opponent.stars || 0;
+    const clanDest = war.clan.destructionPercentage || 0;
+    const opponentDest = war.opponent.destructionPercentage || 0;
+    let resultLabel = statusLabel;
+    let scoreColor = "gold";
+    if (!isPinned) {
+        if (clanStars > opponentStars) { resultLabel = "Victory"; scoreColor = "text-green-500"; }
+        else if (clanStars < opponentStars) { resultLabel = "Loss"; scoreColor = "text-red-500"; }
+        else {
+            if (clanDest > opponentDest) { resultLabel = "Victory"; scoreColor = "text-green-500"; }
+            else if (clanDest < opponentDest) { resultLabel = "Loss"; scoreColor = "text-red-500"; }
+            else { resultLabel = "Draw"; scoreColor = "text-gray-400"; }
+        }
+    }
+    
+    return `
+    <div class="p-2.5 md:p-3.5 rounded-xl border ${pinnedClass} transition-colors relative overflow-hidden">
+        <div class="flex justify-between items-center mb-1">
+            <span class="text-[8px] md:text-[9px] font-bold text-gray-500 uppercase tracking-widest">${formattedDate}</span>
+        </div>
+        <div class="flex justify-between items-center">
+            <div class="flex items-center gap-2 md:gap-3 w-1/3 text-left">
+                <img src="${war.clan.badgeUrls.small}" class="w-7 h-7 md:w-9 md:h-9">
+                <div class="min-w-0">
+                    <p class="text-[10px] md:text-xs font-bold text-white truncate">${war.clan.name}</p>
+                    <p class="text-[7px] md:text-[8px] text-gray-500">${clanAttacks}/${totalPossibleAttacks} Atks</p>
+                </div>
+            </div>
+            <div class="flex flex-col items-center justify-center w-1/3 text-center px-1">
+                ${countdownTarget ? `<p id="cd-${war.filename || 'detail'}" class="mb-0.5 font-mono gold text-[9px] md:text-[10px]">${getCountdown(countdownTarget)}</p>` : ''}
+                <p class="text-[9px] md:text-[11px] font-black ${isPinned ? 'gold' : scoreColor} uppercase tracking-widest leading-none mb-0.5">${resultLabel}</p>
+                <p class="medieval ${isPinned ? 'gold' : scoreColor} text-base md:text-xl">${war.clan.stars} - ${war.opponent.stars}</p>
+                <p class="text-[7px] md:text-[8px] text-gray-500 mt-0.5">${war.clan.destructionPercentage.toFixed(1)}% vs ${war.opponent.destructionPercentage.toFixed(1)}%</p>
+            </div>
+            <div class="flex items-center gap-2 md:gap-3 text-right justify-end w-1/3">
+                <div class="min-w-0">
+                    <p class="text-[10px] md:text-xs font-bold text-white truncate">${war.opponent.name}</p>
+                    <p class="text-[7px] md:text-[8px] text-gray-500">${opponentAttacks}/${totalPossibleAttacks} Atks</p>
+                </div>
+                <img src="${war.opponent.badgeUrls.small}" class="w-7 h-7 md:w-9 md:h-9">
+            </div>
+        </div>
+    </div>`;
+}
+
 export function renderWarHistory(warHistory) {
     const container = document.getElementById('warHistoryList');
     if (!container) return;
@@ -143,71 +206,17 @@ export function renderWarHistory(warHistory) {
         return b.startTime.localeCompare(a.startTime);
     });
     if (countdownInterval) clearInterval(countdownInterval);
-    container.innerHTML = sorted.map(war => {
-        const totalPossibleAttacks = war.teamSize * war.attacksPerMember;
-        const clanAttacks = war.clan.attacks || 0;
-        const opponentAttacks = war.opponent.attacks || 0;
-        const d = war.startTime;
-        const formattedDate = `${d.substring(0,4)}-${d.substring(4,6)}-${d.substring(6,8)}`;
-        const start = parseCoCDate(war.startTime);
-        const end = parseCoCDate(war.endTime);
-        let statusLabel = "";
-        let countdownTarget = null;
-        let isPinned = now < end;
-        if (now < start) { statusLabel = "Preparation Day"; countdownTarget = war.startTime; }
-        else if (now < end) { statusLabel = "War Day"; countdownTarget = war.endTime; }
-        const pinnedClass = isPinned ? 'border-gold bg-[#2a2618]' : 'border-gray-700 bg-[#252525]';
-        const clanStars = war.clan.stars || 0;
-        const opponentStars = war.opponent.stars || 0;
-        const clanDest = war.clan.destructionPercentage || 0;
-        const opponentDest = war.opponent.destructionPercentage || 0;
-        let resultLabel = statusLabel;
-        let scoreColor = "gold";
-        if (!isPinned) {
-            if (clanStars > opponentStars) { resultLabel = "Victory"; scoreColor = "text-green-500"; }
-            else if (clanStars < opponentStars) { resultLabel = "Loss"; scoreColor = "text-red-500"; }
-            else {
-                if (clanDest > opponentDest) { resultLabel = "Victory"; scoreColor = "text-green-500"; }
-                else if (clanDest < opponentDest) { resultLabel = "Loss"; scoreColor = "text-red-500"; }
-                else { resultLabel = "Draw"; scoreColor = "text-gray-400"; }
-            }
-        }
-        return `
-        <div class="p-4 rounded-xl border ${pinnedClass} hover:border-gold cursor-pointer transition-colors relative overflow-hidden" onclick="window.loadWarDetail('${war.filename}')">
-            <div class="flex justify-between items-center mb-2">
-                <div class="flex flex-col">
-                    <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">${formattedDate}</span>
-                </div>
-            </div>
-            <div class="flex justify-between items-center mb-4">
-                <div class="flex items-center gap-2 md:gap-3 w-1/3 text-left">
-                    <img src="${war.clan.badgeUrls.small}" class="w-8 h-8 md:w-10 md:h-10">
-                    <div class="min-w-0">
-                        <p class="text-[11px] md:text-xs font-bold text-white truncate">${war.clan.name}</p>
-                        <p class="text-[8px] md:text-[9px] text-gray-500">${clanAttacks}/${totalPossibleAttacks} Attacks</p>
-                    </div>
-                </div>
-                <div class="flex flex-col items-center justify-center w-1/3 text-center px-1">
-                    ${countdownTarget ? `<p id="cd-${war.filename}" class="mb-1 font-mono gold text-[10px] md:text-[11px]">${getCountdown(countdownTarget)}</p>` : ''}
-                    <p class="text-[10px] md:text-[13px] font-black ${isPinned ? 'gold' : scoreColor} uppercase tracking-widest mb-1 leading-tight">${resultLabel}</p>
-                    <p class="medieval ${isPinned ? 'gold' : scoreColor} text-lg md:text-2xl">${war.clan.stars} - ${war.opponent.stars}</p>
-                    <p class="text-[8px] md:text-[9px] text-gray-500 mt-1">${war.clan.destructionPercentage.toFixed(1)}% vs ${war.opponent.destructionPercentage.toFixed(1)}%</p>
-                </div>
-                <div class="flex items-center gap-2 md:gap-3 text-right justify-end w-1/3">
-                    <div class="min-w-0">
-                        <p class="text-[11px] md:text-xs font-bold text-white truncate">${war.opponent.name}</p>
-                        <p class="text-[8px] md:text-[9px] text-gray-500">${opponentAttacks}/${totalPossibleAttacks} Attacks</p>
-                    </div>
-                    <img src="${war.opponent.badgeUrls.small}" class="w-8 h-8 md:w-10 md:h-10">
-                </div>
-            </div>
-        </div>`;
-    }).join('');
+    
+    container.innerHTML = sorted.map(war => `
+        <div onclick="window.loadWarDetail('${war.filename}')" class="cursor-pointer hover:border-gold group">
+            ${getWarSummaryHtml(war, now)}
+        </div>
+    `).join('');
     
     countdownInterval = setInterval(() => {
         document.querySelectorAll('[id^="cd-"]').forEach(el => {
             const warFile = el.id.replace('cd-', '');
-            const warObj = warHistory.find(w => w.filename === warFile);
+            const warObj = (warFile === 'detail' && window.activeWarData) ? window.activeWarData : warHistory.find(w => w.filename === warFile);
             if (warObj) {
                 const startT = parseCoCDate(warObj.startTime);
                 const target = now < startT ? warObj.startTime : warObj.endTime;
@@ -274,28 +283,16 @@ function calculateWinProbability(warData, history) {
     const now = new Date();
     const isFinished = now > parseCoCDate(warData.endTime);
 
-    // Terminal Conditions - if war is finished or both out of attacks
     if (isFinished || (clanAtksRemaining === 0 && oppAtksRemaining === 0)) {
-        return clanStars > oppStars ? 100 : 0; // Win only if strictly ahead, draw = 0%
-    }
-
-    // Our Defeat: Clan out of attacks and not winning (equal or losing)
-    if (clanAtksRemaining === 0) {
         return clanStars > oppStars ? 100 : 0;
     }
+    if (clanAtksRemaining === 0) return clanStars > oppStars ? 100 : 0;
+    if (oppAtksRemaining === 0) return clanStars > oppStars ? 100 : 0;
 
-    // Our Victory: Opponent out of attacks and we're winning
-    if (oppAtksRemaining === 0) {
-        return clanStars > oppStars ? 100 : 0;
-    }
-
-    // Build player MTD stat maps from history
     const playerMTDMap = {};
     history.forEach(w => {
         w.clan.members.forEach(m => {
             if (!playerMTDMap[m.tag]) playerMTDMap[m.tag] = { sum: 0, count: 0 };
-            const oppMap = {};
-            w.opponent.members.forEach(om => oppMap[om.tag] = om.townhallLevel || om.townHallLevel);
             (m.attacks || []).forEach(a => {
                 playerMTDMap[m.tag].sum += a.stars;
                 playerMTDMap[m.tag].count++;
@@ -306,13 +303,11 @@ function calculateWinProbability(warData, history) {
     const getPlayerMTDAvg = (playerTag) => {
         return playerMTDMap[playerTag] && playerMTDMap[playerTag].count > 0 
             ? playerMTDMap[playerTag].sum / playerMTDMap[playerTag].count 
-            : 2.2; // Default expected value
+            : 2.2;
     };
 
-    // Calculate realistic star potential for clan
     let clanProjectedStars = clanStars;
     let clanMaxPotentialStars = clanStars;
-    let clanWeakenedPotential = false;
 
     warData.clan.members.forEach(m => {
         const attackerTH = m.townhallLevel || m.townHallLevel;
@@ -320,25 +315,16 @@ function calculateWinProbability(warData, history) {
         const atksLeft = 2 - atksUsed;
 
         for (let i = 0; i < atksLeft; i++) {
-            // Find target at mapPosition (wrapping if needed)
             const targetIdx = (m.mapPosition - 1) % warData.opponent.members.length;
             const target = warData.opponent.members[targetIdx];
             const targetTH = target.townhallLevel || target.townHallLevel;
             const targetStars = target.bestOpponentAttack?.stars || 0;
-
-            // Hard-cap logic: if attacker is 4+ TH levels below target, cap at 1-2 stars
             let maxStars = 3;
-            if (targetTH - attackerTH >= 4) {
-                maxStars = 1 + Math.random(); // 1-2 stars
-                clanWeakenedPotential = true;
-            } else if (targetTH - attackerTH === 3) {
-                maxStars = 2.5; // Usually 2-3 stars
-            }
+            if (targetTH - attackerTH >= 4) maxStars = 1.5;
+            else if (targetTH - attackerTH === 3) maxStars = 2.5;
 
-            // Use player's MTD average as EV, capped by hard cap
             const playerAvg = getPlayerMTDAvg(m.tag);
             const expectedStars = Math.min(playerAvg, maxStars);
-
             if (targetStars < 3) {
                 clanProjectedStars += expectedStars;
                 clanMaxPotentialStars += maxStars;
@@ -346,25 +332,17 @@ function calculateWinProbability(warData, history) {
         }
     });
 
-    // Calculate opponent's projected stars
     const oppAvgStarsPerAtk = oppAtksUsed > 0 ? (oppStars / oppAtksUsed) : 2.2;
     let oppProjectedStars = oppStars;
-
-    // Count opponent's high-level threats remaining
     let oppHighThreats = 0;
     warData.opponent.members.forEach(m => {
         const oppTH = m.townhallLevel || m.townHallLevel;
         const atksUsed = m.attacks ? m.attacks.length : 0;
         const atksLeft = 2 - atksUsed;
-
         if (oppTH >= 16 && atksLeft > 0) oppHighThreats += atksLeft;
-
-        for (let i = 0; i < atksLeft; i++) {
-            oppProjectedStars += oppAvgStarsPerAtk;
-        }
+        for (let i = 0; i < atksLeft; i++) oppProjectedStars += oppAvgStarsPerAtk;
     });
 
-    // Defense Insurance: If we're leading and opponent lacks high-level threats
     let defenseBonus = 0;
     if (clanStars >= oppStars) {
         let clanHighDef = warData.clan.members.filter(m => {
@@ -372,50 +350,22 @@ function calculateWinProbability(warData, history) {
             const stars = m.bestOpponentAttack?.stars || 0;
             return th >= 16 && stars < 3;
         }).length;
-
-        if (oppHighThreats === 0 && clanHighDef > 0) {
-            defenseBonus = 15; // Significant insurance bonus
-        } else if (oppHighThreats < clanHighDef / 2) {
-            defenseBonus = 8; // Moderate insurance bonus
-        }
+        if (oppHighThreats === 0 && clanHighDef > 0) defenseBonus = 15;
+        else if (oppHighThreats < clanHighDef / 2) defenseBonus = 8;
     }
 
-    // Late-war volatility: increase sensitivity as attacks decrease
     const attacksRemaining = Math.min(clanAtksRemaining, oppAtksRemaining);
     const totalAttacksPossible = totalPossibleAtks;
     const volatilityMultiplier = 1 + ((totalAttacksPossible - attacksRemaining) / totalAttacksPossible) * 0.5;
-
-    // Score gap vs potential: weigh current gap against possible remaining stars
     const currentStarGap = clanStars - oppStars;
     const maxPossibleGap = clanMaxPotentialStars - oppProjectedStars;
-    
     let winProbability = 50;
-    
     if (maxPossibleGap > 0) {
-        // We can win
-        if (currentStarGap >= 0) {
-            // We're already ahead or tied
-            const gapRatio = Math.min(1, currentStarGap / Math.max(1, maxPossibleGap));
-            winProbability = 50 + (gapRatio * 40); // 50-90%
-        } else {
-            // We're behind but can catch up
-            const deficit = Math.abs(currentStarGap);
-            const maxDeficit = Math.abs(maxPossibleGap);
-            const catchupPotential = 1 - (deficit / Math.max(1, maxDeficit));
-            winProbability = 50 + (catchupPotential * 40); // 10-50%
-        }
-    } else if (maxPossibleGap < 0) {
-        // We cannot win
-        winProbability = Math.max(10, 50 + (maxPossibleGap / Math.max(1, Math.abs(maxPossibleGap)) * 40));
-    }
-
-    // Apply volatility multiplier
+        if (currentStarGap >= 0) winProbability = 50 + (Math.min(1, currentStarGap / Math.max(1, maxPossibleGap)) * 40);
+        else winProbability = 50 + ((1 - (Math.abs(currentStarGap) / Math.max(1, Math.abs(maxPossibleGap)))) * 40);
+    } else if (maxPossibleGap < 0) winProbability = Math.max(10, 50 + (maxPossibleGap / Math.max(1, Math.abs(maxPossibleGap)) * 40));
     winProbability = 50 + ((winProbability - 50) * volatilityMultiplier);
-
-    // Apply defense bonus
     winProbability += defenseBonus;
-
-    // Clamp to 0-100
     return Math.max(0, Math.min(100, Math.round(winProbability)));
 }
 
@@ -424,15 +374,16 @@ function calculateWinProbability(warData, history) {
  */
 export function renderWarDetail(warData, history = []) {
     const container = document.getElementById('warResults');
+    const summaryContainer = document.getElementById('warDetailSummaryCard');
     const metricsContainer = document.getElementById('warMetrics');
-    if (!container || !metricsContainer) return;
+    if (!container || !summaryContainer || !metricsContainer) return;
 
+    window.activeWarData = warData; // For countdown interval
     if (currentWarFilters.selectedClan === 'map') currentWarFilters.selectedClan = 'clan';
 
     const clanAtksUsed = warData.clan.attacks || 0;
     const avgStarsAtk = clanAtksUsed > 0 ? (warData.clan.stars / clanAtksUsed).toFixed(2) : "0.00";
     const winProb = calculateWinProbability(warData, history);
-
     const clanAvailablePower = warData.clan.members.reduce((sum, m) => sum + ((m.townhallLevel || m.townHallLevel || 0) * (2 - (m.attacks ? m.attacks.length : 0))), 0);
     const oppNeedsClearingSum = warData.opponent.members.filter(m => (m.bestOpponentAttack?.stars || 0) < 3).reduce((sum, m) => sum + (m.townhallLevel || m.townHallLevel || 0), 0);
     const currentTHRatio = oppNeedsClearingSum > 0 ? (clanAvailablePower / oppNeedsClearingSum).toFixed(2) : "∞";
@@ -449,6 +400,8 @@ export function renderWarDetail(warData, history = []) {
         allTooltips.forEach(t => t.classList.remove('active'));
         if (!isActive) target.classList.add('active');
     };
+
+    summaryContainer.innerHTML = getWarSummaryHtml(warData, new Date());
 
     metricsContainer.innerHTML = `
         <div class="bg-[#1a1a1a] p-3 rounded-xl border border-gray-800 flex flex-col justify-between relative">
@@ -542,26 +495,14 @@ export function renderWarDetail(warData, history = []) {
         renderWarDetail(warData, history);
     };
 
-    const cn = document.getElementById('clanNameDetail'); if (cn) cn.innerText = warData.clan.name;
-    const on = document.getElementById('opponentNameDetail'); if (on) on.innerText = warData.opponent.name;
-    const cb = document.getElementById('detailClanBadge'); if (cb) cb.src = warData.clan.badgeUrls.small;
-    const ob = document.getElementById('detailOpponentBadge'); if (ob) ob.src = warData.opponent.badgeUrls.small;
-    const ca = document.getElementById('clanAttacks'); if (ca) ca.innerText = `${warData.clan.attacks || 0}/${warData.teamSize * 2} Attacks`;
-    const oa = document.getElementById('opponentAttacks'); if (oa) oa.innerText = `${warData.opponent.attacks || 0}/${warData.teamSize * 2} Attacks`;
-    
-    const start = parseCoCDate(warData.startTime); const end = parseCoCDate(warData.endTime); const now = new Date();
-    let isPinned = now < end; let resultLabel = ""; let scoreColor = "gold";
-    if (now < start) resultLabel = "Preparation Day"; else if (now < end) resultLabel = "War Day";
-    else {
-        if (warData.clan.stars > warData.opponent.stars) { resultLabel = "Victory"; scoreColor = "text-green-500"; }
-        else if (warData.clan.stars < warData.opponent.stars) { resultLabel = "Loss"; scoreColor = "text-red-500"; }
-        else resultLabel = "Draw";
-    }
-    const summaryHeader = document.getElementById('warResultHeader');
-    if (summaryHeader) {
-        summaryHeader.innerHTML = `<span class="text-[10px] md:text-xs font-black ${isPinned ? 'gold' : scoreColor} uppercase tracking-widest mb-1 leading-none">${resultLabel}</span>
-            <p class="medieval ${isPinned ? 'gold' : scoreColor} text-lg md:text-2xl">${warData.clan.stars} - ${warData.opponent.stars}</p>
-            <p class="text-[8px] md:text-[9px] text-gray-500 mt-1">${warData.clan.destructionPercentage.toFixed(1)}% vs ${warData.opponent.destructionPercentage.toFixed(1)}%</p>`;
+    const togglesContainer = document.getElementById('warDetailToggles');
+    if (togglesContainer) {
+        togglesContainer.innerHTML = `
+            <button id="showAttacks" class="sub-tab-btn ${currentWarFilters.viewType === 'attacks' ? 'active' : ''} uppercase tracking-wider">Attacks</button>
+            <button id="showDefenses" class="sub-tab-btn ${currentWarFilters.viewType === 'defenses' ? 'active' : ''} uppercase tracking-wider">Defenses</button>
+        `;
+        document.getElementById('showAttacks').onclick = () => { currentWarFilters.viewType = 'attacks'; renderWarDetail(warData, history); };
+        document.getElementById('showDefenses').onclick = () => { currentWarFilters.viewType = 'defenses'; renderWarDetail(warData, history); };
     }
 
     const clanMap = {};
@@ -603,15 +544,8 @@ export function renderWarDetail(warData, history = []) {
     container.innerHTML = `
         <div class="flex items-center justify-between px-1 mb-2">
             <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">War Roster</p>
-            <div class="flex gap-2 p-1 bg-[#1a1a1a] rounded-lg border border-gray-800">
-                <button id="showAttacks" class="text-[9px] font-bold px-3 py-1 rounded transition-all ${currentWarFilters.viewType === 'attacks' ? 'text-gold bg-gold/10' : 'text-gray-500 hover:text-gray-300'} uppercase">Attacks</button>
-                <button id="showDefenses" class="text-[9px] font-bold px-3 py-1 rounded transition-all ${currentWarFilters.viewType === 'defenses' ? 'text-gold bg-gold/10' : 'text-gray-500 hover:text-gray-300'} uppercase">Defenses</button>
-            </div>
         </div>
         ${filtered.map(m => renderMemberCard(m, infoInfoMap, warData.teamSize * 2, warAttacksMap)).join('')}`;
-
-    document.getElementById('showAttacks').onclick = () => { currentWarFilters.viewType = 'attacks'; renderWarDetail(warData, history); };
-    document.getElementById('showDefenses').onclick = () => { currentWarFilters.viewType = 'defenses'; renderWarDetail(warData, history); };
 }
 
 export function renderAbout(clanData) {
