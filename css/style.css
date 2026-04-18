@@ -215,3 +215,33 @@ select.control-base {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
+
+
+/* Enhanced Reset Buttons */
+.btn-reset {
+    font-size: 10px;
+    font-weight: bold;
+    color: #6b7280;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border: 1px solid #333;
+    border-radius: 6px;
+    background: transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-reset:hover {
+    color: #d4af37;
+    border-color: #d4af37;
+    background: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+}
+
+.btn-reset:active {
+    background: rgba(212, 175, 55, 0.2);
+    transform: scale(0.96);
+}

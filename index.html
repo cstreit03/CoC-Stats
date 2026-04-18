@@ -31,6 +31,7 @@
         <button id="tab-about" class="tab-btn medieval uppercase tracking-widest">About</button>
         <button id="tab-members" class="tab-btn medieval uppercase tracking-widest">Members</button>
         <button id="tab-war" class="tab-btn medieval uppercase tracking-widest">War</button>
+        <button id="tab-raids" class="tab-btn medieval uppercase tracking-widest">Raids</button>
     </div>
 
     <div class="max-w-7xl mx-auto">
@@ -82,7 +83,7 @@
                                     <option value="role">Role</option>
                                 </select>
                             </div>
-                            <button id="clearMembersFilters" class="text-[10px] font-bold text-gray-500 hover:text-gold uppercase transition-colors sm:col-span-2 lg:ml-auto">Clear</button>
+                            <button id="resetMembersFilters" class="btn-reset sm:col-span-2 lg:ml-auto">Reset</button>
                         </div>
                     </div>
                 </div>
@@ -116,7 +117,7 @@
                                 <input type="text" id="warStartDate" class="control-base flex-1 sm:w-32 font-mono" placeholder="Start Date">
                                 <span class="text-gray-600 text-[10px]">-</span>
                                 <input type="text" id="warEndDate" class="control-base flex-1 sm:w-32 font-mono" placeholder="End Date">
-                                <button id="clearWarFilters" class="text-[10px] font-bold text-gray-500 hover:gold uppercase transition-colors ml-1">Clear</button>
+                                <button id="resetWarFilters" class="btn-reset ml-1">Reset</button>
                             </div>
                         </div>
                     </div>
@@ -198,6 +199,88 @@
                     
                     <!-- Attacks/Map container -->
                     <div id="warResults" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Raids -->
+        <div id="section-raids" class="lg:col-span-12 hidden-section">
+            <div class="panel p-3 md:p-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 px-1">
+                    <div class="flex items-center gap-3">
+                        <h2 class="medieval text-base md:text-lg font-bold uppercase">Raid Weekend</h2>
+                        <div class="flex items-center gap-2 p-1 bg-[#1a1a1a] rounded-lg border border-gray-800">
+                            <button id="raid-subtab-summary" class="sub-tab-btn active uppercase tracking-wider">Summary</button>
+                            <button id="raid-subtab-attacks" class="sub-tab-btn uppercase tracking-wider">Attacks</button>
+                            <button id="raid-subtab-defenses" class="sub-tab-btn uppercase tracking-wider">Defenses</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            <span class="text-[10px] font-bold text-gray-500 uppercase">Weekend:</span>
+                            <input type="text" id="raidWeekendCalendar" class="control-base h-8 w-40 font-mono text-center" placeholder="Select Date...">
+                        </div>
+                        <button id="resetRaidSort" class="btn-reset">Reset</button>
+                    </div>
+                </div>
+
+                <!-- View: Raid Summary -->
+                <div id="raidSummaryView">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-[#1a1a1a] text-[10px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-800">
+                                    <th class="p-3 cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="name" data-table="summary">Player ↕</th>
+                                    <th class="p-3 text-center cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="attacks" data-table="summary">Attacks ↕</th>
+                                    <th class="p-3 text-center cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="loot" data-table="summary">Capital Gold ↕</th>
+                                    <th class="p-3 text-center cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="stars" data-table="summary">Total Stars ↕</th>
+                                    <th class="p-3 text-center cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="damage" data-table="summary">Total Damage ↕</th>
+                                    <th class="p-3 text-center cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="avgStars" data-table="summary">Avg Stars ↕</th>
+                                </tr>
+                            </thead>
+                            <tbody id="raidSummaryTableBody" class="text-xs md:text-sm">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- View: Raid Attacks -->
+                <div id="raidAttacksView" class="hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-[#1a1a1a] text-[10px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-800">
+                                    <th class="p-3 cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="index" data-table="attacks">Raid # ↕</th>
+                                    <th class="p-3 cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="clan" data-table="attacks">Target Clan ↕</th>
+                                    <th class="p-3 text-center cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="status" data-table="attacks">Status ↕</th>
+                                    <th class="p-3 text-center cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="attacks" data-table="attacks">Attacks Used ↕</th>
+                                    <th class="p-3 text-center cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="districts" data-table="attacks">Destroyed Districts ↕</th>
+                                </tr>
+                            </thead>
+                            <tbody id="raidAttacksTableBody" class="text-xs md:text-sm">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- View: Raid Defenses -->
+                <div id="raidDefensesView" class="hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-[#1a1a1a] text-[10px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-800">
+                                    <th class="p-3 cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="index" data-table="defenses">Raid # ↕</th>
+                                    <th class="p-3 cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="clan" data-table="defenses">Attacker Clan ↕</th>
+                                    <th class="p-3 text-center cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="status" data-table="defenses">Status ↕</th>
+                                    <th class="p-3 text-center cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="attacks" data-table="defenses">Attacks Received ↕</th>
+                                    <th class="p-3 text-center cursor-pointer hover:text-gold transition-colors raid-sort-btn" data-sort="districts" data-table="defenses">Districts Lost ↕</th>
+                                </tr>
+                            </thead>
+                            <tbody id="raidDefensesTableBody" class="text-xs md:text-sm">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

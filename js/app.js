@@ -8,13 +8,20 @@ import {
     fetchMembersIndex, 
     fetchHistoricalMembers, 
     fetchWarIndex, 
-    fetchWarData 
+    fetchWarData,
+    fetchRaidIndex,
+    fetchRaidData
 } from './api.js';
 import { 
     renderMembers, 
     renderWarHistory, 
     renderWarDetail, 
-    renderAbout
+    renderAbout,
+    renderRaidSummary,
+    renderRaidAttacks,
+    renderRaidDefenses,
+    setRaidSort,
+    resetRaidSort
 } from './render.js';
 import { renderCharts } from './charts.js';
 
@@ -23,27 +30,24 @@ let allMembers = [];
 let latestClanData = null;     
 let currentRoleFilter = 'all'; 
 let fullWarHistory = [];       
+let fullRaidHistory = [];      
 let availableMemberDates = []; 
 let fp = null;                 
+let raidFp = null;             
 let activeWarFilename = null;  
 let warHistoryPickers = []; 
+let currentRaidIndex = 0;      
 
 /**
  * UI View Controllers
  */
 function switchView(viewId, updateHash = true) {
-    // Select all elements that start with 'section-' and hide them
     document.querySelectorAll('[id^="section-"]').forEach(s => s.classList.add('hidden-section'));
-    
-    // Show target section
     const target = document.getElementById(`section-${viewId}`);
     if (target) target.classList.remove('hidden-section');
-    
-    // Update tabs
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     const activeTab = document.getElementById(`tab-${viewId}`);
     if (activeTab) activeTab.classList.add('active');
-    
     if (updateHash) window.location.hash = viewId;
 }
 
@@ -52,11 +56,24 @@ function switchSubView(subviewId, updateHash = true) {
     document.getElementById('warListView')?.classList.toggle('hidden', !isHistory);
     document.getElementById('warStatsView')?.classList.toggle('hidden', isHistory);
     document.getElementById('warDetailView')?.classList.add('hidden');
-    
     document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(`subtab-${subviewId}`)?.classList.add('active');
-    
     if (updateHash) window.location.hash = `war/${subviewId}`;
+}
+
+function switchRaidSubView(subviewId, updateHash = true) {
+    document.getElementById('raidSummaryView')?.classList.toggle('hidden', subviewId !== 'summary');
+    document.getElementById('raidAttacksView')?.classList.toggle('hidden', subviewId !== 'attacks');
+    document.getElementById('raidDefensesView')?.classList.toggle('hidden', subviewId !== 'defenses');
+    document.querySelectorAll('#section-raids .sub-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`raid-subtab-${subviewId}`)?.classList.add('active');
+    const raid = fullRaidHistory[currentRaidIndex];
+    if (raid) {
+        if (subviewId === 'summary') renderRaidSummary(raid, allMembers);
+        else if (subviewId === 'attacks') renderRaidAttacks(raid);
+        else if (subviewId === 'defenses') renderRaidDefenses(raid);
+    }
+    if (updateHash) window.location.hash = `raids/${subviewId}`;
 }
 
 function updateMemberCount(count) {
@@ -74,9 +91,6 @@ function updateHeader(name, badgeUrl) {
     }
 }
 
-/**
- * Syncs all data in the background without a full page reload.
- */
 window.syncData = async () => {
     const btns = document.querySelectorAll('.sync-btn');
     btns.forEach(b => b.classList.add('syncing'));
@@ -86,9 +100,7 @@ window.syncData = async () => {
             const warData = fullWarHistory.find(w => w.filename === activeWarFilename);
             if (warData) renderWarDetail(warData, fullWarHistory);
         }
-    } catch (e) {
-        console.error("Sync failed", e);
-    } finally {
+    } catch (e) { console.error("Sync failed", e); } finally {
         setTimeout(() => btns.forEach(b => b.classList.remove('syncing')), 500);
     }
 };
@@ -98,16 +110,16 @@ function preRoute() {
     const tabAbout = document.getElementById('tab-about');
     const tabMembers = document.getElementById('tab-members');
     const tabWar = document.getElementById('tab-war');
-    if (!tabAbout || !tabMembers || !tabWar) return;
-    
-    [tabAbout, tabMembers, tabWar].forEach(t => t.classList.remove('active'));
+    const tabRaids = document.getElementById('tab-raids');
+    if (!tabAbout || !tabMembers || !tabWar || !tabRaids) return;
+    [tabAbout, tabMembers, tabWar, tabRaids].forEach(t => t.classList.remove('active'));
     if (!hash || hash === 'about') tabAbout.classList.add('active');
     else if (hash === 'members') tabMembers.classList.add('active');
     else if (hash.startsWith('war')) tabWar.classList.add('active');
+    else if (hash.startsWith('raids')) tabRaids.classList.add('active');
 }
 
 async function init() {
-    // 1. Load Clan/Member Profile
     try {
         const clanData = await fetchClanData();
         latestClanData = clanData;
@@ -118,7 +130,6 @@ async function init() {
         updateHeader(clanData.name, clanData.badgeUrls?.medium || clanData.badgeUrls?.small);
     } catch (e) { console.error("Could not load latest clan data.", e); }
 
-    // 2. Setup Member Snapshot Filter
     try {
         const memberIndex = await fetchMembersIndex();
         const todayStr = new Date().toISOString().split('T')[0];
@@ -137,7 +148,6 @@ async function init() {
         if (titleEl) titleEl.innerText = bestDefaultDate === todayStr ? "Current Members" : `Members: ${bestDefaultDate}`;
     } catch (e) { console.warn("Could not setup member date filters.", e); }
 
-    // 3. Load War History
     try {
         const warIndex = await fetchWarIndex();
         const warDataPromises = warIndex.reverse().map(async (filename) => {
@@ -149,8 +159,75 @@ async function init() {
         fullWarHistory = (await Promise.all(warDataPromises)).filter(w => w !== null);
         renderWarHistory(fullWarHistory);
         setupWarHistoryPickers();
+    } catch (e) { console.error("Could not load war history.", e); }
+
+    try {
+        const raidIndex = await fetchRaidIndex();
+        const raidDataPromises = raidIndex.reverse().map(async (filename) => {
+            try {
+                const data = await fetchRaidData(filename);
+                const items = data.items || [data];
+                return items.map(item => ({ ...item, filename }));
+            } catch (e) { return null; }
+        });
+        const raidResults = await Promise.all(raidDataPromises);
+        fullRaidHistory = raidResults.flat().filter(r => r !== null);
+        setupRaidCalendar();
         handleInitialRoute();
-    } catch (e) { console.error("Could not load war history.", e); handleInitialRoute(); }
+    } catch (e) { console.error("Could not load raid history.", e); handleInitialRoute(); }
+}
+
+function setupRaidCalendar() {
+    const calendarEl = document.getElementById('raidWeekendCalendar');
+    if (!calendarEl || fullRaidHistory.length === 0) return;
+
+    const getDateStr = (d) => {
+        const year = d.getUTCFullYear();
+        const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(d.getUTCDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const enabledDates = [];
+    fullRaidHistory.forEach(r => {
+        let current = parseCoCDate(r.startTime);
+        const end = parseCoCDate(r.endTime);
+        while (current <= end) {
+            enabledDates.push(getDateStr(current));
+            current.setUTCDate(current.getUTCDate() + 1);
+        }
+    });
+
+    if (raidFp) raidFp.destroy();
+    raidFp = flatpickr(calendarEl, {
+        enable: enabledDates,
+        dateFormat: "Y-m-d",
+        defaultDate: enabledDates[0],
+        onChange: (selectedDates) => {
+            if (selectedDates.length === 0) return;
+            const sel = selectedDates[0];
+            const selectedStr = `${sel.getFullYear()}-${String(sel.getMonth() + 1).padStart(2, '0')}-${String(sel.getDate()).padStart(2, '0')}`;
+            
+            const idx = fullRaidHistory.findIndex(r => {
+                let check = parseCoCDate(r.startTime);
+                const rEnd = parseCoCDate(r.endTime);
+                while (check <= rEnd) {
+                    if (getDateStr(check) === selectedStr) return true;
+                    check.setUTCDate(check.getUTCDate() + 1);
+                }
+                return false;
+            });
+
+            if (idx !== -1) {
+                currentRaidIndex = idx;
+                const activeSubTab = document.querySelector('#section-raids .sub-tab-btn.active')?.id.replace('raid-subtab-', '') || 'summary';
+                switchRaidSubView(activeSubTab);
+            }
+        }
+    });
+
+    currentRaidIndex = 0;
+    switchRaidSubView('summary', false);
 }
 
 function setupWarHistoryPickers() {
@@ -158,7 +235,6 @@ function setupWarHistoryPickers() {
     const startEl = document.getElementById('warStartDate');
     const endEl = document.getElementById('warEndDate');
     if (!startEl || !endEl) return;
-    
     const sP = flatpickr(startEl, { 
         dateFormat: "Y-m-d", 
         onChange: (selectedDates) => {
@@ -180,6 +256,12 @@ function handleInitialRoute() {
     const hash = window.location.hash.replace('#', '');
     if (!hash || hash === 'about') { switchView('about', false); return; }
     if (hash === 'members') { switchView(hash, false); }
+    else if (hash.startsWith('raids')) {
+        const parts = hash.split('/');
+        const subview = parts[1] || 'summary';
+        switchView('raids', false);
+        switchRaidSubView(subview, false);
+    }
     else if (hash.startsWith('war/')) {
         const parts = hash.split('/');
         const subview = parts[1];
@@ -270,18 +352,39 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('tab-about')?.addEventListener('click', () => { switchView('about'); if (latestClanData) renderAbout(latestClanData); bindAboutPageEvents(); });
     document.getElementById('tab-members')?.addEventListener('click', () => switchView('members'));
     document.getElementById('tab-war')?.addEventListener('click', () => { switchView('war'); switchSubView('history'); });
+    document.getElementById('tab-raids')?.addEventListener('click', () => { switchView('raids'); switchRaidSubView('summary'); });
+    document.getElementById('raid-subtab-summary')?.addEventListener('click', () => switchRaidSubView('summary'));
+    document.getElementById('raid-subtab-attacks')?.addEventListener('click', () => switchRaidSubView('attacks'));
+    document.getElementById('raid-subtab-defenses')?.addEventListener('click', () => switchRaidSubView('defenses'));
+    
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.raid-sort-btn');
+        if (btn) {
+            const table = btn.getAttribute('data-table');
+            const sortKey = btn.getAttribute('data-sort');
+            setRaidSort(table, sortKey);
+            switchRaidSubView(table, false);
+        }
+    });
+
+    document.getElementById('resetRaidSort')?.addEventListener('click', () => {
+        const activeSubTab = document.querySelector('#section-raids .sub-tab-btn.active')?.id.replace('raid-subtab-', '') || 'summary';
+        resetRaidSort(activeSubTab);
+        switchRaidSubView(activeSubTab, false);
+    });
+
     document.getElementById('subtab-history')?.addEventListener('click', () => switchSubView('history'));
     document.getElementById('subtab-stats')?.addEventListener('click', () => { switchSubView('stats'); renderCharts(fullWarHistory, document.getElementById('statsTimeRange')?.value || 'month'); });
     document.getElementById('statsTimeRange')?.addEventListener('change', (e) => { renderCharts(fullWarHistory, e.target.value); });
     document.getElementById('sortBy')?.addEventListener('change', updateDisplay);
     document.getElementById('backToWarList')?.addEventListener('click', showWarList);
-    document.getElementById('clearMembersFilters')?.addEventListener('click', () => {
+    document.getElementById('resetMembersFilters')?.addEventListener('click', () => {
         currentRoleFilter = 'all'; document.querySelectorAll('.btn-role').forEach(b => b.classList.remove('active'));
         document.querySelector('[data-role="all"]')?.classList.add('active');
         document.getElementById('sortBy').value = 'league';
         updateDisplay();
     });
-    document.getElementById('clearWarFilters')?.addEventListener('click', () => {
+    document.getElementById('resetWarFilters')?.addEventListener('click', () => {
         const start = document.getElementById('warStartDate');
         const end = document.getElementById('warEndDate');
         if (start) start.value = '';

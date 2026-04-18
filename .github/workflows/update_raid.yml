@@ -1,0 +1,36 @@
+name: Update Raid Stats (15m)
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Runs every 15 minutes
+  workflow_dispatch:
+
+jobs:
+  update-raid:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install requests python-dotenv
+
+      - name: Run Raid Scraper
+        env:
+          COC_API_TOKEN: ${{ secrets.COC_API_TOKEN }}
+          CLAN_TAG: ${{ secrets.CLAN_TAG }}
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/scrapers
+          python scrapers/raid_scraper.py
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "Stats Bot"
+          git config --global user.email "bot@github.com"
+          git add data/
+          git commit -m "Auto-update raid stats" || exit 0
+          git push

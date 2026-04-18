@@ -527,7 +527,7 @@ export function renderWarDetail(warData, history = []) {
                     <option value="stars" ${currentWarFilters.sortBy === 'stars' ? 'selected' : ''}>Total Stars</option>
                 </select>
             </div>
-            <button id="clearDetailFilters" class="text-[10px] font-bold text-gray-500 uppercase transition-colors col-span-2 lg:ml-auto">Clear</button>
+            <button id="resetDetailFilters" class="btn-reset col-span-2 lg:ml-auto">Reset</button>
         </div>`;
 
     document.getElementById('toggleClan').onclick = () => { currentWarFilters.selectedClan = 'clan'; renderWarDetail(warData, history); };
@@ -535,7 +535,7 @@ export function renderWarDetail(warData, history = []) {
     document.getElementById('filterAttacks').onchange = (e) => { currentWarFilters.attacks = e.target.value; renderWarDetail(warData, history); };
     document.getElementById('filterPerformance').onchange = (e) => { currentWarFilters.performance = e.target.value; renderWarDetail(warData, history); };
     document.getElementById('filterSort').onchange = (e) => { currentWarFilters.sortBy = e.target.value; renderWarDetail(warData, history); };
-    document.getElementById('clearDetailFilters').onclick = () => {
+    document.getElementById('resetDetailFilters').onclick = () => {
         const clan = currentWarFilters.selectedClan;
         const view = currentWarFilters.viewType;
         currentWarFilters = { attacks: 'all', difficulty: 'all', performance: 'all', sortBy: 'mapPosition', selectedClan: clan, viewType: view, strategy: 'Mirror' };
@@ -617,5 +617,222 @@ export function renderWarDetail(warData, history = []) {
 export function renderAbout(clanData) {
     const container = document.getElementById('aboutContent'); if (!container || !clanData) return;
     const labelsHtml = (clanData.labels || []).map(l => `<div class="flex items-center gap-1.5 bg-[#252525] px-2 py-1 rounded border border-gray-800"><img src="${l.iconUrls.small}" class="w-3.5 h-3.5"><span class="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase">${l.name}</span></div>`).join('');
-    container.innerHTML = `<div class="panel p-4 md:p-6 space-y-6 md:space-y-8"><div class="bg-[#1a1a1a] p-4 md:p-6 rounded-xl border border-gray-800"><div class="flex flex-col md:flex-row gap-6 md:gap-8 items-start"><div class="flex-1 space-y-4 w-full"><div class="flex items-center gap-4"><img src="${clanData.badgeUrls.medium}" class="w-16 h-16 md:w-20 md:h-20"><div><h2 class="medieval text-xl md:text-2xl font-bold gold">${clanData.name}</h2><div class="flex items-center gap-2 mt-1"><span class="text-[10px] md:text-xs font-mono text-gray-500">${clanData.tag}</span></div></div></div><p class="text-[11px] md:text-sm text-gray-300 leading-relaxed italic">${clanData.description}</p></div><div class="grid grid-cols-2 gap-x-4 md:gap-x-8 gap-y-4 w-full md:w-auto md:min-w-[350px]"><div><p class="stat-label">Location</p><p class="stat-value text-[11px] md:text-xs">${clanData.location?.name || 'Unknown'}</p></div><div><p class="stat-label">Language</p><p class="stat-value text-[11px] md:text-xs">${clanData.chatLanguage?.name || 'English'}</p></div><div><p class="stat-label">Clan Level</p><p class="stat-value text-gold text-[11px] md:text-xs">${clanData.clanLevel}</p></div><div><p class="stat-label">Family Friendly</p><p class="stat-value text-[11px] md:text-xs">${clanData.isFamilyFriendly ? 'Yes' : 'No'}</p></div><div class="col-span-2"><p class="stat-label mb-2">Clan Labels</p><div class="flex flex-wrap gap-2">${labelsHtml}</div></div></div></div></div><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="bg-[#1a1a1a] p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]"><div class="flex-1 flex flex-col"><h3 class="medieval text-xs md:text-sm font-bold gold mb-4 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>War Performance</h3><div class="space-y-3 md:space-y-4 flex-1"><div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">War League</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.warLeague?.name || 'Unranked'}</p></div><div class="grid grid-cols-3 gap-2"><div class="text-center p-2 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Wins</p><p class="text-green-500 font-bold text-[11px] md:text-xs">${clanData.warWins}</p></div><div class="text-center p-2 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Losses</p><p class="text-red-500 font-bold text-[11px] md:text-xs">${clanData.warLosses}</p></div><div class="text-center p-2 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Ties</p><p class="text-gray-500 font-bold text-[11px] md:text-xs">${clanData.warTies}</p></div></div><button id="viewWarHistoryBtn" class="w-full py-2 bg-[#252525] border border-gray-700 rounded h-[58px] text-[9px] md:text-[10px] font-bold uppercase hover:border-gold transition-colors">View War History <span class="ml-1 opacity-70">›</span></button></div></div></div><div class="bg-[#1a1a1a] p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]"><div><h3 class="medieval text-xs md:text-sm font-bold gold mb-4 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H5a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m0 10V4m-2 4h1m1 4h1m-3 10a1 1 0 011-1h2a1 1 0 011 1v3a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3z" /></svg>Clan Capital</h3><div class="space-y-3 md:space-y-4"><div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Capital League</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.capitalLeague?.name || 'Unranked'}</p></div><div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Capital Hall Level</p><p class="stat-value text-white text-[11px] md:text-xs">Level ${clanData.clanCapital?.capitalHallLevel || 'Unknown'}</p></div><div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Districts Unlocked</p><p class="stat-value text-white text-[11px] md:text-xs">${(clanData.clanCapital?.districts || []).length} Districts</p></div></div></div></div><div class="bg-[#1a1a1a] p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]"><div><h3 class="medieval text-xs md:text-sm font-bold gold mb-4 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Join Requirements</h3><div class="space-y-3 md:space-y-4"><div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Required Trophies</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.requiredTrophies.toLocaleString()}</p></div><div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Min. Town Hall</p><p class="stat-value text-white text-[11px] md:text-xs">TH${clanData.requiredTownhallLevel}</p></div><div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Builder Trophies</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.requiredBuilderBaseTrophies.toLocaleString()}</p></div></div></div></div></div></div>`;
+    container.innerHTML = `<div class="panel p-4 md:p-6 space-y-6 md:space-y-8">
+        <div class="bg-[#1a1a1a] p-4 md:p-6 rounded-xl border border-gray-800">
+            <div class="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
+                <div class="flex-1 space-y-4 w-full">
+                    <div class="flex items-center gap-4">
+                        <img src="${clanData.badgeUrls.medium}" class="w-16 h-16 md:w-20 md:h-20">
+                        <div>
+                            <h2 class="medieval text-xl md:text-2xl font-bold gold">${clanData.name}</h2>
+                            <div class="flex items-center gap-2 mt-1"><span class="text-[10px] md:text-xs font-mono text-gray-500">${clanData.tag}</span></div>
+                        </div>
+                    </div>
+                    <p class="text-[11px] md:text-sm text-gray-300 leading-relaxed italic">${clanData.description}</p>
+                </div>
+                <div class="grid grid-cols-2 gap-x-4 md:gap-x-8 gap-y-4 w-full md:w-auto md:min-w-[350px]">
+                    <div><p class="stat-label">Location</p><p class="stat-value text-[11px] md:text-xs">${clanData.location?.name || 'Unknown'}</p></div>
+                    <div><p class="stat-label">Language</p><p class="stat-value text-[11px] md:text-xs">${clanData.chatLanguage?.name || 'English'}</p></div>
+                    <div><p class="stat-label">Clan Level</p><p class="stat-value text-gold text-[11px] md:text-xs">${clanData.clanLevel}</p></div>
+                    <div><p class="stat-label">Family Friendly</p><p class="stat-value text-[11px] md:text-xs">${clanData.isFamilyFriendly ? 'Yes' : 'No'}</p></div>
+                    <div class="col-span-2"><p class="stat-label mb-2">Clan Labels</p><div class="flex flex-wrap gap-2">${labelsHtml}</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-[#1a1a1a] p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]">
+                <div class="flex-1 flex flex-col">
+                    <h3 class="medieval text-xs md:text-sm font-bold gold mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        War Performance
+                    </h3>
+                    <div class="space-y-3 md:space-y-4 flex-1">
+                        <div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">War League</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.warLeague?.name || 'Unranked'}</p></div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="text-center p-2 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Wins</p><p class="text-green-500 font-bold text-[11px] md:text-xs">${clanData.warWins}</p></div>
+                            <div class="text-center p-2 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Losses</p><p class="text-red-500 font-bold text-[11px] md:text-xs">${clanData.warLosses}</p></div>
+                            <div class="text-center p-2 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Ties</p><p class="text-gray-500 font-bold text-[11px] md:text-xs">${clanData.warTies}</p></div>
+                        </div>
+                        <button id="viewWarHistoryBtn" class="w-full py-2 bg-[#252525] border border-gray-700 rounded h-[58px] text-[9px] md:text-[10px] font-bold uppercase hover:border-gold transition-colors">View War History <span class="ml-1 opacity-70">›</span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-[#1a1a1a] p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]">
+                <div>
+                    <h3 class="medieval text-xs md:text-sm font-bold gold mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H5a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m0 10V4m-2 4h1m1 4h1m-3 10a1 1 0 011-1h2a1 1 0 011 1v3a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3z" /></svg>
+                        Clan Capital
+                    </h3>
+                    <div class="space-y-3 md:space-y-4">
+                        <div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Capital League</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.capitalLeague?.name || 'Unranked'}</p></div>
+                        <div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Capital Hall Level</p><p class="stat-value text-white text-[11px] md:text-xs">Level ${clanData.clanCapital?.capitalHallLevel || 'Unknown'}</p></div>
+                        <div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Districts Unlocked</p><p class="stat-value text-white text-[11px] md:text-xs">${(clanData.clanCapital?.districts || []).length} Districts</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-[#1a1a1a] p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]">
+                <div>
+                    <h3 class="medieval text-xs md:text-sm font-bold gold mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        Join Requirements
+                    </h3>
+                    <div class="space-y-3 md:space-y-4">
+                        <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Required Trophies</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.requiredTrophies.toLocaleString()}</p></div>
+                        <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Min. Town Hall</p><p class="stat-value text-white text-[11px] md:text-xs">TH${clanData.requiredTownhallLevel}</p></div>
+                        <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Builder Trophies</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.requiredBuilderBaseTrophies.toLocaleString()}</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+// Raid sorting state
+let raidSort = { 
+    summary: { col: 'loot', dir: -1 }, 
+    attacks: { col: 'index', dir: -1 }, 
+    defenses: { col: 'index', dir: -1 } 
+};
+
+export function setRaidSort(table, column) {
+    if (raidSort[table].col === column) raidSort[table].dir *= -1;
+    else { raidSort[table].col = column; raidSort[table].dir = -1; }
+}
+
+export function resetRaidSort(table) {
+    if (table === 'summary') raidSort.summary = { col: 'loot', dir: -1 };
+    else if (table === 'attacks') raidSort.attacks = { col: 'index', dir: -1 };
+    else if (table === 'defenses') raidSort.defenses = { col: 'index', dir: -1 };
+}
+
+/**
+ * Renders the Raid Summary table.
+ */
+export function renderRaidSummary(raidData, membersLookup = []) {
+    const tableBody = document.getElementById('raidSummaryTableBody');
+    if (!tableBody) return;
+    if (!raidData || !raidData.members) { tableBody.innerHTML = `<tr><td colspan="6" class="p-10 text-center text-gray-600 italic">No raid data available.</td></tr>`; return; }
+
+    const memberMap = {};
+    membersLookup.forEach(m => memberMap[m.tag] = m);
+
+    const playerStats = {};
+    if (raidData.attackLog) {
+        raidData.attackLog.forEach(logEntry => {
+            (logEntry.districts || []).forEach(district => {
+                (district.attacks || []).forEach(atk => {
+                    const tag = atk.attacker.tag;
+                    if (!playerStats[tag]) playerStats[tag] = { stars: 0, damage: 0, count: 0 };
+                    playerStats[tag].stars += atk.stars;
+                    playerStats[tag].damage += atk.destructionPercent;
+                    playerStats[tag].count++;
+                });
+            });
+        });
+    }
+
+    const members = raidData.members.map(m => {
+        const stats = playerStats[m.tag] || { stars: 0, damage: 0, count: 0 };
+        return { ...m, ...stats, avgStars: stats.count > 0 ? (stats.stars / stats.count) : 0 };
+    });
+
+    const s = raidSort.summary;
+    members.sort((a, b) => {
+        let valA, valB;
+        if (s.col === 'name') { valA = a.name.toLowerCase(); valB = b.name.toLowerCase(); }
+        else if (s.col === 'attacks') { valA = a.attacks; valB = b.attacks; }
+        else if (s.col === 'loot') { valA = a.capitalResourcesLooted || 0; valB = b.capitalResourcesLooted || 0; }
+        else if (s.col === 'stars') { valA = a.stars; valB = b.stars; }
+        else if (s.col === 'damage') { valA = a.damage; valB = b.damage; }
+        else if (s.col === 'avgStars') { valA = a.avgStars; valB = b.avgStars; }
+        return (valA < valB ? -1 : 1) * s.dir;
+    });
+
+    tableBody.innerHTML = members.map(member => {
+        const totalPossible = member.attackLimit + member.bonusAttackLimit;
+        const mInfo = memberMap[member.tag];
+        const thLevel = mInfo?.townHallLevel || mInfo?.townhallLevel || 1;
+
+        return `
+            <tr class="border-b border-gray-800/50 hover:bg-[#1a1a1a] transition-colors">
+                <td class="p-3">
+                    <div class="flex items-center gap-3">
+                        <img src="${getTHImage(thLevel)}" class="w-8 h-8">
+                        <div class="min-w-0">
+                            <p class="font-bold text-[11px] text-white truncate">${member.name}</p>
+                            <p class="text-[9px] gold font-bold uppercase tracking-tighter">TH${thLevel}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="p-3 text-center text-gray-400 font-mono">${member.attacks}/${totalPossible}</td>
+                <td class="p-3 text-center gold font-bold">${(member.capitalResourcesLooted || 0).toLocaleString()}</td>
+                <td class="p-3 text-center text-white font-bold">${member.stars}</td>
+                <td class="p-3 text-center text-gray-400">${member.damage}%</td>
+                <td class="p-3 text-center text-gold font-bold">${member.avgStars.toFixed(2)}</td>
+            </tr>`;
+    }).join('');
+}
+
+/**
+ * Renders the Raid Attacks (Log) table.
+ */
+export function renderRaidAttacks(raidData) {
+    const tableBody = document.getElementById('raidAttacksTableBody');
+    if (!tableBody) return;
+    const log = (raidData.attackLog || []).map((r, i) => {
+        const isDefeated = r.districtsDestroyed === r.districtCount;
+        return { ...r, index: i + 1, status: isDefeated ? 'Defeated' : 'In-Progress' };
+    });
+
+    const s = raidSort.attacks;
+    log.sort((a, b) => {
+        let valA, valB;
+        if (s.col === 'index') { valA = a.index; valB = b.index; }
+        else if (s.col === 'clan') { valA = a.defender.name.toLowerCase(); valB = b.defender.name.toLowerCase(); }
+        else if (s.col === 'status') { valA = a.status; valB = b.status; }
+        else if (s.col === 'attacks') { valA = a.attackCount; valB = b.attackCount; }
+        else if (s.col === 'districts') { valA = a.districtsDestroyed; valB = b.districtsDestroyed; }
+        return (valA < valB ? -1 : 1) * s.dir;
+    });
+
+    tableBody.innerHTML = log.map(r => `
+        <tr class="border-b border-gray-800/50 hover:bg-[#1a1a1a] transition-colors">
+            <td class="p-3 text-gray-500 font-mono">#${r.index}</td>
+            <td class="p-3"><div class="flex items-center gap-2"><img src="${r.defender.badgeUrls.small}" class="w-5 h-5"><span class="font-bold text-white">${r.defender.name}</span></div></td>
+            <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${r.status === 'Defeated' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}">${r.status}</span></td>
+            <td class="p-3 text-center text-gray-400">${r.attackCount}</td>
+            <td class="p-3 text-center text-gold font-bold">${r.districtsDestroyed} / ${r.districtCount}</td>
+        </tr>`).join('');
+}
+
+/**
+ * Renders the Raid Defenses (Log) table.
+ */
+export function renderRaidDefenses(raidData) {
+    const tableBody = document.getElementById('raidDefensesTableBody');
+    if (!tableBody) return;
+    const log = (raidData.defenseLog || []).map((r, i) => {
+        const isDefeated = r.districtsDestroyed === r.districtCount;
+        return { ...r, index: i + 1, status: isDefeated ? 'Defeated' : 'In-Progress' };
+    });
+
+    const s = raidSort.defenses;
+    log.sort((a, b) => {
+        let valA, valB;
+        if (s.col === 'index') { valA = a.index; valB = b.index; }
+        else if (s.col === 'clan') { valA = a.attacker.name.toLowerCase(); valB = b.attacker.name.toLowerCase(); }
+        else if (s.col === 'status') { valA = a.status; valB = b.status; }
+        else if (s.col === 'attacks') { valA = a.attackCount; valB = b.attackCount; }
+        else if (s.col === 'districts') { valA = a.districtsDestroyed; valB = b.districtsDestroyed; }
+        return (valA < valB ? -1 : 1) * s.dir;
+    });
+
+    tableBody.innerHTML = log.map(r => `
+        <tr class="border-b border-gray-800/50 hover:bg-[#1a1a1a] transition-colors">
+            <td class="p-3 text-gray-500 font-mono">#${r.index}</td>
+            <td class="p-3"><div class="flex items-center gap-2"><img src="${r.attacker.badgeUrls.small}" class="w-5 h-5"><span class="font-bold text-white">${r.attacker.name}</span></div></td>
+            <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${r.status === 'Defeated' ? 'bg-red-500/10 text-red-500' : 'bg-yellow-500/10 text-yellow-500'}">${r.status}</span></td>
+            <td class="p-3 text-center text-gray-400">${r.attackCount}</td>
+            <td class="p-3 text-center text-red-400 font-bold">${r.districtsDestroyed} / ${r.districtCount}</td>
+        </tr>`).join('');
 }

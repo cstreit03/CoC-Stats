@@ -45,6 +45,14 @@ export async function fetchWarData(filename) {
     return await fetchData(`data/war_stats/${filename}`);
 }
 
+export async function fetchRaidIndex() {
+    return await fetchData('data/raid_stats_index.json');
+}
+
+export async function fetchRaidData(filename) {
+    return await fetchData(`data/raid_stats/${filename}`);
+}
+
 /**
  * Global Sync Trigger
  * Notifies the scrapers to update data (via Github Actions typically, but here simulated)
