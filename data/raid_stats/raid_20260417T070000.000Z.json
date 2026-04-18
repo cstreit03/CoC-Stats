@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260417T070000.000Z",
     "endTime": "20260420T070000.000Z",
-    "capitalTotalLoot": 623231,
+    "capitalTotalLoot": 633180,
     "raidsCompleted": 7,
-    "totalAttacks": 142,
-    "enemyDistrictsDestroyed": 54,
+    "totalAttacks": 144,
+    "enemyDistrictsDestroyed": 55,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -32,6 +32,14 @@
             "attackLimit": 5,
             "bonusAttackLimit": 1,
             "capitalResourcesLooted": 26306
+        },
+        {
+            "tag": "#U90CYLQ2",
+            "name": "Ben",
+            "attacks": 2,
+            "attackLimit": 5,
+            "bonusAttackLimit": 1,
+            "capitalResourcesLooted": 9949
         },
         {
             "tag": "#YQYVJ92C",
@@ -2070,9 +2078,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/9soYI8ikq5IFi8w-d4Eq4UA51rwqmjXhSYt-jjISupE.png"
                 }
             },
-            "attackCount": 0,
+            "attackCount": 2,
             "districtCount": 9,
-            "districtsDestroyed": 0,
+            "districtsDestroyed": 1,
             "districts": [
                 {
                     "id": 70000000,
@@ -2141,10 +2149,28 @@
                     "id": 70000007,
                     "name": "Skeleton Park",
                     "districtHallLevel": 3,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 2,
+                    "totalLooted": 9949,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#U90CYLQ2",
+                                "name": "Ben"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#U90CYLQ2",
+                                "name": "Ben"
+                            },
+                            "destructionPercent": 50,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000008,
