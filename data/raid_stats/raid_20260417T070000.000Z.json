@@ -1918,9 +1918,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/SrqxOOYOnUx7gKcG1-FXEfXBN_LzCimToms3cgVq9wU.png"
                 }
             },
-            "attackCount": 8,
+            "attackCount": 11,
             "districtCount": 9,
-            "districtsDestroyed": 2,
+            "districtsDestroyed": 3,
             "districts": [
                 {
                     "id": 70000000,
@@ -1962,10 +1962,36 @@
                     "id": 70000004,
                     "name": "Builder's Workshop",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11645,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#G82VL8J8Q",
+                                "name": "NINJA"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#G82VL8J8Q",
+                                "name": "NINJA"
+                            },
+                            "destructionPercent": 56,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#G82VL8J8Q",
+                                "name": "NINJA"
+                            },
+                            "destructionPercent": 30,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000005,
