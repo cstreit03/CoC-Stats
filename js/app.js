@@ -152,6 +152,7 @@ async function init() {
         if (fp) fp.destroy();
         fp = flatpickr("#memberDate", {
             defaultDate: bestDefaultDate, enable: availableMemberDates, dateFormat: "Y-m-d",
+            disableMobile: true,
             onChange: function(selectedDates, dateStr) { handleMemberDateChange(dateStr); }
         });
     } catch (e) { console.warn("Could not setup member date filters.", e); }
@@ -211,6 +212,7 @@ function setupRaidCalendar() {
         enable: enabledDates,
         dateFormat: "Y-m-d",
         defaultDate: enabledDates[0],
+        disableMobile: true,
         onChange: (selectedDates) => {
             if (selectedDates.length === 0) return;
             const sel = selectedDates[0];
@@ -245,6 +247,7 @@ function setupWarHistoryPickers() {
     if (!startEl || !endEl) return;
     const sP = flatpickr(startEl, { 
         dateFormat: "Y-m-d", 
+        disableMobile: true,
         onChange: (selectedDates) => {
             if (selectedDates.length > 0) eP.set('minDate', selectedDates[0]);
             filterWarHistory(); 
@@ -252,6 +255,7 @@ function setupWarHistoryPickers() {
     });
     const eP = flatpickr(endEl, { 
         dateFormat: "Y-m-d", 
+        disableMobile: true,
         onChange: (selectedDates) => {
             if (selectedDates.length > 0) sP.set('maxDate', selectedDates[0]);
             filterWarHistory(); 
