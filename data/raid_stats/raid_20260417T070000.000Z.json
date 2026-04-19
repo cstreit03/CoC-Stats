@@ -3322,9 +3322,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/utkEvC5eM9g-obV8qHWDTB_2kwn16WnIJ7LaHs1CA0o.png"
                 }
             },
-            "attackCount": 10,
+            "attackCount": 12,
             "districtCount": 9,
-            "districtsDestroyed": 2,
+            "districtsDestroyed": 3,
             "districts": [
                 {
                     "id": 70000000,
@@ -3400,11 +3400,19 @@
                     "id": 70000004,
                     "name": "Builder's Workshop",
                     "districtHallLevel": 5,
-                    "destructionPercent": 63,
-                    "stars": 2,
-                    "attackCount": 2,
-                    "totalLooted": 7585,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 12122,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#2Q9UQ20G8",
+                                "name": "SANURAJ"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
                         {
                             "attacker": {
                                 "tag": "#8VJ99QPLU",
@@ -3480,11 +3488,19 @@
                     "id": 70000008,
                     "name": "Goblin Mines",
                     "districtHallLevel": 4,
-                    "destructionPercent": 32,
-                    "stars": 0,
-                    "attackCount": 1,
-                    "totalLooted": 4510,
+                    "destructionPercent": 83,
+                    "stars": 2,
+                    "attackCount": 2,
+                    "totalLooted": 8790,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#2Q9UQ20G8",
+                                "name": "SANURAJ"
+                            },
+                            "destructionPercent": 83,
+                            "stars": 2
+                        },
                         {
                             "attacker": {
                                 "tag": "#8JPVL00QU",
