@@ -2998,7 +2998,7 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/utkEvC5eM9g-obV8qHWDTB_2kwn16WnIJ7LaHs1CA0o.png"
                 }
             },
-            "attackCount": 8,
+            "attackCount": 10,
             "districtCount": 9,
             "districtsDestroyed": 2,
             "districts": [
@@ -3076,11 +3076,19 @@
                     "id": 70000004,
                     "name": "Builder's Workshop",
                     "districtHallLevel": 5,
-                    "destructionPercent": 51,
+                    "destructionPercent": 63,
                     "stars": 2,
-                    "attackCount": 1,
-                    "totalLooted": 5715,
+                    "attackCount": 2,
+                    "totalLooted": 7585,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#8VJ99QPLU",
+                                "name": "koushik"
+                            },
+                            "destructionPercent": 63,
+                            "stars": 2
+                        },
                         {
                             "attacker": {
                                 "tag": "#8JPVL00QU",
@@ -3148,10 +3156,20 @@
                     "id": 70000008,
                     "name": "Goblin Mines",
                     "districtHallLevel": 4,
-                    "destructionPercent": 0,
+                    "destructionPercent": 32,
                     "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "attackCount": 1,
+                    "totalLooted": 4510,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#8JPVL00QU",
+                                "name": "ArVinD"
+                            },
+                            "destructionPercent": 32,
+                            "stars": 0
+                        }
+                    ]
                 }
             ]
         }
