@@ -2,9 +2,9 @@
     "state": "ongoing",
     "startTime": "20260417T070000.000Z",
     "endTime": "20260420T070000.000Z",
-    "capitalTotalLoot": 708550,
+    "capitalTotalLoot": 711725,
     "raidsCompleted": 9,
-    "totalAttacks": 160,
+    "totalAttacks": 161,
     "enemyDistrictsDestroyed": 63,
     "offensiveReward": 0,
     "defensiveReward": 0,
@@ -188,10 +188,10 @@
         {
             "tag": "#LPU0GGCJQ",
             "name": "night dragon",
-            "attacks": 5,
+            "attacks": 6,
             "attackLimit": 5,
             "bonusAttackLimit": 1,
-            "capitalResourcesLooted": 23073
+            "capitalResourcesLooted": 26248
         },
         {
             "tag": "#8RJ8CC8LU",
@@ -2354,7 +2354,7 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/CA8ZWoWZJHELBBqCiwgITL7uJreCcSB_HZvyZkkN0Go.png"
                 }
             },
-            "attackCount": 0,
+            "attackCount": 1,
             "districtCount": 9,
             "districtsDestroyed": 0,
             "districts": [
@@ -2398,10 +2398,20 @@
                     "id": 70000004,
                     "name": "Builder's Workshop",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 33,
+                    "stars": 1,
+                    "attackCount": 1,
+                    "totalLooted": 3175,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#LPU0GGCJQ",
+                                "name": "night dragon"
+                            },
+                            "destructionPercent": 33,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000005,
