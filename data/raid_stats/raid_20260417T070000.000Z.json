@@ -2544,28 +2544,62 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/SrqxOOYOnUx7gKcG1-FXEfXBN_LzCimToms3cgVq9wU.png"
                 }
             },
-            "attackCount": 20,
+            "attackCount": 27,
             "districtCount": 9,
-            "districtsDestroyed": 6,
+            "districtsDestroyed": 8,
             "districts": [
                 {
                     "id": 70000000,
                     "name": "Capital Peak",
                     "districtHallLevel": 10,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 54,
+                    "stars": 2,
+                    "attackCount": 2,
+                    "totalLooted": 6130,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#QCGYPCCV9",
+                                "name": "UNKNOWN-02-"
+                            },
+                            "destructionPercent": 54,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#QCGYPCCV9",
+                                "name": "UNKNOWN-02-"
+                            },
+                            "destructionPercent": 25,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000001,
                     "name": "Barbarian Camp",
                     "districtHallLevel": 5,
-                    "destructionPercent": 42,
-                    "stars": 0,
-                    "attackCount": 1,
-                    "totalLooted": 2325,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11604,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#GJGCGC8J2",
+                                "name": "rich4671"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#GJGCGC8J2",
+                                "name": "rich4671"
+                            },
+                            "destructionPercent": 75,
+                            "stars": 2
+                        },
                         {
                             "attacker": {
                                 "tag": "#2PPL0GG9U",
@@ -2693,10 +2727,36 @@
                     "id": 70000005,
                     "name": "Dragon Cliffs",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11354,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#QCGYPCCV9",
+                                "name": "UNKNOWN-02-"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#QCGYPCCV9",
+                                "name": "UNKNOWN-02-"
+                            },
+                            "destructionPercent": 70,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#QCGYPCCV9",
+                                "name": "UNKNOWN-02-"
+                            },
+                            "destructionPercent": 24,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000006,
