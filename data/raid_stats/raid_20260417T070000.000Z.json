@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260417T070000.000Z",
     "endTime": "20260420T070000.000Z",
-    "capitalTotalLoot": 667126,
+    "capitalTotalLoot": 681492,
     "raidsCompleted": 8,
-    "totalAttacks": 151,
-    "enemyDistrictsDestroyed": 58,
+    "totalAttacks": 154,
+    "enemyDistrictsDestroyed": 60,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -140,10 +140,10 @@
         {
             "tag": "#V0GYVCJ9",
             "name": "YAGO",
-            "attacks": 2,
+            "attacks": 5,
             "attackLimit": 5,
             "bonusAttackLimit": 1,
-            "capitalResourcesLooted": 6148
+            "capitalResourcesLooted": 20514
         },
         {
             "tag": "#L2PQ9QLUC",
@@ -2086,9 +2086,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/9soYI8ikq5IFi8w-d4Eq4UA51rwqmjXhSYt-jjISupE.png"
                 }
             },
-            "attackCount": 9,
+            "attackCount": 12,
             "districtCount": 9,
-            "districtsDestroyed": 4,
+            "districtsDestroyed": 6,
             "districts": [
                 {
                     "id": 70000000,
@@ -2184,11 +2184,19 @@
                     "id": 70000004,
                     "name": "Builder's Workshop",
                     "districtHallLevel": 4,
-                    "destructionPercent": 55,
-                    "stars": 2,
-                    "attackCount": 1,
-                    "totalLooted": 5005,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 2,
+                    "totalLooted": 9794,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#V0GYVCJ9",
+                                "name": "YAGO"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
                         {
                             "attacker": {
                                 "tag": "#289RPC2GP",
@@ -2212,10 +2220,28 @@
                     "id": 70000006,
                     "name": "Golem Quarry",
                     "districtHallLevel": 4,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 2,
+                    "totalLooted": 9577,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#V0GYVCJ9",
+                                "name": "YAGO"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#V0GYVCJ9",
+                                "name": "YAGO"
+                            },
+                            "destructionPercent": 63,
+                            "stars": 2
+                        }
+                    ]
                 },
                 {
                     "id": 70000007,
