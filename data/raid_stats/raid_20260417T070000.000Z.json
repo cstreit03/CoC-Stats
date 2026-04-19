@@ -3322,7 +3322,7 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/utkEvC5eM9g-obV8qHWDTB_2kwn16WnIJ7LaHs1CA0o.png"
                 }
             },
-            "attackCount": 12,
+            "attackCount": 16,
             "districtCount": 9,
             "districtsDestroyed": 3,
             "districts": [
@@ -3382,19 +3382,55 @@
                     "id": 70000002,
                     "name": "Wizard Valley",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 94,
+                    "stars": 2,
+                    "attackCount": 2,
+                    "totalLooted": 9850,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#2Q9UQ20G8",
+                                "name": "SANURAJ"
+                            },
+                            "destructionPercent": 94,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2Q9UQ20G8",
+                                "name": "SANURAJ"
+                            },
+                            "destructionPercent": 42,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000003,
                     "name": "Balloon Lagoon",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 47,
+                    "stars": 1,
+                    "attackCount": 2,
+                    "totalLooted": 5865,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#2Q9UQ20G8",
+                                "name": "SANURAJ"
+                            },
+                            "destructionPercent": 47,
+                            "stars": 1
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2Q9UQ20G8",
+                                "name": "SANURAJ"
+                            },
+                            "destructionPercent": 19,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000004,
