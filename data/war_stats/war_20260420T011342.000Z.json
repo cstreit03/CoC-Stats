@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 23,
-        "stars": 56,
-        "destructionPercentage": 76.68,
+        "attacks": 25,
+        "stars": 60,
+        "destructionPercentage": 82.2,
         "members": [
             {
                 "tag": "#9C229UGJ",
@@ -394,6 +394,14 @@
                         "destructionPercentage": 91,
                         "order": 18,
                         "duration": 105
+                    },
+                    {
+                        "attackerTag": "#UQQ0LJLP",
+                        "defenderTag": "#V82CC80L",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 43,
+                        "duration": 99
                     }
                 ],
                 "opponentAttacks": 0
@@ -443,6 +451,16 @@
                 "name": "night dragon",
                 "townhallLevel": 15,
                 "mapPosition": 22,
+                "attacks": [
+                    {
+                        "attackerTag": "#LPU0GGCJQ",
+                        "defenderTag": "#9JYU2YL8U",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 44,
+                        "duration": 129
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#829VP0U",
@@ -784,14 +802,14 @@
                         "duration": 166
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#2VYVULCVL",
+                    "attackerTag": "#UQQ0LJLP",
                     "defenderTag": "#V82CC80L",
-                    "stars": 2,
-                    "destructionPercentage": 62,
-                    "order": 33,
-                    "duration": 152
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 43,
+                    "duration": 99
                 }
             },
             {
@@ -975,7 +993,15 @@
                 "name": "*Ti\u1ec3u T\u1eed Th\u1ed1i *",
                 "townhallLevel": 14,
                 "mapPosition": 24,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#LPU0GGCJQ",
+                    "defenderTag": "#9JYU2YL8U",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 44,
+                    "duration": 129
+                }
             },
             {
                 "tag": "#GCLRUQUYU",
