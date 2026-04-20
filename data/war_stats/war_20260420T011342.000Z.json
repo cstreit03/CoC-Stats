@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 17,
-        "stars": 46,
-        "destructionPercentage": 63.48,
+        "attacks": 19,
+        "stars": 49,
+        "destructionPercentage": 66.32,
         "members": [
             {
                 "tag": "#9C229UGJ",
@@ -91,14 +91,30 @@
                 "name": "SochieLife",
                 "townhallLevel": 18,
                 "mapPosition": 10,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#CVRRUJC9",
+                    "defenderTag": "#YQYVJ92C",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 30,
+                    "duration": 161
+                }
             },
             {
                 "tag": "#UUC9PCQ",
                 "name": "Beat my Wifi",
                 "townhallLevel": 18,
                 "mapPosition": 11,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#CVRRUJC9",
+                    "defenderTag": "#UUC9PCQ",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 31,
+                    "duration": 126
+                }
             },
             {
                 "tag": "#YL0VJ2YY",
@@ -427,6 +443,16 @@
                 "name": "family buffalo",
                 "townhallLevel": 18,
                 "mapPosition": 7,
+                "attacks": [
+                    {
+                        "attackerTag": "#2VYVULCVL",
+                        "defenderTag": "#V82CC80L",
+                        "stars": 2,
+                        "destructionPercentage": 62,
+                        "order": 33,
+                        "duration": 152
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -442,6 +468,14 @@
                         "destructionPercentage": 100,
                         "order": 8,
                         "duration": 90
+                    },
+                    {
+                        "attackerTag": "#2P8LYJCUR",
+                        "defenderTag": "#YUJLQQ08",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 32,
+                        "duration": 128
                     }
                 ],
                 "opponentAttacks": 0
@@ -457,9 +491,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/518p827uO2G8VQg3nwmclfczmLQ7UFAOC2zM414IOdk.png"
         },
         "clanLevel": 32,
-        "attacks": 12,
-        "stars": 29,
-        "destructionPercentage": 42.16,
+        "attacks": 14,
+        "stars": 35,
+        "destructionPercentage": 50.16,
         "members": [
             {
                 "tag": "#V08QP98G",
@@ -623,14 +657,14 @@
                         "duration": 132
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#UQQ0LJLP",
+                    "attackerTag": "#2P8LYJCUR",
                     "defenderTag": "#YUJLQQ08",
-                    "stars": 2,
-                    "destructionPercentage": 91,
-                    "order": 18,
-                    "duration": 105
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 32,
+                    "duration": 128
                 }
             },
             {
@@ -648,7 +682,15 @@
                         "duration": 180
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2VYVULCVL",
+                    "defenderTag": "#V82CC80L",
+                    "stars": 2,
+                    "destructionPercentage": 62,
+                    "order": 33,
+                    "duration": 152
+                }
             },
             {
                 "tag": "#989G2G28",
@@ -727,6 +769,24 @@
                 "name": "Jenny",
                 "townhallLevel": 18,
                 "mapPosition": 4,
+                "attacks": [
+                    {
+                        "attackerTag": "#CVRRUJC9",
+                        "defenderTag": "#YQYVJ92C",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 30,
+                        "duration": 161
+                    },
+                    {
+                        "attackerTag": "#CVRRUJC9",
+                        "defenderTag": "#UUC9PCQ",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 31,
+                        "duration": 126
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#Q92RUPUJ",
