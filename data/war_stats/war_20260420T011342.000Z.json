@@ -269,7 +269,15 @@
                         "duration": 93
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#GRQP9GVRR",
+                    "defenderTag": "#99VC2CU9",
+                    "stars": 2,
+                    "destructionPercentage": 77,
+                    "order": 29,
+                    "duration": 119
+                }
             },
             {
                 "tag": "#V0GYVCJ9",
@@ -449,9 +457,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/518p827uO2G8VQg3nwmclfczmLQ7UFAOC2zM414IOdk.png"
         },
         "clanLevel": 32,
-        "attacks": 11,
-        "stars": 27,
-        "destructionPercentage": 39.08,
+        "attacks": 12,
+        "stars": 29,
+        "destructionPercentage": 42.16,
         "members": [
             {
                 "tag": "#V08QP98G",
@@ -802,6 +810,16 @@
                 "name": "Sunny Phan",
                 "townhallLevel": 16,
                 "mapPosition": 19,
+                "attacks": [
+                    {
+                        "attackerTag": "#GRQP9GVRR",
+                        "defenderTag": "#99VC2CU9",
+                        "stars": 2,
+                        "destructionPercentage": 77,
+                        "order": 29,
+                        "duration": 119
+                    }
+                ],
                 "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#U90CYLQ2",
