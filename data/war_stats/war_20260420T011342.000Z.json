@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 13,
-        "stars": 35,
-        "destructionPercentage": 47.84,
+        "attacks": 16,
+        "stars": 44,
+        "destructionPercentage": 59.84,
         "members": [
             {
                 "tag": "#9C229UGJ",
@@ -122,6 +122,16 @@
                 "name": "- nancy 95",
                 "townhallLevel": 18,
                 "mapPosition": 2,
+                "attacks": [
+                    {
+                        "attackerTag": "#Q92RUPUJ",
+                        "defenderTag": "#CVRRUJC9",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 14,
+                        "duration": 149
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -192,6 +202,16 @@
                 "name": "King Hova",
                 "townhallLevel": 17,
                 "mapPosition": 16,
+                "attacks": [
+                    {
+                        "attackerTag": "#QC92VLPP",
+                        "defenderTag": "#28YVYP98",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 16,
+                        "duration": 127
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -199,6 +219,16 @@
                 "name": "Polaris",
                 "townhallLevel": 15,
                 "mapPosition": 20,
+                "attacks": [
+                    {
+                        "attackerTag": "#99VC2CU9",
+                        "defenderTag": "#P09RYJR8C",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 17,
+                        "duration": 93
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -285,7 +315,15 @@
                 "name": "Viking 2",
                 "townhallLevel": 17,
                 "mapPosition": 14,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#GQ9GYG9U8",
+                    "defenderTag": "#GU2UVG9CV",
+                    "stars": 1,
+                    "destructionPercentage": 81,
+                    "order": 15,
+                    "duration": 84
+                }
             },
             {
                 "tag": "#LRR0LP2J0",
@@ -329,9 +367,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/518p827uO2G8VQg3nwmclfczmLQ7UFAOC2zM414IOdk.png"
         },
         "clanLevel": 32,
-        "attacks": 0,
-        "stars": 0,
-        "destructionPercentage": 0.0,
+        "attacks": 1,
+        "stars": 1,
+        "destructionPercentage": 3.24,
         "members": [
             {
                 "tag": "#V08QP98G",
@@ -412,7 +450,15 @@
                 "name": "TUAN ANH PHAN",
                 "townhallLevel": 17,
                 "mapPosition": 18,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#QC92VLPP",
+                    "defenderTag": "#28YVYP98",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 16,
+                    "duration": 127
+                }
             },
             {
                 "tag": "#2C0U0LGJR",
@@ -507,7 +553,15 @@
                 "name": "Jenny",
                 "townhallLevel": 18,
                 "mapPosition": 4,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#Q92RUPUJ",
+                    "defenderTag": "#CVRRUJC9",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 14,
+                    "duration": 149
+                }
             },
             {
                 "tag": "#RUP00V8U",
@@ -557,7 +611,15 @@
                 "name": "L\u1ea1i Anh Huy",
                 "townhallLevel": 14,
                 "mapPosition": 22,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#99VC2CU9",
+                    "defenderTag": "#P09RYJR8C",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 17,
+                    "duration": 93
+                }
             },
             {
                 "tag": "#GRQP9GVRR",
@@ -594,6 +656,16 @@
                 "name": "Ho\u00e0ng Long",
                 "townhallLevel": 18,
                 "mapPosition": 10,
+                "attacks": [
+                    {
+                        "attackerTag": "#GQ9GYG9U8",
+                        "defenderTag": "#GU2UVG9CV",
+                        "stars": 1,
+                        "destructionPercentage": 81,
+                        "order": 15,
+                        "duration": 84
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#9G92CY9L",
