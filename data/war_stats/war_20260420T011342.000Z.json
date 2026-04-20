@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 25,
-        "stars": 60,
-        "destructionPercentage": 82.2,
+        "attacks": 30,
+        "stars": 71,
+        "destructionPercentage": 95.84,
         "members": [
             {
                 "tag": "#9C229UGJ",
@@ -116,6 +116,24 @@
                 "name": "Beat my Wifi",
                 "townhallLevel": 18,
                 "mapPosition": 11,
+                "attacks": [
+                    {
+                        "attackerTag": "#UUC9PCQ",
+                        "defenderTag": "#RUP00V8U",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 46,
+                        "duration": 115
+                    },
+                    {
+                        "attackerTag": "#UUC9PCQ",
+                        "defenderTag": "#829VP0U",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 48,
+                        "duration": 135
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#CVRRUJC9",
@@ -172,6 +190,14 @@
                         "destructionPercentage": 100,
                         "order": 14,
                         "duration": 149
+                    },
+                    {
+                        "attackerTag": "#Q92RUPUJ",
+                        "defenderTag": "#2P9YPGY",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 45,
+                        "duration": 142
                     }
                 ],
                 "opponentAttacks": 0
@@ -214,6 +240,16 @@
                 "name": "Viking",
                 "townhallLevel": 18,
                 "mapPosition": 6,
+                "attacks": [
+                    {
+                        "attackerTag": "#VPJYP29",
+                        "defenderTag": "#PG8G2YL0",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 47,
+                        "duration": 126
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -493,6 +529,16 @@
                 "name": "Viking 2",
                 "townhallLevel": 17,
                 "mapPosition": 14,
+                "attacks": [
+                    {
+                        "attackerTag": "#GU2UVG9CV",
+                        "defenderTag": "#GVPQQQQU",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 49,
+                        "duration": 94
+                    }
+                ],
                 "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#989G2G28",
@@ -618,7 +664,15 @@
                 "name": "Dolphin-Suri",
                 "townhallLevel": 17,
                 "mapPosition": 16,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#GU2UVG9CV",
+                    "defenderTag": "#GVPQQQQU",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 49,
+                    "duration": 94
+                }
             },
             {
                 "tag": "#QGC2Y2GQ",
@@ -691,14 +745,14 @@
                         "duration": 151
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#YQYVJ92C",
+                    "attackerTag": "#UUC9PCQ",
                     "defenderTag": "#829VP0U",
-                    "stars": 2,
-                    "destructionPercentage": 96,
-                    "order": 37,
-                    "duration": 180
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 48,
+                    "duration": 135
                 }
             },
             {
@@ -883,14 +937,14 @@
                         "duration": 136
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#V0GYVCJ9",
+                    "attackerTag": "#Q92RUPUJ",
                     "defenderTag": "#2P9YPGY",
-                    "stars": 2,
-                    "destructionPercentage": 63,
-                    "order": 34,
-                    "duration": 88
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 45,
+                    "duration": 142
                 }
             },
             {
@@ -946,7 +1000,15 @@
                 "name": "Sam",
                 "townhallLevel": 18,
                 "mapPosition": 13,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#UUC9PCQ",
+                    "defenderTag": "#RUP00V8U",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 46,
+                    "duration": 115
+                }
             },
             {
                 "tag": "#PG8G2YL0",
@@ -971,7 +1033,15 @@
                         "duration": 128
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#VPJYP29",
+                    "defenderTag": "#PG8G2YL0",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 47,
+                    "duration": 126
+                }
             },
             {
                 "tag": "#QU02R9PR0",
