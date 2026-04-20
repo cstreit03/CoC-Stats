@@ -179,7 +179,15 @@
                 "name": "maxmom",
                 "townhallLevel": 14,
                 "mapPosition": 23,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2P9YPGY",
+                    "defenderTag": "#9PU22U8Y",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 27,
+                    "duration": 136
+                }
             },
             {
                 "tag": "#99VJ2VVPQ",
@@ -309,7 +317,15 @@
                 "name": "Katara",
                 "townhallLevel": 13,
                 "mapPosition": 24,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#829VP0U",
+                    "defenderTag": "#GCL9GGPYG",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 26,
+                    "duration": 120
+                }
             },
             {
                 "tag": "#2PYVCVQP9",
@@ -341,7 +357,15 @@
                 "name": "night dragon",
                 "townhallLevel": 15,
                 "mapPosition": 22,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#829VP0U",
+                    "defenderTag": "#LPU0GGCJQ",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 28,
+                    "duration": 151
+                }
             },
             {
                 "tag": "#8RJ8CC8LU",
@@ -425,9 +449,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/518p827uO2G8VQg3nwmclfczmLQ7UFAOC2zM414IOdk.png"
         },
         "clanLevel": 32,
-        "attacks": 8,
-        "stars": 18,
-        "destructionPercentage": 27.08,
+        "attacks": 11,
+        "stars": 27,
+        "destructionPercentage": 39.08,
         "members": [
             {
                 "tag": "#V08QP98G",
@@ -511,6 +535,24 @@
                 "name": "QuynhNguyen",
                 "townhallLevel": 18,
                 "mapPosition": 12,
+                "attacks": [
+                    {
+                        "attackerTag": "#829VP0U",
+                        "defenderTag": "#GCL9GGPYG",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 26,
+                        "duration": 120
+                    },
+                    {
+                        "attackerTag": "#829VP0U",
+                        "defenderTag": "#LPU0GGCJQ",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 28,
+                        "duration": 151
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -645,6 +687,14 @@
                         "destructionPercentage": 100,
                         "order": 20,
                         "duration": 125
+                    },
+                    {
+                        "attackerTag": "#2P9YPGY",
+                        "defenderTag": "#9PU22U8Y",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 27,
+                        "duration": 136
                     }
                 ],
                 "opponentAttacks": 0
