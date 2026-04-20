@@ -15,7 +15,7 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 32,
+        "attacks": 33,
         "stars": 75,
         "destructionPercentage": 100.0,
         "members": [
@@ -34,7 +34,15 @@
                         "duration": 101
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#GQYR9JRP",
+                    "defenderTag": "#9C229UGJ",
+                    "stars": 1,
+                    "destructionPercentage": 83,
+                    "order": 55,
+                    "duration": 154
+                }
             },
             {
                 "tag": "#2PULPGL90",
@@ -59,7 +67,15 @@
                         "duration": 115
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#GQYR9JRP",
+                    "defenderTag": "#2PULPGL90",
+                    "stars": 2,
+                    "destructionPercentage": 72,
+                    "order": 54,
+                    "duration": 134
+                }
             },
             {
                 "tag": "#U90CYLQ2",
@@ -288,6 +304,14 @@
                         "destructionPercentage": 100,
                         "order": 39,
                         "duration": 111
+                    },
+                    {
+                        "attackerTag": "#99VJ2VVPQ",
+                        "defenderTag": "#2C0U0LGJR",
+                        "stars": 2,
+                        "destructionPercentage": 77,
+                        "order": 56,
+                        "duration": 104
                     }
                 ],
                 "opponentAttacks": 1,
@@ -657,9 +681,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/518p827uO2G8VQg3nwmclfczmLQ7UFAOC2zM414IOdk.png"
         },
         "clanLevel": 32,
-        "attacks": 21,
-        "stars": 47,
-        "destructionPercentage": 71.04,
+        "attacks": 23,
+        "stars": 50,
+        "destructionPercentage": 77.24,
         "members": [
             {
                 "tag": "#V08QP98G",
@@ -681,6 +705,24 @@
                 "name": "Viet.Plus",
                 "townhallLevel": 18,
                 "mapPosition": 2,
+                "attacks": [
+                    {
+                        "attackerTag": "#GQYR9JRP",
+                        "defenderTag": "#2PULPGL90",
+                        "stars": 2,
+                        "destructionPercentage": 72,
+                        "order": 54,
+                        "duration": 134
+                    },
+                    {
+                        "attackerTag": "#GQYR9JRP",
+                        "defenderTag": "#9C229UGJ",
+                        "stars": 1,
+                        "destructionPercentage": 83,
+                        "order": 55,
+                        "duration": 154
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#9G92CY9L",
@@ -825,7 +867,7 @@
                         "duration": 175
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#2PULPGL90",
                     "defenderTag": "#2C0U0LGJR",
