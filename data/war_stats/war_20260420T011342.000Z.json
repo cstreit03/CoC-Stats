@@ -15,7 +15,7 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 42,
+        "attacks": 44,
         "stars": 75,
         "destructionPercentage": 100.0,
         "members": [
@@ -131,6 +131,14 @@
                         "destructionPercentage": 96,
                         "order": 37,
                         "duration": 180
+                    },
+                    {
+                        "attackerTag": "#YQYVJ92C",
+                        "defenderTag": "#2C0U0LGJR",
+                        "stars": 2,
+                        "destructionPercentage": 61,
+                        "order": 66,
+                        "duration": 144
                     }
                 ],
                 "opponentAttacks": 1,
@@ -632,6 +640,14 @@
                         "destructionPercentage": 100,
                         "order": 2,
                         "duration": 88
+                    },
+                    {
+                        "attackerTag": "#8RJ8CC8LU",
+                        "defenderTag": "#VGCRL0L",
+                        "stars": 2,
+                        "destructionPercentage": 68,
+                        "order": 67,
+                        "duration": 93
                     }
                 ],
                 "opponentAttacks": 0
@@ -939,7 +955,7 @@
                         "duration": 175
                     }
                 ],
-                "opponentAttacks": 6,
+                "opponentAttacks": 7,
                 "bestOpponentAttack": {
                     "attackerTag": "#2PULPGL90",
                     "defenderTag": "#2C0U0LGJR",
@@ -954,7 +970,7 @@
                 "name": "Tommy Huynh",
                 "townhallLevel": 18,
                 "mapPosition": 3,
-                "opponentAttacks": 2,
+                "opponentAttacks": 3,
                 "bestOpponentAttack": {
                     "attackerTag": "#L2PQ9QLUC",
                     "defenderTag": "#VGCRL0L",
