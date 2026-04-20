@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 16,
-        "stars": 44,
-        "destructionPercentage": 59.84,
+        "attacks": 17,
+        "stars": 46,
+        "destructionPercentage": 63.48,
         "members": [
             {
                 "tag": "#9C229UGJ",
@@ -76,7 +76,15 @@
                         "duration": 131
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#PG8G2YL0",
+                    "defenderTag": "#U90CYLQ2",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 22,
+                    "duration": 126
+                }
             },
             {
                 "tag": "#YQYVJ92C",
@@ -149,7 +157,15 @@
                         "duration": 121
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#989G2G28",
+                    "defenderTag": "#800CC2CCG",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 19,
+                    "duration": 150
+                }
             },
             {
                 "tag": "#VPJYP29",
@@ -170,7 +186,15 @@
                 "name": "The Sage",
                 "townhallLevel": 18,
                 "mapPosition": 15,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#QGC2Y2GQ",
+                    "defenderTag": "#99VJ2VVPQ",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 24,
+                    "duration": 142
+                }
             },
             {
                 "tag": "#9G92CY9L",
@@ -212,7 +236,15 @@
                         "duration": 127
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 2,
+                "bestOpponentAttack": {
+                    "attackerTag": "#V82CC80L",
+                    "defenderTag": "#QC92VLPP",
+                    "stars": 2,
+                    "destructionPercentage": 96,
+                    "order": 23,
+                    "duration": 180
+                }
             },
             {
                 "tag": "#99VC2CU9",
@@ -260,6 +292,16 @@
                 "name": "mike",
                 "townhallLevel": 18,
                 "mapPosition": 5,
+                "attacks": [
+                    {
+                        "attackerTag": "#UQQ0LJLP",
+                        "defenderTag": "#YUJLQQ08",
+                        "stars": 2,
+                        "destructionPercentage": 91,
+                        "order": 18,
+                        "duration": 105
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -284,7 +326,15 @@
                         "duration": 140
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#YUJLQQ08",
+                    "defenderTag": "#2PYVCVQP9",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 21,
+                    "duration": 132
+                }
             },
             {
                 "tag": "#LPU0GGCJQ",
@@ -330,7 +380,15 @@
                 "name": "Joey Salads",
                 "townhallLevel": 13,
                 "mapPosition": 25,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2P9YPGY",
+                    "defenderTag": "#LRR0LP2J0",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 20,
+                    "duration": 125
+                }
             },
             {
                 "tag": "#2VYVULCVL",
@@ -367,9 +425,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/518p827uO2G8VQg3nwmclfczmLQ7UFAOC2zM414IOdk.png"
         },
         "clanLevel": 32,
-        "attacks": 1,
-        "stars": 1,
-        "destructionPercentage": 3.24,
+        "attacks": 8,
+        "stars": 18,
+        "destructionPercentage": 27.08,
         "members": [
             {
                 "tag": "#V08QP98G",
@@ -413,6 +471,16 @@
                 "name": "Siu nh\u00e2n g\u00e0 n\u00f2i",
                 "townhallLevel": 18,
                 "mapPosition": 6,
+                "attacks": [
+                    {
+                        "attackerTag": "#QGC2Y2GQ",
+                        "defenderTag": "#99VJ2VVPQ",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 24,
+                        "duration": 142
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#9C229UGJ",
@@ -495,13 +563,41 @@
                 "name": "Pham Quoc",
                 "townhallLevel": 18,
                 "mapPosition": 7,
-                "opponentAttacks": 0
+                "attacks": [
+                    {
+                        "attackerTag": "#YUJLQQ08",
+                        "defenderTag": "#2PYVCVQP9",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 21,
+                        "duration": 132
+                    }
+                ],
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#UQQ0LJLP",
+                    "defenderTag": "#YUJLQQ08",
+                    "stars": 2,
+                    "destructionPercentage": 91,
+                    "order": 18,
+                    "duration": 105
+                }
             },
             {
                 "tag": "#V82CC80L",
                 "name": "Du Hy",
                 "townhallLevel": 18,
                 "mapPosition": 9,
+                "attacks": [
+                    {
+                        "attackerTag": "#V82CC80L",
+                        "defenderTag": "#QC92VLPP",
+                        "stars": 2,
+                        "destructionPercentage": 96,
+                        "order": 23,
+                        "duration": 180
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -509,6 +605,16 @@
                 "name": "hoangLinh",
                 "townhallLevel": 18,
                 "mapPosition": 5,
+                "attacks": [
+                    {
+                        "attackerTag": "#989G2G28",
+                        "defenderTag": "#800CC2CCG",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 19,
+                        "duration": 150
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#2PULPGL90",
@@ -531,6 +637,16 @@
                 "name": "DuyHung",
                 "townhallLevel": 18,
                 "mapPosition": 11,
+                "attacks": [
+                    {
+                        "attackerTag": "#2P9YPGY",
+                        "defenderTag": "#LRR0LP2J0",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 20,
+                        "duration": 125
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -575,6 +691,16 @@
                 "name": "Haroo",
                 "townhallLevel": 18,
                 "mapPosition": 8,
+                "attacks": [
+                    {
+                        "attackerTag": "#PG8G2YL0",
+                        "defenderTag": "#U90CYLQ2",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 22,
+                        "duration": 126
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -664,6 +790,14 @@
                         "destructionPercentage": 81,
                         "order": 15,
                         "duration": 84
+                    },
+                    {
+                        "attackerTag": "#GQ9GYG9U8",
+                        "defenderTag": "#QC92VLPP",
+                        "stars": 2,
+                        "destructionPercentage": 68,
+                        "order": 25,
+                        "duration": 93
                     }
                 ],
                 "opponentAttacks": 1,
