@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 12,
-        "stars": 32,
-        "destructionPercentage": 43.8,
+        "attacks": 13,
+        "stars": 35,
+        "destructionPercentage": 47.8,
         "members": [
             {
                 "tag": "#2PULPGL90",
@@ -207,6 +207,16 @@
                 "name": "mike",
                 "townhallLevel": 18,
                 "mapPosition": 4,
+                "attacks": [
+                    {
+                        "attackerTag": "#UQQ0LJLP",
+                        "defenderTag": "#LJV9QLCU",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 13,
+                        "duration": 93
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -557,7 +567,15 @@
                 "name": "Md.Rajib pathan",
                 "townhallLevel": 18,
                 "mapPosition": 8,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#UQQ0LJLP",
+                    "defenderTag": "#LJV9QLCU",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 13,
+                    "duration": 93
+                }
             },
             {
                 "tag": "#2R9U8R8GQ",
