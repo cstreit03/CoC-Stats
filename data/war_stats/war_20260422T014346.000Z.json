@@ -107,7 +107,15 @@
                         "duration": 130
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#900JPPPL2",
+                    "defenderTag": "#Q92RUPUJ",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 14,
+                    "duration": 78
+                }
             },
             {
                 "tag": "#800CC2CCG",
@@ -200,7 +208,15 @@
                 "name": "BossHogg",
                 "townhallLevel": 18,
                 "mapPosition": 1,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#9CYY8VVR8",
+                    "defenderTag": "#L2PQ9QLUC",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 15,
+                    "duration": 156
+                }
             },
             {
                 "tag": "#UQQ0LJLP",
@@ -331,9 +347,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/dxi6AmiYBZWu1Cd5pvvL3ixVfENxps3qNGHY2jEw_3U.png"
         },
         "clanLevel": 19,
-        "attacks": 0,
-        "stars": 0,
-        "destructionPercentage": 0.0,
+        "attacks": 2,
+        "stars": 6,
+        "destructionPercentage": 8.0,
         "members": [
             {
                 "tag": "#2PLVY22L9",
@@ -415,6 +431,16 @@
                 "name": "Irfan",
                 "townhallLevel": 18,
                 "mapPosition": 2,
+                "attacks": [
+                    {
+                        "attackerTag": "#9CYY8VVR8",
+                        "defenderTag": "#L2PQ9QLUC",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 15,
+                        "duration": 156
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -509,6 +535,16 @@
                 "name": "APON",
                 "townhallLevel": 18,
                 "mapPosition": 10,
+                "attacks": [
+                    {
+                        "attackerTag": "#900JPPPL2",
+                        "defenderTag": "#Q92RUPUJ",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 14,
+                        "duration": 78
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
