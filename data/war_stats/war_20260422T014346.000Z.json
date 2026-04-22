@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 28,
-        "stars": 72,
-        "destructionPercentage": 98.16,
+        "attacks": 29,
+        "stars": 74,
+        "destructionPercentage": 99.84,
         "members": [
             {
                 "tag": "#2PULPGL90",
@@ -132,7 +132,15 @@
                         "duration": 137
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#82VVGCCL8",
+                    "defenderTag": "#YL0VJ2YY",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 53,
+                    "duration": 158
+                }
             },
             {
                 "tag": "#Q92RUPUJ",
@@ -321,6 +329,14 @@
                         "destructionPercentage": 100,
                         "order": 29,
                         "duration": 160
+                    },
+                    {
+                        "attackerTag": "#V0GYVCJ9",
+                        "defenderTag": "#L2RP22GY",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 52,
+                        "duration": 169
                     }
                 ],
                 "opponentAttacks": 1,
@@ -613,9 +629,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/dxi6AmiYBZWu1Cd5pvvL3ixVfENxps3qNGHY2jEw_3U.png"
         },
         "clanLevel": 19,
-        "attacks": 23,
-        "stars": 51,
-        "destructionPercentage": 70.76,
+        "attacks": 24,
+        "stars": 54,
+        "destructionPercentage": 74.76,
         "members": [
             {
                 "tag": "#2PLVY22L9",
@@ -1013,6 +1029,16 @@
                 "name": "Deejay Fahad",
                 "townhallLevel": 18,
                 "mapPosition": 3,
+                "attacks": [
+                    {
+                        "attackerTag": "#82VVGCCL8",
+                        "defenderTag": "#YL0VJ2YY",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 53,
+                        "duration": 158
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#YQYVJ92C",
@@ -1038,14 +1064,14 @@
                         "duration": 170
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#8RJ8CC8LU",
+                    "attackerTag": "#V0GYVCJ9",
                     "defenderTag": "#L2RP22GY",
-                    "stars": 1,
-                    "destructionPercentage": 58,
-                    "order": 50,
-                    "duration": 131
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 52,
+                    "duration": 169
                 }
             },
             {
