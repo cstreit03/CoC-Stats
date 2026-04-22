@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 13,
-        "stars": 35,
-        "destructionPercentage": 47.8,
+        "attacks": 15,
+        "stars": 39,
+        "destructionPercentage": 52.0,
         "members": [
             {
                 "tag": "#2PULPGL90",
@@ -144,6 +144,14 @@
                         "destructionPercentage": 100,
                         "order": 9,
                         "duration": 131
+                    },
+                    {
+                        "attackerTag": "#VPJYP29",
+                        "defenderTag": "#9CYY8VVR8",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 16,
+                        "duration": 178
                     }
                 ],
                 "opponentAttacks": 0
@@ -332,6 +340,14 @@
                         "destructionPercentage": 100,
                         "order": 7,
                         "duration": 166
+                    },
+                    {
+                        "attackerTag": "#2P8LYJCUR",
+                        "defenderTag": "#G0JVGG28Y",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 17,
+                        "duration": 121
                     }
                 ],
                 "opponentAttacks": 0
@@ -371,14 +387,14 @@
                 "name": "BD PRO KING",
                 "townhallLevel": 17,
                 "mapPosition": 16,
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#YL0VJ2YY",
+                    "attackerTag": "#2P8LYJCUR",
                     "defenderTag": "#G0JVGG28Y",
-                    "stars": 2,
-                    "destructionPercentage": 95,
-                    "order": 2,
-                    "duration": 137
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 17,
+                    "duration": 121
                 }
             },
             {
@@ -441,7 +457,15 @@
                         "duration": 156
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#VPJYP29",
+                    "defenderTag": "#9CYY8VVR8",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 16,
+                    "duration": 178
+                }
             },
             {
                 "tag": "#PJJ8LYUU2",
