@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 15,
-        "stars": 39,
-        "destructionPercentage": 52.0,
+        "attacks": 16,
+        "stars": 42,
+        "destructionPercentage": 56.0,
         "members": [
             {
                 "tag": "#2PULPGL90",
@@ -262,6 +262,16 @@
                 "name": "night dragon",
                 "townhallLevel": 15,
                 "mapPosition": 21,
+                "attacks": [
+                    {
+                        "attackerTag": "#LPU0GGCJQ",
+                        "defenderTag": "#GR0V02CL0",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 18,
+                        "duration": 112
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -649,7 +659,15 @@
                 "name": "BD T RANA",
                 "townhallLevel": 13,
                 "mapPosition": 25,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#LPU0GGCJQ",
+                    "defenderTag": "#GR0V02CL0",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 18,
+                    "duration": 112
+                }
             },
             {
                 "tag": "#9PP98UJ0",
