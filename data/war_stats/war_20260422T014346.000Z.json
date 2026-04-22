@@ -15,7 +15,7 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 33,
+        "attacks": 36,
         "stars": 75,
         "destructionPercentage": 100.0,
         "members": [
@@ -130,6 +130,14 @@
                         "destructionPercentage": 95,
                         "order": 2,
                         "duration": 137
+                    },
+                    {
+                        "attackerTag": "#YL0VJ2YY",
+                        "defenderTag": "#8QR28098J",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 61,
+                        "duration": 94
                     }
                 ],
                 "opponentAttacks": 1,
@@ -278,6 +286,14 @@
                         "destructionPercentage": 100,
                         "order": 51,
                         "duration": 100
+                    },
+                    {
+                        "attackerTag": "#9G92CY9L",
+                        "defenderTag": "#2JCQ0VV8C",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 62,
+                        "duration": 166
                     }
                 ],
                 "opponentAttacks": 2,
@@ -484,6 +500,14 @@
                         "destructionPercentage": 100,
                         "order": 18,
                         "duration": 112
+                    },
+                    {
+                        "attackerTag": "#LPU0GGCJQ",
+                        "defenderTag": "#GUQ9Q2GCY",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 60,
+                        "duration": 156
                     }
                 ],
                 "opponentAttacks": 1,
@@ -951,7 +975,7 @@
                 "name": "Hunted Mamun",
                 "townhallLevel": 14,
                 "mapPosition": 21,
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#2PYVCVQP9",
                     "defenderTag": "#8QR28098J",
@@ -1054,7 +1078,7 @@
                 "name": "NaYem",
                 "townhallLevel": 14,
                 "mapPosition": 22,
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#800CC2CCG",
                     "defenderTag": "#GUQ9Q2GCY",
@@ -1137,7 +1161,7 @@
                         "duration": 107
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#2PULPGL90",
                     "defenderTag": "#2JCQ0VV8C",
