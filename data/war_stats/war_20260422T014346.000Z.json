@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 29,
-        "stars": 74,
-        "destructionPercentage": 99.84,
+        "attacks": 33,
+        "stars": 75,
+        "destructionPercentage": 100.0,
         "members": [
             {
                 "tag": "#2PULPGL90",
@@ -107,14 +107,14 @@
                 "name": "Beat my Wifi",
                 "townhallLevel": 18,
                 "mapPosition": 10,
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#2PLVY22L9",
+                    "attackerTag": "#2JCQ0VV8C",
                     "defenderTag": "#UUC9PCQ",
-                    "stars": 2,
-                    "destructionPercentage": 95,
-                    "order": 21,
-                    "duration": 89
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 55,
+                    "duration": 103
                 }
             },
             {
@@ -180,6 +180,14 @@
                         "destructionPercentage": 100,
                         "order": 38,
                         "duration": 106
+                    },
+                    {
+                        "attackerTag": "#800CC2CCG",
+                        "defenderTag": "#82VVGCCL8",
+                        "stars": 2,
+                        "destructionPercentage": 85,
+                        "order": 56,
+                        "duration": 154
                     }
                 ],
                 "opponentAttacks": 0
@@ -362,6 +370,14 @@
                         "destructionPercentage": 88,
                         "order": 19,
                         "duration": 151
+                    },
+                    {
+                        "attackerTag": "#L2PQ9QLUC",
+                        "defenderTag": "#82VVGCCL8",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 58,
+                        "duration": 152
                     }
                 ],
                 "opponentAttacks": 1,
@@ -435,6 +451,14 @@
                         "destructionPercentage": 100,
                         "order": 40,
                         "duration": 131
+                    },
+                    {
+                        "attackerTag": "#2PYVCVQP9",
+                        "defenderTag": "#82VVGCCL8",
+                        "stars": 2,
+                        "destructionPercentage": 76,
+                        "order": 54,
+                        "duration": 153
                     }
                 ],
                 "opponentAttacks": 1,
@@ -581,6 +605,14 @@
                         "destructionPercentage": 100,
                         "order": 28,
                         "duration": 133
+                    },
+                    {
+                        "attackerTag": "#2VYVULCVL",
+                        "defenderTag": "#9PP98UJ0",
+                        "stars": 2,
+                        "destructionPercentage": 82,
+                        "order": 59,
+                        "duration": 103
                     }
                 ],
                 "opponentAttacks": 2,
@@ -616,7 +648,15 @@
                         "duration": 121
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2JCQ0VV8C",
+                    "defenderTag": "#2P8LYJCUR",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 57,
+                    "duration": 107
+                }
             }
         ]
     },
@@ -629,9 +669,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/dxi6AmiYBZWu1Cd5pvvL3ixVfENxps3qNGHY2jEw_3U.png"
         },
         "clanLevel": 19,
-        "attacks": 24,
-        "stars": 54,
-        "destructionPercentage": 74.76,
+        "attacks": 26,
+        "stars": 58,
+        "destructionPercentage": 78.96,
         "members": [
             {
                 "tag": "#2PLVY22L9",
@@ -1039,14 +1079,14 @@
                         "duration": 158
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 4,
                 "bestOpponentAttack": {
-                    "attackerTag": "#YQYVJ92C",
+                    "attackerTag": "#L2PQ9QLUC",
                     "defenderTag": "#82VVGCCL8",
-                    "stars": 2,
-                    "destructionPercentage": 96,
-                    "order": 48,
-                    "duration": 180
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 58,
+                    "duration": 152
                 }
             },
             {
@@ -1079,6 +1119,24 @@
                 "name": "SoHeL TanViR>",
                 "townhallLevel": 18,
                 "mapPosition": 1,
+                "attacks": [
+                    {
+                        "attackerTag": "#2JCQ0VV8C",
+                        "defenderTag": "#UUC9PCQ",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 55,
+                        "duration": 103
+                    },
+                    {
+                        "attackerTag": "#2JCQ0VV8C",
+                        "defenderTag": "#2P8LYJCUR",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 57,
+                        "duration": 107
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#2PULPGL90",
@@ -1218,7 +1276,7 @@
                         "duration": 180
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#2PULPGL90",
                     "defenderTag": "#9PP98UJ0",
