@@ -15,7 +15,7 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 34,
+        "attacks": 36,
         "stars": 60,
         "destructionPercentage": 100.0,
         "members": [
@@ -164,6 +164,14 @@
                         "destructionPercentage": 64,
                         "order": 36,
                         "duration": 139
+                    },
+                    {
+                        "attackerTag": "#Q92RUPUJ",
+                        "defenderTag": "#J2200LYP",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 53,
+                        "duration": 140
                     }
                 ],
                 "opponentAttacks": 1,
@@ -288,6 +296,14 @@
                         "destructionPercentage": 100,
                         "order": 39,
                         "duration": 116
+                    },
+                    {
+                        "attackerTag": "#9G92CY9L",
+                        "defenderTag": "#L9JU8C80",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 52,
+                        "duration": 114
                     }
                 ],
                 "opponentAttacks": 0
@@ -619,7 +635,7 @@
                         "duration": 142
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#L2PQ9QLUC",
                     "defenderTag": "#J2200LYP",
@@ -896,7 +912,7 @@
                 "name": "Marcola_FNX",
                 "townhallLevel": 18,
                 "mapPosition": 1,
-                "opponentAttacks": 7,
+                "opponentAttacks": 8,
                 "bestOpponentAttack": {
                     "attackerTag": "#VPJYP29",
                     "defenderTag": "#L9JU8C80",
