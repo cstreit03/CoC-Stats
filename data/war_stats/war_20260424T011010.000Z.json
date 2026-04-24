@@ -15,7 +15,7 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 31,
+        "attacks": 34,
         "stars": 60,
         "destructionPercentage": 100.0,
         "members": [
@@ -255,6 +255,14 @@
                         "destructionPercentage": 100,
                         "order": 35,
                         "duration": 122
+                    },
+                    {
+                        "attackerTag": "#99VJ2VVPQ",
+                        "defenderTag": "#L9JU8C80",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 49,
+                        "duration": 152
                     }
                 ],
                 "opponentAttacks": 1,
@@ -446,6 +454,14 @@
                         "destructionPercentage": 79,
                         "order": 23,
                         "duration": 180
+                    },
+                    {
+                        "attackerTag": "#LPU0GGCJQ",
+                        "defenderTag": "#PQJJLURC",
+                        "stars": 2,
+                        "destructionPercentage": 76,
+                        "order": 50,
+                        "duration": 135
                     }
                 ],
                 "opponentAttacks": 0
@@ -520,6 +536,14 @@
                         "destructionPercentage": 100,
                         "order": 22,
                         "duration": 116
+                    },
+                    {
+                        "attackerTag": "#2VYVULCVL",
+                        "defenderTag": "#2PUJU8LG",
+                        "stars": 2,
+                        "destructionPercentage": 72,
+                        "order": 51,
+                        "duration": 130
                     }
                 ],
                 "opponentAttacks": 0
@@ -794,7 +818,7 @@
                 "name": "Ixtalone",
                 "townhallLevel": 18,
                 "mapPosition": 7,
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#9G92CY9L",
                     "defenderTag": "#2PUJU8LG",
@@ -842,7 +866,7 @@
                 "name": "HelberThug",
                 "townhallLevel": 16,
                 "mapPosition": 19,
-                "opponentAttacks": 2,
+                "opponentAttacks": 3,
                 "bestOpponentAttack": {
                     "attackerTag": "#U90CYLQ2",
                     "defenderTag": "#PQJJLURC",
@@ -872,7 +896,7 @@
                 "name": "Marcola_FNX",
                 "townhallLevel": 18,
                 "mapPosition": 1,
-                "opponentAttacks": 6,
+                "opponentAttacks": 7,
                 "bestOpponentAttack": {
                     "attackerTag": "#VPJYP29",
                     "defenderTag": "#L9JU8C80",
