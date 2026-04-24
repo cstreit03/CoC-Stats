@@ -3,7 +3,7 @@
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
     "capitalTotalLoot": 196958,
-    "raidsCompleted": 2,
+    "raidsCompleted": 3,
     "totalAttacks": 45,
     "enemyDistrictsDestroyed": 17,
     "offensiveReward": 0,
@@ -1016,6 +1016,22 @@
                     ]
                 }
             ]
+        },
+        {
+            "attacker": {
+                "tag": "#2V2PPYJG",
+                "name": "Megadeth",
+                "level": 24,
+                "badgeUrls": {
+                    "small": "https://api-assets.clashofclans.com/badges/70/TqQjOJuOPIpkqZFHglRwhM3MYI9yGfVji9dmAey3X90.png",
+                    "large": "https://api-assets.clashofclans.com/badges/512/TqQjOJuOPIpkqZFHglRwhM3MYI9yGfVji9dmAey3X90.png",
+                    "medium": "https://api-assets.clashofclans.com/badges/200/TqQjOJuOPIpkqZFHglRwhM3MYI9yGfVji9dmAey3X90.png"
+                }
+            },
+            "attackCount": 0,
+            "districtCount": 0,
+            "districtsDestroyed": 0,
+            "districts": []
         }
     ]
 }
