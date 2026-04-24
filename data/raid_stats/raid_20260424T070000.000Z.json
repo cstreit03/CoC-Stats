@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
-    "capitalTotalLoot": 150331,
+    "capitalTotalLoot": 173926,
     "raidsCompleted": 1,
-    "totalAttacks": 33,
-    "enemyDistrictsDestroyed": 14,
+    "totalAttacks": 39,
+    "enemyDistrictsDestroyed": 16,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -72,6 +72,14 @@
             "attackLimit": 5,
             "bonusAttackLimit": 1,
             "capitalResourcesLooted": 2549
+        },
+        {
+            "tag": "#2P8LYJCUR",
+            "name": "nofreelunch",
+            "attacks": 6,
+            "attackLimit": 5,
+            "bonusAttackLimit": 1,
+            "capitalResourcesLooted": 23595
         }
     ],
     "attackLog": [
@@ -354,9 +362,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/dcKZIk6s2o-q7HKqR0kxHmI-QVSjShW5fYDgIGSdrmE.png"
                 }
             },
-            "attackCount": 14,
+            "attackCount": 20,
             "districtCount": 9,
-            "districtsDestroyed": 5,
+            "districtsDestroyed": 7,
             "districts": [
                 {
                     "id": 70000000,
@@ -441,10 +449,36 @@
                     "id": 70000003,
                     "name": "Balloon Lagoon",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11646,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#2P8LYJCUR",
+                                "name": "nofreelunch"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2P8LYJCUR",
+                                "name": "nofreelunch"
+                            },
+                            "destructionPercent": 86,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2P8LYJCUR",
+                                "name": "nofreelunch"
+                            },
+                            "destructionPercent": 40,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000004,
@@ -494,10 +528,36 @@
                     "id": 70000006,
                     "name": "Golem Quarry",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11949,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#2P8LYJCUR",
+                                "name": "nofreelunch"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2P8LYJCUR",
+                                "name": "nofreelunch"
+                            },
+                            "destructionPercent": 80,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2P8LYJCUR",
+                                "name": "nofreelunch"
+                            },
+                            "destructionPercent": 30,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000007,
@@ -576,9 +636,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/5gW0BBXSS1IKZ7yRcK_rfnmfsi6UCPBTPBk_rWMdbdI.png"
                 }
             },
-            "attackCount": 17,
+            "attackCount": 23,
             "districtCount": 9,
-            "districtsDestroyed": 4,
+            "districtsDestroyed": 8,
             "districts": [
                 {
                     "id": 70000000,
@@ -593,11 +653,19 @@
                     "id": 70000001,
                     "name": "Barbarian Camp",
                     "districtHallLevel": 5,
-                    "destructionPercent": 64,
-                    "stars": 2,
-                    "attackCount": 2,
-                    "totalLooted": 6195,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11562,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#YQPRY2CQJ",
+                                "name": "zebua"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
                         {
                             "attacker": {
                                 "tag": "#80LCU0U0C",
@@ -620,20 +688,54 @@
                     "id": 70000002,
                     "name": "Wizard Valley",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 2,
+                    "totalLooted": 10181,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#YQPRY2CQJ",
+                                "name": "zebua"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#YQPRY2CQJ",
+                                "name": "zebua"
+                            },
+                            "destructionPercent": 52,
+                            "stars": 2
+                        }
+                    ]
                 },
                 {
                     "id": 70000003,
                     "name": "Balloon Lagoon",
                     "districtHallLevel": 5,
-                    "destructionPercent": 32,
-                    "stars": 1,
-                    "attackCount": 1,
-                    "totalLooted": 3675,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11820,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#YQPRY2CQJ",
+                                "name": "zebua"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#YQPRY2CQJ",
+                                "name": "zebua"
+                            },
+                            "destructionPercent": 82,
+                            "stars": 2
+                        },
                         {
                             "attacker": {
                                 "tag": "#2YPJYPUGL",
@@ -683,11 +785,19 @@
                     "id": 70000005,
                     "name": "Dragon Cliffs",
                     "districtHallLevel": 5,
-                    "destructionPercent": 89,
-                    "stars": 2,
-                    "attackCount": 2,
-                    "totalLooted": 10790,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 12035,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#YQPRY2CQJ",
+                                "name": "zebua"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
                         {
                             "attacker": {
                                 "tag": "#2YPJYPUGL",
