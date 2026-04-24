@@ -2,9 +2,9 @@
     "state": "ongoing",
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
-    "capitalTotalLoot": 190738,
+    "capitalTotalLoot": 196958,
     "raidsCompleted": 2,
-    "totalAttacks": 44,
+    "totalAttacks": 45,
     "enemyDistrictsDestroyed": 17,
     "offensiveReward": 0,
     "defensiveReward": 0,
@@ -12,10 +12,10 @@
         {
             "tag": "#2PULPGL90",
             "name": "M M 1960",
-            "attacks": 5,
+            "attacks": 6,
             "attackLimit": 5,
             "bonusAttackLimit": 1,
-            "capitalResourcesLooted": 16456
+            "capitalResourcesLooted": 22676
         },
         {
             "tag": "#Q92RUPUJ",
@@ -362,7 +362,7 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/dcKZIk6s2o-q7HKqR0kxHmI-QVSjShW5fYDgIGSdrmE.png"
                 }
             },
-            "attackCount": 25,
+            "attackCount": 26,
             "districtCount": 9,
             "districtsDestroyed": 8,
             "districts": [
@@ -370,11 +370,19 @@
                     "id": 70000000,
                     "name": "Capital Peak",
                     "districtHallLevel": 10,
-                    "destructionPercent": 42,
-                    "stars": 0,
-                    "attackCount": 2,
-                    "totalLooted": 4840,
+                    "destructionPercent": 82,
+                    "stars": 2,
+                    "attackCount": 3,
+                    "totalLooted": 11060,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#2PULPGL90",
+                                "name": "M M 1960"
+                            },
+                            "destructionPercent": 82,
+                            "stars": 2
+                        },
                         {
                             "attacker": {
                                 "tag": "#2PULPGL90",
