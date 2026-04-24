@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 8,
-        "stars": 21,
-        "destructionPercentage": 37.05,
+        "attacks": 11,
+        "stars": 26,
+        "destructionPercentage": 44.25,
         "members": [
             {
                 "tag": "#2PULPGL90",
@@ -136,9 +136,25 @@
                         "destructionPercentage": 100,
                         "order": 11,
                         "duration": 95
+                    },
+                    {
+                        "attackerTag": "#VPJYP29",
+                        "defenderTag": "#L9JU8C80",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 20,
+                        "duration": 136
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2UP080P2G",
+                    "defenderTag": "#VPJYP29",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 17,
+                    "duration": 105
+                }
             },
             {
                 "tag": "#99VJ2VVPQ",
@@ -188,7 +204,25 @@
                 "name": "mike",
                 "townhallLevel": 18,
                 "mapPosition": 4,
-                "opponentAttacks": 0
+                "attacks": [
+                    {
+                        "attackerTag": "#UQQ0LJLP",
+                        "defenderTag": "#2UP080P2G",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 18,
+                        "duration": 116
+                    }
+                ],
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2UP080P2G",
+                    "defenderTag": "#UQQ0LJLP",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 16,
+                    "duration": 106
+                }
             },
             {
                 "tag": "#2PYVCVQP9",
@@ -242,6 +276,14 @@
                         "destructionPercentage": 100,
                         "order": 1,
                         "duration": 105
+                    },
+                    {
+                        "attackerTag": "#GU2UVG9CV",
+                        "defenderTag": "#YVL220P8Y",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 19,
+                        "duration": 83
                     }
                 ],
                 "opponentAttacks": 0
@@ -296,9 +338,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/KWzX25EFImCVdX-9scyr-iiDw1wqh2zoF6_MhUnFDEE.png"
         },
         "clanLevel": 28,
-        "attacks": 7,
-        "stars": 15,
-        "destructionPercentage": 27.6,
+        "attacks": 9,
+        "stars": 21,
+        "destructionPercentage": 37.6,
         "members": [
             {
                 "tag": "#J2200LYP",
@@ -433,14 +475,14 @@
                 "name": "LUCAS MAIA",
                 "townhallLevel": 18,
                 "mapPosition": 12,
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#YL0VJ2YY",
+                    "attackerTag": "#GU2UVG9CV",
                     "defenderTag": "#YVL220P8Y",
-                    "stars": 2,
-                    "destructionPercentage": 74,
-                    "order": 15,
-                    "duration": 132
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 19,
+                    "duration": 83
                 }
             },
             {
@@ -484,14 +526,14 @@
                 "name": "Marcola_FNX",
                 "townhallLevel": 18,
                 "mapPosition": 1,
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#2PULPGL90",
+                    "attackerTag": "#VPJYP29",
                     "defenderTag": "#L9JU8C80",
-                    "stars": 2,
-                    "destructionPercentage": 82,
-                    "order": 5,
-                    "duration": 107
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 20,
+                    "duration": 136
                 }
             },
             {
@@ -529,7 +571,33 @@
                 "name": "arthur",
                 "townhallLevel": 18,
                 "mapPosition": 5,
-                "opponentAttacks": 0
+                "attacks": [
+                    {
+                        "attackerTag": "#2UP080P2G",
+                        "defenderTag": "#UQQ0LJLP",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 16,
+                        "duration": 106
+                    },
+                    {
+                        "attackerTag": "#2UP080P2G",
+                        "defenderTag": "#VPJYP29",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 17,
+                        "duration": 105
+                    }
+                ],
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#UQQ0LJLP",
+                    "defenderTag": "#2UP080P2G",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 18,
+                    "duration": 116
+                }
             },
             {
                 "tag": "#L82JCVQC",
