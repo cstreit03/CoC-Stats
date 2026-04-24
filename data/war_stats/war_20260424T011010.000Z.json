@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 24,
-        "stars": 53,
-        "destructionPercentage": 88.2,
+        "attacks": 28,
+        "stars": 60,
+        "destructionPercentage": 100.0,
         "members": [
             {
                 "tag": "#2PULPGL90",
@@ -42,7 +42,15 @@
                         "duration": 107
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#V9J0RVV",
+                    "defenderTag": "#2PULPGL90",
+                    "stars": 2,
+                    "destructionPercentage": 82,
+                    "order": 40,
+                    "duration": 180
+                }
             },
             {
                 "tag": "#U90CYLQ2",
@@ -67,14 +75,14 @@
                         "duration": 105
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#J2L9V2RJ",
+                    "attackerTag": "#V9J0RVV",
                     "defenderTag": "#U90CYLQ2",
                     "stars": 2,
-                    "destructionPercentage": 90,
-                    "order": 2,
-                    "duration": 180
+                    "destructionPercentage": 95,
+                    "order": 41,
+                    "duration": 171
                 }
             },
             {
@@ -240,6 +248,16 @@
                 "name": "brandondepalma",
                 "townhallLevel": 18,
                 "mapPosition": 6,
+                "attacks": [
+                    {
+                        "attackerTag": "#9G92CY9L",
+                        "defenderTag": "#2PUJU8LG",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 39,
+                        "duration": 116
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -264,6 +282,24 @@
                 "name": "YAGO",
                 "townhallLevel": 18,
                 "mapPosition": 8,
+                "attacks": [
+                    {
+                        "attackerTag": "#V0GYVCJ9",
+                        "defenderTag": "#28Q8J99GY",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 37,
+                        "duration": 138
+                    },
+                    {
+                        "attackerTag": "#V0GYVCJ9",
+                        "defenderTag": "#V9J0RVV",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 38,
+                        "duration": 130
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -461,6 +497,14 @@
                         "destructionPercentage": 100,
                         "order": 14,
                         "duration": 149
+                    },
+                    {
+                        "attackerTag": "#2P8LYJCUR",
+                        "defenderTag": "#L9JU8C80",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 42,
+                        "duration": 117
                     }
                 ],
                 "opponentAttacks": 1,
@@ -484,9 +528,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/KWzX25EFImCVdX-9scyr-iiDw1wqh2zoF6_MhUnFDEE.png"
         },
         "clanLevel": 28,
-        "attacks": 12,
-        "stars": 28,
-        "destructionPercentage": 51.85,
+        "attacks": 14,
+        "stars": 30,
+        "destructionPercentage": 56.2,
         "members": [
             {
                 "tag": "#J2200LYP",
@@ -551,7 +595,15 @@
                         "duration": 166
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#V0GYVCJ9",
+                    "defenderTag": "#28Q8J99GY",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 37,
+                    "duration": 138
+                }
             },
             {
                 "tag": "#QVUQRYJC9",
@@ -694,21 +746,47 @@
                 "name": "Ixtalone",
                 "townhallLevel": 18,
                 "mapPosition": 7,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#9G92CY9L",
+                    "defenderTag": "#2PUJU8LG",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 39,
+                    "duration": 116
+                }
             },
             {
                 "tag": "#V9J0RVV",
                 "name": "Vini",
                 "townhallLevel": 18,
                 "mapPosition": 3,
-                "opponentAttacks": 1,
+                "attacks": [
+                    {
+                        "attackerTag": "#V9J0RVV",
+                        "defenderTag": "#2PULPGL90",
+                        "stars": 2,
+                        "destructionPercentage": 82,
+                        "order": 40,
+                        "duration": 180
+                    },
+                    {
+                        "attackerTag": "#V9J0RVV",
+                        "defenderTag": "#U90CYLQ2",
+                        "stars": 2,
+                        "destructionPercentage": 95,
+                        "order": 41,
+                        "duration": 171
+                    }
+                ],
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#Q92RUPUJ",
+                    "attackerTag": "#V0GYVCJ9",
                     "defenderTag": "#V9J0RVV",
-                    "stars": 2,
-                    "destructionPercentage": 64,
-                    "order": 36,
-                    "duration": 139
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 38,
+                    "duration": 130
                 }
             },
             {
@@ -746,7 +824,7 @@
                 "name": "Marcola_FNX",
                 "townhallLevel": 18,
                 "mapPosition": 1,
-                "opponentAttacks": 3,
+                "opponentAttacks": 4,
                 "bestOpponentAttack": {
                     "attackerTag": "#VPJYP29",
                     "defenderTag": "#L9JU8C80",
