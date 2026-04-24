@@ -15,9 +15,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 11,
-        "stars": 26,
-        "destructionPercentage": 44.25,
+        "attacks": 18,
+        "stars": 43,
+        "destructionPercentage": 73.2,
         "members": [
             {
                 "tag": "#2PULPGL90",
@@ -49,6 +49,16 @@
                 "name": "Ben",
                 "townhallLevel": 16,
                 "mapPosition": 15,
+                "attacks": [
+                    {
+                        "attackerTag": "#U90CYLQ2",
+                        "defenderTag": "#J2L9V2RJ",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 24,
+                        "duration": 129
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#J2L9V2RJ",
@@ -121,6 +131,16 @@
                 "name": "also Carsten",
                 "townhallLevel": 17,
                 "mapPosition": 17,
+                "attacks": [
+                    {
+                        "attackerTag": "#800CC2CCG",
+                        "defenderTag": "#QVUQRYJC9",
+                        "stars": 2,
+                        "destructionPercentage": 93,
+                        "order": 25,
+                        "duration": 144
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -183,6 +203,16 @@
                 "name": "King Hova",
                 "townhallLevel": 17,
                 "mapPosition": 14,
+                "attacks": [
+                    {
+                        "attackerTag": "#QC92VLPP",
+                        "defenderTag": "#L82JCVQC",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 21,
+                        "duration": 102
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -229,6 +259,24 @@
                 "name": "Carsten",
                 "townhallLevel": 17,
                 "mapPosition": 16,
+                "attacks": [
+                    {
+                        "attackerTag": "#2PYVCVQP9",
+                        "defenderTag": "#PCY9JV8YQ",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 26,
+                        "duration": 140
+                    },
+                    {
+                        "attackerTag": "#2PYVCVQP9",
+                        "defenderTag": "#QVUQRYJC9",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 27,
+                        "duration": 147
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#J2L9V2RJ",
@@ -244,6 +292,16 @@
                 "name": "night dragon",
                 "townhallLevel": 15,
                 "mapPosition": 19,
+                "attacks": [
+                    {
+                        "attackerTag": "#LPU0GGCJQ",
+                        "defenderTag": "#2PP8JJCLU",
+                        "stars": 2,
+                        "destructionPercentage": 79,
+                        "order": 23,
+                        "duration": 180
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -300,6 +358,16 @@
                 "name": "family buffalo",
                 "townhallLevel": 18,
                 "mapPosition": 7,
+                "attacks": [
+                    {
+                        "attackerTag": "#2VYVULCVL",
+                        "defenderTag": "#PJR88V9LG",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 22,
+                        "duration": 116
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
@@ -378,7 +446,15 @@
                 "name": "BENJAMIN",
                 "townhallLevel": 16,
                 "mapPosition": 18,
-                "opponentAttacks": 0
+                "opponentAttacks": 2,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2PYVCVQP9",
+                    "defenderTag": "#QVUQRYJC9",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 27,
+                    "duration": 147
+                }
             },
             {
                 "tag": "#8092CVU9V",
@@ -468,7 +544,15 @@
                         "duration": 124
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2VYVULCVL",
+                    "defenderTag": "#PJR88V9LG",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 22,
+                    "duration": 116
+                }
             },
             {
                 "tag": "#YVL220P8Y",
@@ -519,7 +603,15 @@
                 "name": "SKY",
                 "townhallLevel": 17,
                 "mapPosition": 17,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2PYVCVQP9",
+                    "defenderTag": "#PCY9JV8YQ",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 26,
+                    "duration": 140
+                }
             },
             {
                 "tag": "#L9JU8C80",
@@ -604,7 +696,15 @@
                 "name": "Tia Celle",
                 "townhallLevel": 17,
                 "mapPosition": 15,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#QC92VLPP",
+                    "defenderTag": "#L82JCVQC",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 21,
+                    "duration": 102
+                }
             },
             {
                 "tag": "#J2L9V2RJ",
@@ -629,14 +729,30 @@
                         "duration": 169
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#U90CYLQ2",
+                    "defenderTag": "#J2L9V2RJ",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 24,
+                    "duration": 129
+                }
             },
             {
                 "tag": "#2PP8JJCLU",
                 "name": "Madara Uchiha",
                 "townhallLevel": 15,
                 "mapPosition": 20,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#LPU0GGCJQ",
+                    "defenderTag": "#2PP8JJCLU",
+                    "stars": 2,
+                    "destructionPercentage": 79,
+                    "order": 23,
+                    "duration": 180
+                }
             }
         ]
     }
