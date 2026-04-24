@@ -15,7 +15,7 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 28,
+        "attacks": 29,
         "stars": 60,
         "destructionPercentage": 100.0,
         "members": [
@@ -181,6 +181,14 @@
                         "destructionPercentage": 93,
                         "order": 25,
                         "duration": 144
+                    },
+                    {
+                        "attackerTag": "#800CC2CCG",
+                        "defenderTag": "#L9JU8C80",
+                        "stars": 2,
+                        "destructionPercentage": 73,
+                        "order": 43,
+                        "duration": 131
                     }
                 ],
                 "opponentAttacks": 0
@@ -824,7 +832,7 @@
                 "name": "Marcola_FNX",
                 "townhallLevel": 18,
                 "mapPosition": 1,
-                "opponentAttacks": 4,
+                "opponentAttacks": 5,
                 "bestOpponentAttack": {
                     "attackerTag": "#VPJYP29",
                     "defenderTag": "#L9JU8C80",
