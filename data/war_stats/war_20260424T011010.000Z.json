@@ -15,7 +15,7 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 37,
+        "attacks": 38,
         "stars": 60,
         "destructionPercentage": 100.0,
         "members": [
@@ -511,6 +511,14 @@
                         "destructionPercentage": 85,
                         "order": 10,
                         "duration": 107
+                    },
+                    {
+                        "attackerTag": "#8RJ8CC8LU",
+                        "defenderTag": "#2PP8JJCLU",
+                        "stars": 2,
+                        "destructionPercentage": 88,
+                        "order": 59,
+                        "duration": 110
                     }
                 ],
                 "opponentAttacks": 0
@@ -1116,7 +1124,7 @@
                 "name": "Madara Uchiha",
                 "townhallLevel": 15,
                 "mapPosition": 20,
-                "opponentAttacks": 2,
+                "opponentAttacks": 3,
                 "bestOpponentAttack": {
                     "attackerTag": "#YL0VJ2YY",
                     "defenderTag": "#2PP8JJCLU",
