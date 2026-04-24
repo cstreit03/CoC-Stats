@@ -15,7 +15,7 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 29,
+        "attacks": 31,
         "stars": 60,
         "destructionPercentage": 100.0,
         "members": [
@@ -98,6 +98,14 @@
                         "destructionPercentage": 100,
                         "order": 13,
                         "duration": 157
+                    },
+                    {
+                        "attackerTag": "#YQYVJ92C",
+                        "defenderTag": "#L9JU8C80",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 48,
+                        "duration": 159
                     }
                 ],
                 "opponentAttacks": 2,
@@ -191,7 +199,15 @@
                         "duration": 131
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#L82JCVQC",
+                    "defenderTag": "#800CC2CCG",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 44,
+                    "duration": 138
+                }
             },
             {
                 "tag": "#VPJYP29",
@@ -281,9 +297,25 @@
                         "destructionPercentage": 100,
                         "order": 21,
                         "duration": 102
+                    },
+                    {
+                        "attackerTag": "#QC92VLPP",
+                        "defenderTag": "#LVUP2VQPQ",
+                        "stars": 2,
+                        "destructionPercentage": 88,
+                        "order": 46,
+                        "duration": 133
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#L82JCVQC",
+                    "defenderTag": "#QC92VLPP",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 45,
+                    "duration": 164
+                }
             },
             {
                 "tag": "#V0GYVCJ9",
@@ -458,14 +490,14 @@
                         "duration": 83
                     }
                 ],
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
-                    "attackerTag": "#PJR88V9LG",
+                    "attackerTag": "#28Q8J99GY",
                     "defenderTag": "#GU2UVG9CV",
-                    "stars": 1,
-                    "destructionPercentage": 85,
-                    "order": 31,
-                    "duration": 162
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 47,
+                    "duration": 119
                 }
             },
             {
@@ -536,9 +568,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/KWzX25EFImCVdX-9scyr-iiDw1wqh2zoF6_MhUnFDEE.png"
         },
         "clanLevel": 28,
-        "attacks": 14,
-        "stars": 30,
-        "destructionPercentage": 56.2,
+        "attacks": 17,
+        "stars": 38,
+        "destructionPercentage": 66.95,
         "members": [
             {
                 "tag": "#J2200LYP",
@@ -578,7 +610,7 @@
                 "name": "BHSilva",
                 "townhallLevel": 17,
                 "mapPosition": 14,
-                "opponentAttacks": 1,
+                "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#99VJ2VVPQ",
                     "defenderTag": "#LVUP2VQPQ",
@@ -601,6 +633,14 @@
                         "destructionPercentage": 76,
                         "order": 6,
                         "duration": 166
+                    },
+                    {
+                        "attackerTag": "#28Q8J99GY",
+                        "defenderTag": "#GU2UVG9CV",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 47,
+                        "duration": 119
                     }
                 ],
                 "opponentAttacks": 1,
@@ -832,7 +872,7 @@
                 "name": "Marcola_FNX",
                 "townhallLevel": 18,
                 "mapPosition": 1,
-                "opponentAttacks": 5,
+                "opponentAttacks": 6,
                 "bestOpponentAttack": {
                     "attackerTag": "#VPJYP29",
                     "defenderTag": "#L9JU8C80",
@@ -910,6 +950,24 @@
                 "name": "Tia Celle",
                 "townhallLevel": 17,
                 "mapPosition": 15,
+                "attacks": [
+                    {
+                        "attackerTag": "#L82JCVQC",
+                        "defenderTag": "#800CC2CCG",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 44,
+                        "duration": 138
+                    },
+                    {
+                        "attackerTag": "#L82JCVQC",
+                        "defenderTag": "#QC92VLPP",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 45,
+                        "duration": 164
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#QC92VLPP",
