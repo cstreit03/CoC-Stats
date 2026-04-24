@@ -75,7 +75,7 @@
                         "duration": 105
                     }
                 ],
-                "opponentAttacks": 2,
+                "opponentAttacks": 3,
                 "bestOpponentAttack": {
                     "attackerTag": "#V9J0RVV",
                     "defenderTag": "#U90CYLQ2",
@@ -364,7 +364,15 @@
                         "duration": 130
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#L8URPRGRP",
+                    "defenderTag": "#V0GYVCJ9",
+                    "stars": 2,
+                    "destructionPercentage": 72,
+                    "order": 58,
+                    "duration": 149
+                }
             },
             {
                 "tag": "#L2PQ9QLUC",
@@ -570,7 +578,15 @@
                         "duration": 130
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#L8URPRGRP",
+                    "defenderTag": "#2VYVULCVL",
+                    "stars": 2,
+                    "destructionPercentage": 59,
+                    "order": 57,
+                    "duration": 104
+                }
             },
             {
                 "tag": "#2P8LYJCUR",
@@ -616,9 +632,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/KWzX25EFImCVdX-9scyr-iiDw1wqh2zoF6_MhUnFDEE.png"
         },
         "clanLevel": 28,
-        "attacks": 18,
-        "stars": 38,
-        "destructionPercentage": 66.95,
+        "attacks": 21,
+        "stars": 42,
+        "destructionPercentage": 73.5,
         "members": [
             {
                 "tag": "#J2200LYP",
@@ -658,6 +674,16 @@
                 "name": "BHSilva",
                 "townhallLevel": 17,
                 "mapPosition": 14,
+                "attacks": [
+                    {
+                        "attackerTag": "#LVUP2VQPQ",
+                        "defenderTag": "#U90CYLQ2",
+                        "stars": 1,
+                        "destructionPercentage": 87,
+                        "order": 56,
+                        "duration": 139
+                    }
+                ],
                 "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#99VJ2VVPQ",
@@ -943,6 +969,24 @@
                 "name": "Caverninha",
                 "townhallLevel": 18,
                 "mapPosition": 4,
+                "attacks": [
+                    {
+                        "attackerTag": "#L8URPRGRP",
+                        "defenderTag": "#2VYVULCVL",
+                        "stars": 2,
+                        "destructionPercentage": 59,
+                        "order": 57,
+                        "duration": 104
+                    },
+                    {
+                        "attackerTag": "#L8URPRGRP",
+                        "defenderTag": "#V0GYVCJ9",
+                        "stars": 2,
+                        "destructionPercentage": 72,
+                        "order": 58,
+                        "duration": 149
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#2PULPGL90",
