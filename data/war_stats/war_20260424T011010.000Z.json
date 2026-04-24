@@ -15,7 +15,7 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/HJOIPKWJ-kgz9zlLsa5zR8zG9KzHF2htwHRDW_y8p5o.png"
         },
         "clanLevel": 32,
-        "attacks": 36,
+        "attacks": 37,
         "stars": 60,
         "destructionPercentage": 100.0,
         "members": [
@@ -108,7 +108,7 @@
                         "duration": 159
                     }
                 ],
-                "opponentAttacks": 2,
+                "opponentAttacks": 3,
                 "bestOpponentAttack": {
                     "attackerTag": "#PJR88V9LG",
                     "defenderTag": "#YQYVJ92C",
@@ -379,6 +379,14 @@
                         "destructionPercentage": 100,
                         "order": 32,
                         "duration": 124
+                    },
+                    {
+                        "attackerTag": "#L2PQ9QLUC",
+                        "defenderTag": "#L9JU8C80",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 55,
+                        "duration": 125
                     }
                 ],
                 "opponentAttacks": 1,
@@ -608,7 +616,7 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/KWzX25EFImCVdX-9scyr-iiDw1wqh2zoF6_MhUnFDEE.png"
         },
         "clanLevel": 28,
-        "attacks": 17,
+        "attacks": 18,
         "stars": 38,
         "destructionPercentage": 66.95,
         "members": [
@@ -769,6 +777,14 @@
                         "destructionPercentage": 100,
                         "order": 3,
                         "duration": 176
+                    },
+                    {
+                        "attackerTag": "#Y8089CQJ",
+                        "defenderTag": "#YQYVJ92C",
+                        "stars": 1,
+                        "destructionPercentage": 92,
+                        "order": 54,
+                        "duration": 180
                     }
                 ],
                 "opponentAttacks": 1,
@@ -912,7 +928,7 @@
                 "name": "Marcola_FNX",
                 "townhallLevel": 18,
                 "mapPosition": 1,
-                "opponentAttacks": 8,
+                "opponentAttacks": 9,
                 "bestOpponentAttack": {
                     "attackerTag": "#VPJYP29",
                     "defenderTag": "#L9JU8C80",
