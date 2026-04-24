@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
-    "capitalTotalLoot": 138676,
+    "capitalTotalLoot": 150331,
     "raidsCompleted": 1,
-    "totalAttacks": 31,
-    "enemyDistrictsDestroyed": 13,
+    "totalAttacks": 33,
+    "enemyDistrictsDestroyed": 14,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -40,6 +40,14 @@
             "attackLimit": 5,
             "bonusAttackLimit": 1,
             "capitalResourcesLooted": 29176
+        },
+        {
+            "tag": "#L2PQ9QLUC",
+            "name": "BossHogg",
+            "attacks": 2,
+            "attackLimit": 5,
+            "bonusAttackLimit": 1,
+            "capitalResourcesLooted": 11655
         },
         {
             "tag": "#8RJ8CC8LU",
@@ -346,9 +354,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/dcKZIk6s2o-q7HKqR0kxHmI-QVSjShW5fYDgIGSdrmE.png"
                 }
             },
-            "attackCount": 12,
+            "attackCount": 14,
             "districtCount": 9,
-            "districtsDestroyed": 4,
+            "districtsDestroyed": 5,
             "districts": [
                 {
                     "id": 70000000,
@@ -530,10 +538,28 @@
                     "id": 70000008,
                     "name": "Goblin Mines",
                     "districtHallLevel": 4,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 2,
+                    "totalLooted": 11655,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#L2PQ9QLUC",
+                                "name": "BossHogg"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#L2PQ9QLUC",
+                                "name": "BossHogg"
+                            },
+                            "destructionPercent": 59,
+                            "stars": 2
+                        }
+                    ]
                 }
             ]
         }
