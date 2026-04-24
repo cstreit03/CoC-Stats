@@ -3,7 +3,7 @@
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
     "capitalTotalLoot": 173926,
-    "raidsCompleted": 1,
+    "raidsCompleted": 2,
     "totalAttacks": 39,
     "enemyDistrictsDestroyed": 16,
     "offensiveReward": 0,
@@ -636,18 +636,60 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/5gW0BBXSS1IKZ7yRcK_rfnmfsi6UCPBTPBk_rWMdbdI.png"
                 }
             },
-            "attackCount": 23,
+            "attackCount": 28,
             "districtCount": 9,
-            "districtsDestroyed": 8,
+            "districtsDestroyed": 9,
             "districts": [
                 {
                     "id": 70000000,
                     "name": "Capital Peak",
                     "districtHallLevel": 10,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 5,
+                    "totalLooted": 13970,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#P9VL8CLQQ",
+                                "name": "KORL@P O.I"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#P9VL8CLQQ",
+                                "name": "KORL@P O.I"
+                            },
+                            "destructionPercent": 89,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#P9VL8CLQQ",
+                                "name": "KORL@P O.I"
+                            },
+                            "destructionPercent": 60,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#P9VL8CLQQ",
+                                "name": "KORL@P O.I"
+                            },
+                            "destructionPercent": 47,
+                            "stars": 1
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#P9VL8CLQQ",
+                                "name": "KORL@P O.I"
+                            },
+                            "destructionPercent": 23,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000001,
