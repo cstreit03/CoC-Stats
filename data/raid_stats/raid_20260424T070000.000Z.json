@@ -1,0 +1,201 @@
+{
+    "state": "ongoing",
+    "startTime": "20260424T070000.000Z",
+    "endTime": "20260427T070000.000Z",
+    "capitalTotalLoot": 0,
+    "raidsCompleted": 0,
+    "totalAttacks": 0,
+    "enemyDistrictsDestroyed": 0,
+    "offensiveReward": 0,
+    "defensiveReward": 0,
+    "members": [],
+    "attackLog": [],
+    "defenseLog": [
+        {
+            "attacker": {
+                "tag": "#2LJ89U2GU",
+                "name": "Blackwell",
+                "level": 20,
+                "badgeUrls": {
+                    "small": "https://api-assets.clashofclans.com/badges/70/5gW0BBXSS1IKZ7yRcK_rfnmfsi6UCPBTPBk_rWMdbdI.png",
+                    "large": "https://api-assets.clashofclans.com/badges/512/5gW0BBXSS1IKZ7yRcK_rfnmfsi6UCPBTPBk_rWMdbdI.png",
+                    "medium": "https://api-assets.clashofclans.com/badges/200/5gW0BBXSS1IKZ7yRcK_rfnmfsi6UCPBTPBk_rWMdbdI.png"
+                }
+            },
+            "attackCount": 10,
+            "districtCount": 9,
+            "districtsDestroyed": 3,
+            "districts": [
+                {
+                    "id": 70000000,
+                    "name": "Capital Peak",
+                    "districtHallLevel": 10,
+                    "destructionPercent": 0,
+                    "stars": 0,
+                    "attackCount": 0,
+                    "totalLooted": 0
+                },
+                {
+                    "id": 70000001,
+                    "name": "Barbarian Camp",
+                    "districtHallLevel": 5,
+                    "destructionPercent": 38,
+                    "stars": 0,
+                    "attackCount": 1,
+                    "totalLooted": 2195,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#80LCU0U0C",
+                                "name": "DarkBango"
+                            },
+                            "destructionPercent": 38,
+                            "stars": 0
+                        }
+                    ]
+                },
+                {
+                    "id": 70000002,
+                    "name": "Wizard Valley",
+                    "districtHallLevel": 5,
+                    "destructionPercent": 0,
+                    "stars": 0,
+                    "attackCount": 0,
+                    "totalLooted": 0
+                },
+                {
+                    "id": 70000003,
+                    "name": "Balloon Lagoon",
+                    "districtHallLevel": 5,
+                    "destructionPercent": 0,
+                    "stars": 0,
+                    "attackCount": 0,
+                    "totalLooted": 0
+                },
+                {
+                    "id": 70000004,
+                    "name": "Builder's Workshop",
+                    "districtHallLevel": 5,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 12251,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#80LCU0U0C",
+                                "name": "DarkBango"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#80LCU0U0C",
+                                "name": "DarkBango"
+                            },
+                            "destructionPercent": 75,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#9CUURLJCY",
+                                "name": "suci rahmawati"
+                            },
+                            "destructionPercent": 52,
+                            "stars": 2
+                        }
+                    ]
+                },
+                {
+                    "id": 70000005,
+                    "name": "Dragon Cliffs",
+                    "districtHallLevel": 5,
+                    "destructionPercent": 0,
+                    "stars": 0,
+                    "attackCount": 0,
+                    "totalLooted": 0
+                },
+                {
+                    "id": 70000006,
+                    "name": "Golem Quarry",
+                    "districtHallLevel": 5,
+                    "destructionPercent": 0,
+                    "stars": 0,
+                    "attackCount": 0,
+                    "totalLooted": 0
+                },
+                {
+                    "id": 70000007,
+                    "name": "Skeleton Park",
+                    "districtHallLevel": 4,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11858,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#9CUURLJCY",
+                                "name": "suci rahmawati"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#9CUURLJCY",
+                                "name": "suci rahmawati"
+                            },
+                            "destructionPercent": 50,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#9CUURLJCY",
+                                "name": "suci rahmawati"
+                            },
+                            "destructionPercent": 39,
+                            "stars": 1
+                        }
+                    ]
+                },
+                {
+                    "id": 70000008,
+                    "name": "Goblin Mines",
+                    "districtHallLevel": 4,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11919,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#80LCU0U0C",
+                                "name": "DarkBango"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#9CUURLJCY",
+                                "name": "suci rahmawati"
+                            },
+                            "destructionPercent": 83,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#9CUURLJCY",
+                                "name": "suci rahmawati"
+                            },
+                            "destructionPercent": 45,
+                            "stars": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
