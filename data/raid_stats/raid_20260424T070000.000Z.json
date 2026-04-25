@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
-    "capitalTotalLoot": 372128,
+    "capitalTotalLoot": 387599,
     "raidsCompleted": 4,
-    "totalAttacks": 85,
-    "enemyDistrictsDestroyed": 32,
+    "totalAttacks": 89,
+    "enemyDistrictsDestroyed": 34,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -44,10 +44,10 @@
         {
             "tag": "#Q92RUPUJ",
             "name": "- nancy 95",
-            "attacks": 3,
+            "attacks": 6,
             "attackLimit": 5,
             "bonusAttackLimit": 1,
-            "capitalResourcesLooted": 11981
+            "capitalResourcesLooted": 22744
         },
         {
             "tag": "#LGUV2YP0",
@@ -80,6 +80,14 @@
             "attackLimit": 5,
             "bonusAttackLimit": 1,
             "capitalResourcesLooted": 11979
+        },
+        {
+            "tag": "#V0GYVCJ9",
+            "name": "YAGO",
+            "attacks": 1,
+            "attackLimit": 5,
+            "bonusAttackLimit": 1,
+            "capitalResourcesLooted": 4708
         },
         {
             "tag": "#L2PQ9QLUC",
@@ -1082,9 +1090,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/SvSolKw6uyWF3DHSKorEBbd6d5S-LFOc7oG2H-VT1w8.png"
                 }
             },
-            "attackCount": 13,
+            "attackCount": 17,
             "districtCount": 9,
-            "districtsDestroyed": 5,
+            "districtsDestroyed": 7,
             "districts": [
                 {
                     "id": 70000000,
@@ -1108,11 +1116,35 @@
                     "id": 70000002,
                     "name": "Wizard Valley",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 1,
-                    "totalLooted": 0,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 4,
+                    "totalLooted": 10763,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#Q92RUPUJ",
+                                "name": "- nancy 95"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#Q92RUPUJ",
+                                "name": "- nancy 95"
+                            },
+                            "destructionPercent": 89,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#Q92RUPUJ",
+                                "name": "- nancy 95"
+                            },
+                            "destructionPercent": 46,
+                            "stars": 0
+                        },
                         {
                             "attacker": {
                                 "tag": "#PQC82LLR",
@@ -1270,11 +1302,19 @@
                     "id": 70000008,
                     "name": "Goblin Mines",
                     "districtHallLevel": 4,
-                    "destructionPercent": 69,
-                    "stars": 2,
-                    "attackCount": 1,
-                    "totalLooted": 6995,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 2,
+                    "totalLooted": 11703,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#V0GYVCJ9",
+                                "name": "YAGO"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
                         {
                             "attacker": {
                                 "tag": "#L2PQ9QLUC",
