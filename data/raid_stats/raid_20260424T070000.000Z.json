@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
-    "capitalTotalLoot": 418210,
+    "capitalTotalLoot": 431213,
     "raidsCompleted": 5,
-    "totalAttacks": 97,
-    "enemyDistrictsDestroyed": 36,
+    "totalAttacks": 100,
+    "enemyDistrictsDestroyed": 38,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -52,10 +52,10 @@
         {
             "tag": "#P9LC88QJ",
             "name": "DaTicket13",
-            "attacks": 3,
+            "attacks": 6,
             "attackLimit": 5,
             "bonusAttackLimit": 1,
-            "capitalResourcesLooted": 15325
+            "capitalResourcesLooted": 28328
         },
         {
             "tag": "#LGUV2YP0",
@@ -1406,9 +1406,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/RbrzgmlULa8-vJEHkDcvaajWFFPg0GvxJPepFEh7Noc.png"
                 }
             },
-            "attackCount": 1,
+            "attackCount": 4,
             "districtCount": 9,
-            "districtsDestroyed": 0,
+            "districtsDestroyed": 2,
             "districts": [
                 {
                     "id": 70000000,
@@ -1441,20 +1441,46 @@
                     "id": 70000003,
                     "name": "Balloon Lagoon",
                     "districtHallLevel": 4,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 2,
+                    "totalLooted": 9161,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#P9LC88QJ",
+                                "name": "DaTicket13"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#P9LC88QJ",
+                                "name": "DaTicket13"
+                            },
+                            "destructionPercent": 68,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000004,
                     "name": "Builder's Workshop",
                     "districtHallLevel": 4,
-                    "destructionPercent": 64,
-                    "stars": 2,
-                    "attackCount": 1,
-                    "totalLooted": 5190,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 2,
+                    "totalLooted": 9032,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#P9LC88QJ",
+                                "name": "DaTicket13"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
                         {
                             "attacker": {
                                 "tag": "#P9LC88QJ",
