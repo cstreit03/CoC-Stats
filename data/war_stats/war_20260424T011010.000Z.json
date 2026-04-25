@@ -1,5 +1,5 @@
 {
-    "state": "inWar",
+    "state": "warEnded",
     "teamSize": 20,
     "attacksPerMember": 2,
     "battleModifier": "none",
