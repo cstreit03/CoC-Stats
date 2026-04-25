@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
-    "capitalTotalLoot": 318836,
+    "capitalTotalLoot": 355961,
     "raidsCompleted": 4,
-    "totalAttacks": 74,
-    "enemyDistrictsDestroyed": 28,
+    "totalAttacks": 81,
+    "enemyDistrictsDestroyed": 30,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -28,10 +28,10 @@
         {
             "tag": "#U90CYLQ2",
             "name": "Ben",
-            "attacks": 2,
+            "attacks": 6,
             "attackLimit": 5,
             "bonusAttackLimit": 1,
-            "capitalResourcesLooted": 11448
+            "capitalResourcesLooted": 34223
         },
         {
             "tag": "#YL0VJ2YY",
@@ -66,6 +66,14 @@
             "capitalResourcesLooted": 29176
         },
         {
+            "tag": "#9G92CY9L",
+            "name": "brandondepalma",
+            "attacks": 1,
+            "attackLimit": 5,
+            "bonusAttackLimit": 0,
+            "capitalResourcesLooted": 3195
+        },
+        {
             "tag": "#YJ2YPLGR",
             "name": "e\u303d\ufe0fily",
             "attacks": 3,
@@ -76,10 +84,10 @@
         {
             "tag": "#L2PQ9QLUC",
             "name": "BossHogg",
-            "attacks": 5,
+            "attacks": 6,
             "attackLimit": 5,
             "bonusAttackLimit": 1,
-            "capitalResourcesLooted": 23627
+            "capitalResourcesLooted": 30622
         },
         {
             "tag": "#8RJ8CC8LU",
@@ -116,10 +124,10 @@
         {
             "tag": "#GY98LJ8P9",
             "name": "SheepdogDLLJA",
-            "attacks": 2,
+            "attacks": 3,
             "attackLimit": 5,
             "bonusAttackLimit": 1,
-            "capitalResourcesLooted": 11789
+            "capitalResourcesLooted": 15949
         },
         {
             "tag": "#2P8LYJCUR",
@@ -1066,9 +1074,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/SvSolKw6uyWF3DHSKorEBbd6d5S-LFOc7oG2H-VT1w8.png"
                 }
             },
-            "attackCount": 2,
+            "attackCount": 9,
             "districtCount": 9,
-            "districtsDestroyed": 1,
+            "districtsDestroyed": 3,
             "districts": [
                 {
                     "id": 70000000,
@@ -1101,19 +1109,47 @@
                     "id": 70000003,
                     "name": "Balloon Lagoon",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 2,
+                    "totalLooted": 11307,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#U90CYLQ2",
+                                "name": "Ben"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#U90CYLQ2",
+                                "name": "Ben"
+                            },
+                            "destructionPercent": 44,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000004,
                     "name": "Builder's Workshop",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
+                    "destructionPercent": 39,
                     "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "attackCount": 1,
+                    "totalLooted": 4160,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#GY98LJ8P9",
+                                "name": "SheepdogDLLJA"
+                            },
+                            "destructionPercent": 39,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000005,
@@ -1146,28 +1182,66 @@
                     "id": 70000006,
                     "name": "Golem Quarry",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
+                    "destructionPercent": 36,
                     "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "attackCount": 1,
+                    "totalLooted": 3195,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#9G92CY9L",
+                                "name": "brandondepalma"
+                            },
+                            "destructionPercent": 36,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000007,
                     "name": "Skeleton Park",
                     "districtHallLevel": 4,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 2,
+                    "totalLooted": 11468,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#U90CYLQ2",
+                                "name": "Ben"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#U90CYLQ2",
+                                "name": "Ben"
+                            },
+                            "destructionPercent": 52,
+                            "stars": 2
+                        }
+                    ]
                 },
                 {
                     "id": 70000008,
                     "name": "Goblin Mines",
                     "districtHallLevel": 4,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 69,
+                    "stars": 2,
+                    "attackCount": 1,
+                    "totalLooted": 6995,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#L2PQ9QLUC",
+                                "name": "BossHogg"
+                            },
+                            "destructionPercent": 69,
+                            "stars": 2
+                        }
+                    ]
                 }
             ]
         }
@@ -1524,9 +1598,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/TqQjOJuOPIpkqZFHglRwhM3MYI9yGfVji9dmAey3X90.png"
                 }
             },
-            "attackCount": 5,
+            "attackCount": 7,
             "districtCount": 9,
-            "districtsDestroyed": 1,
+            "districtsDestroyed": 2,
             "districts": [
                 {
                     "id": 70000000,
@@ -1586,20 +1660,38 @@
                     "id": 70000006,
                     "name": "Golem Quarry",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 38,
+                    "stars": 1,
+                    "attackCount": 1,
+                    "totalLooted": 2280,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#LJUPR9CRJ",
+                                "name": "Vic Rattlehead"
+                            },
+                            "destructionPercent": 38,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000007,
                     "name": "Skeleton Park",
                     "districtHallLevel": 4,
-                    "destructionPercent": 60,
-                    "stars": 1,
-                    "attackCount": 2,
-                    "totalLooted": 6620,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11864,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#LJUPR9CRJ",
+                                "name": "Vic Rattlehead"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
                         {
                             "attacker": {
                                 "tag": "#LJUPR9CRJ",
