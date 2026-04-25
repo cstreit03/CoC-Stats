@@ -306,7 +306,15 @@
                         "duration": 114
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2PUJU8LG",
+                    "defenderTag": "#9G92CY9L",
+                    "stars": 2,
+                    "destructionPercentage": 82,
+                    "order": 61,
+                    "duration": 180
+                }
             },
             {
                 "tag": "#QC92VLPP",
@@ -496,7 +504,15 @@
                         "duration": 135
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2PUJU8LG",
+                    "defenderTag": "#LPU0GGCJQ",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 62,
+                    "duration": 128
+                }
             },
             {
                 "tag": "#8RJ8CC8LU",
@@ -561,7 +577,15 @@
                 "name": "Joey Salads",
                 "townhallLevel": 13,
                 "mapPosition": 20,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#2PP8JJCLU",
+                    "defenderTag": "#LRR0LP2J0",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 60,
+                    "duration": 79
+                }
             },
             {
                 "tag": "#2VYVULCVL",
@@ -640,9 +664,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/KWzX25EFImCVdX-9scyr-iiDw1wqh2zoF6_MhUnFDEE.png"
         },
         "clanLevel": 28,
-        "attacks": 21,
-        "stars": 42,
-        "destructionPercentage": 73.5,
+        "attacks": 24,
+        "stars": 50,
+        "destructionPercentage": 87.6,
         "members": [
             {
                 "tag": "#J2200LYP",
@@ -884,6 +908,24 @@
                 "name": "Ixtalone",
                 "townhallLevel": 18,
                 "mapPosition": 7,
+                "attacks": [
+                    {
+                        "attackerTag": "#2PUJU8LG",
+                        "defenderTag": "#9G92CY9L",
+                        "stars": 2,
+                        "destructionPercentage": 82,
+                        "order": 61,
+                        "duration": 180
+                    },
+                    {
+                        "attackerTag": "#2PUJU8LG",
+                        "defenderTag": "#LPU0GGCJQ",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 62,
+                        "duration": 128
+                    }
+                ],
                 "opponentAttacks": 2,
                 "bestOpponentAttack": {
                     "attackerTag": "#9G92CY9L",
@@ -1124,6 +1166,16 @@
                 "name": "Madara Uchiha",
                 "townhallLevel": 15,
                 "mapPosition": 20,
+                "attacks": [
+                    {
+                        "attackerTag": "#2PP8JJCLU",
+                        "defenderTag": "#LRR0LP2J0",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 60,
+                        "duration": 79
+                    }
+                ],
                 "opponentAttacks": 3,
                 "bestOpponentAttack": {
                     "attackerTag": "#YL0VJ2YY",
