@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
-    "capitalTotalLoot": 368796,
+    "capitalTotalLoot": 372128,
     "raidsCompleted": 4,
-    "totalAttacks": 83,
-    "enemyDistrictsDestroyed": 31,
+    "totalAttacks": 85,
+    "enemyDistrictsDestroyed": 32,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -68,10 +68,10 @@
         {
             "tag": "#9G92CY9L",
             "name": "brandondepalma",
-            "attacks": 2,
+            "attacks": 3,
             "attackLimit": 5,
-            "bonusAttackLimit": 0,
-            "capitalResourcesLooted": 8500
+            "bonusAttackLimit": 1,
+            "capitalResourcesLooted": 11832
         },
         {
             "tag": "#YJ2YPLGR",
@@ -88,6 +88,14 @@
             "attackLimit": 5,
             "bonusAttackLimit": 1,
             "capitalResourcesLooted": 30622
+        },
+        {
+            "tag": "#PQC82LLR",
+            "name": "DocPeejay",
+            "attacks": 1,
+            "attackLimit": 5,
+            "bonusAttackLimit": 0,
+            "capitalResourcesLooted": 0
         },
         {
             "tag": "#8RJ8CC8LU",
@@ -1074,9 +1082,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/SvSolKw6uyWF3DHSKorEBbd6d5S-LFOc7oG2H-VT1w8.png"
                 }
             },
-            "attackCount": 11,
+            "attackCount": 13,
             "districtCount": 9,
-            "districtsDestroyed": 4,
+            "districtsDestroyed": 5,
             "districts": [
                 {
                     "id": 70000000,
@@ -1102,8 +1110,18 @@
                     "districtHallLevel": 5,
                     "destructionPercent": 0,
                     "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "attackCount": 1,
+                    "totalLooted": 0,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#PQC82LLR",
+                                "name": "DocPeejay"
+                            },
+                            "destructionPercent": 0,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000003,
@@ -1190,11 +1208,19 @@
                     "id": 70000006,
                     "name": "Golem Quarry",
                     "districtHallLevel": 5,
-                    "destructionPercent": 80,
-                    "stars": 1,
-                    "attackCount": 2,
-                    "totalLooted": 8500,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11832,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#9G92CY9L",
+                                "name": "brandondepalma"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
                         {
                             "attacker": {
                                 "tag": "#9G92CY9L",
