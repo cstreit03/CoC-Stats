@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
-    "capitalTotalLoot": 504717,
+    "capitalTotalLoot": 510119,
     "raidsCompleted": 6,
-    "totalAttacks": 117,
-    "enemyDistrictsDestroyed": 45,
+    "totalAttacks": 118,
+    "enemyDistrictsDestroyed": 46,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -156,10 +156,10 @@
         {
             "tag": "#Y8PJCG8L",
             "name": "Chmmr",
-            "attacks": 5,
+            "attacks": 6,
             "attackLimit": 5,
             "bonusAttackLimit": 1,
-            "capitalResourcesLooted": 17449
+            "capitalResourcesLooted": 22851
         },
         {
             "tag": "#YR922PJC0",
@@ -1706,9 +1706,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/pO5TQBRlXCw63FWOGbBbvCHjH89Tnh_E-pkzzALQHjQ.png"
                 }
             },
-            "attackCount": 1,
+            "attackCount": 2,
             "districtCount": 9,
-            "districtsDestroyed": 0,
+            "districtsDestroyed": 1,
             "districts": [
                 {
                     "id": 70000000,
@@ -1768,11 +1768,19 @@
                     "id": 70000006,
                     "name": "Golem Quarry",
                     "districtHallLevel": 5,
-                    "destructionPercent": 64,
-                    "stars": 2,
-                    "attackCount": 1,
-                    "totalLooted": 4805,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 2,
+                    "totalLooted": 10207,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#Y8PJCG8L",
+                                "name": "Chmmr"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
                         {
                             "attacker": {
                                 "tag": "#Y02J2VQ2",
