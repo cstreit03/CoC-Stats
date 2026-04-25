@@ -2,13 +2,21 @@
     "state": "ongoing",
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
-    "capitalTotalLoot": 199943,
+    "capitalTotalLoot": 247914,
     "raidsCompleted": 3,
-    "totalAttacks": 46,
-    "enemyDistrictsDestroyed": 18,
+    "totalAttacks": 58,
+    "enemyDistrictsDestroyed": 22,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
+        {
+            "tag": "#289RPC2GP",
+            "name": "TMac",
+            "attacks": 6,
+            "attackLimit": 5,
+            "bonusAttackLimit": 1,
+            "capitalResourcesLooted": 24077
+        },
         {
             "tag": "#2PULPGL90",
             "name": "M M 1960",
@@ -42,6 +50,14 @@
             "capitalResourcesLooted": 29176
         },
         {
+            "tag": "#YJ2YPLGR",
+            "name": "e\u303d\ufe0fily",
+            "attacks": 3,
+            "attackLimit": 5,
+            "bonusAttackLimit": 1,
+            "capitalResourcesLooted": 11979
+        },
+        {
             "tag": "#L2PQ9QLUC",
             "name": "BossHogg",
             "attacks": 5,
@@ -68,10 +84,10 @@
         {
             "tag": "#Y8PJCG8L",
             "name": "Chmmr",
-            "attacks": 2,
+            "attacks": 5,
             "attackLimit": 5,
             "bonusAttackLimit": 1,
-            "capitalResourcesLooted": 5534
+            "capitalResourcesLooted": 17449
         },
         {
             "tag": "#2P8LYJCUR",
@@ -694,9 +710,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/zz8zqsSGJ1CkiaOSpka6L1pQhWBxlRZL47PhMoFw6D0.png"
                 }
             },
-            "attackCount": 0,
+            "attackCount": 12,
             "districtCount": 9,
-            "districtsDestroyed": 0,
+            "districtsDestroyed": 4,
             "districts": [
                 {
                     "id": 70000000,
@@ -711,10 +727,36 @@
                     "id": 70000001,
                     "name": "Barbarian Camp",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 12042,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#289RPC2GP",
+                                "name": "TMac"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#289RPC2GP",
+                                "name": "TMac"
+                            },
+                            "destructionPercent": 97,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#289RPC2GP",
+                                "name": "TMac"
+                            },
+                            "destructionPercent": 42,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000002,
@@ -747,10 +789,36 @@
                     "id": 70000005,
                     "name": "Dragon Cliffs",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 12035,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#289RPC2GP",
+                                "name": "TMac"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#289RPC2GP",
+                                "name": "TMac"
+                            },
+                            "destructionPercent": 96,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#289RPC2GP",
+                                "name": "TMac"
+                            },
+                            "destructionPercent": 50,
+                            "stars": 2
+                        }
+                    ]
                 },
                 {
                     "id": 70000006,
@@ -765,19 +833,71 @@
                     "id": 70000007,
                     "name": "Skeleton Park",
                     "districtHallLevel": 4,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11915,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#Y8PJCG8L",
+                                "name": "Chmmr"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#Y8PJCG8L",
+                                "name": "Chmmr"
+                            },
+                            "destructionPercent": 73,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#Y8PJCG8L",
+                                "name": "Chmmr"
+                            },
+                            "destructionPercent": 31,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000008,
                     "name": "Goblin Mines",
                     "districtHallLevel": 4,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11979,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#YJ2YPLGR",
+                                "name": "e\u303d\ufe0fily"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#YJ2YPLGR",
+                                "name": "e\u303d\ufe0fily"
+                            },
+                            "destructionPercent": 82,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#YJ2YPLGR",
+                                "name": "e\u303d\ufe0fily"
+                            },
+                            "destructionPercent": 42,
+                            "stars": 0
+                        }
+                    ]
                 }
             ]
         }
