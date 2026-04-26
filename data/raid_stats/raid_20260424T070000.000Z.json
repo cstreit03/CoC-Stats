@@ -3,7 +3,7 @@
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
     "capitalTotalLoot": 536748,
-    "raidsCompleted": 6,
+    "raidsCompleted": 7,
     "totalAttacks": 125,
     "enemyDistrictsDestroyed": 47,
     "offensiveReward": 0,
@@ -2386,36 +2386,114 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/IXiKbdBZhKAE5-x0UCsS9VFr31UuoDysaHfjR11KtL4.png"
                 }
             },
-            "attackCount": 13,
+            "attackCount": 27,
             "districtCount": 9,
-            "districtsDestroyed": 4,
+            "districtsDestroyed": 9,
             "districts": [
                 {
                     "id": 70000000,
                     "name": "Capital Peak",
                     "districtHallLevel": 10,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 13562,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#LYUGQUYC8",
+                                "name": "\u2764\ufe0fKimNg\u00e2n\u2764\ufe0f"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#LYUGQUYC8",
+                                "name": "\u2764\ufe0fKimNg\u00e2n\u2764\ufe0f"
+                            },
+                            "destructionPercent": 66,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#LYUGQUYC8",
+                                "name": "\u2764\ufe0fKimNg\u00e2n\u2764\ufe0f"
+                            },
+                            "destructionPercent": 30,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000001,
                     "name": "Barbarian Camp",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11583,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#LYUGQUYC8",
+                                "name": "\u2764\ufe0fKimNg\u00e2n\u2764\ufe0f"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#LYUGQUYC8",
+                                "name": "\u2764\ufe0fKimNg\u00e2n\u2764\ufe0f"
+                            },
+                            "destructionPercent": 75,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#LYUGQUYC8",
+                                "name": "\u2764\ufe0fKimNg\u00e2n\u2764\ufe0f"
+                            },
+                            "destructionPercent": 44,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000002,
                     "name": "Wizard Valley",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 10856,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#YQLRP0R8G",
+                                "name": "Long\u2764\ufe0f\u1ea8n"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#YQLRP0R8G",
+                                "name": "Long\u2764\ufe0f\u1ea8n"
+                            },
+                            "destructionPercent": 95,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#YQLRP0R8G",
+                                "name": "Long\u2764\ufe0f\u1ea8n"
+                            },
+                            "destructionPercent": 30,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000003,
@@ -2456,11 +2534,27 @@
                     "id": 70000004,
                     "name": "Builder's Workshop",
                     "districtHallLevel": 5,
-                    "destructionPercent": 28,
-                    "stars": 0,
-                    "attackCount": 1,
-                    "totalLooted": 3045,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 12011,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#QV9GQR2Y0",
+                                "name": "==>M\u1ea0NH\u2764\ufe0fBG<=="
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#2LLRPPRUP",
+                                "name": "Thi\u1ec1u\u2764\ufe0f98BG"
+                            },
+                            "destructionPercent": 67,
+                            "stars": 2
+                        },
                         {
                             "attacker": {
                                 "tag": "#QQY9P0UGC",
@@ -2475,10 +2569,36 @@
                     "id": 70000005,
                     "name": "Dragon Cliffs",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11900,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#YQLRP0R8G",
+                                "name": "Long\u2764\ufe0f\u1ea8n"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#YQLRP0R8G",
+                                "name": "Long\u2764\ufe0f\u1ea8n"
+                            },
+                            "destructionPercent": 79,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#YQLRP0R8G",
+                                "name": "Long\u2764\ufe0f\u1ea8n"
+                            },
+                            "destructionPercent": 48,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000006,
