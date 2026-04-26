@@ -2386,9 +2386,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/IXiKbdBZhKAE5-x0UCsS9VFr31UuoDysaHfjR11KtL4.png"
                 }
             },
-            "attackCount": 7,
+            "attackCount": 13,
             "districtCount": 9,
-            "districtsDestroyed": 2,
+            "districtsDestroyed": 4,
             "districts": [
                 {
                     "id": 70000000,
@@ -2421,19 +2421,55 @@
                     "id": 70000003,
                     "name": "Balloon Lagoon",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11733,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#QQY9P0UGC",
+                                "name": "Rikuhachima Aru"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#QQY9P0UGC",
+                                "name": "Rikuhachima Aru"
+                            },
+                            "destructionPercent": 62,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#QQY9P0UGC",
+                                "name": "Rikuhachima Aru"
+                            },
+                            "destructionPercent": 26,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000004,
                     "name": "Builder's Workshop",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
+                    "destructionPercent": 28,
                     "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "attackCount": 1,
+                    "totalLooted": 3045,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#QQY9P0UGC",
+                                "name": "Rikuhachima Aru"
+                            },
+                            "destructionPercent": 28,
+                            "stars": 0
+                        }
+                    ]
                 },
                 {
                     "id": 70000005,
@@ -2483,11 +2519,27 @@
                     "id": 70000007,
                     "name": "Skeleton Park",
                     "districtHallLevel": 4,
-                    "destructionPercent": 33,
-                    "stars": 1,
-                    "attackCount": 1,
-                    "totalLooted": 4160,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 12167,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#QQY9P0UGC",
+                                "name": "Rikuhachima Aru"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#QQY9P0UGC",
+                                "name": "Rikuhachima Aru"
+                            },
+                            "destructionPercent": 90,
+                            "stars": 2
+                        },
                         {
                             "attacker": {
                                 "tag": "#LGCJR2GLG",
