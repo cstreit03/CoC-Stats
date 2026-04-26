@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
-    "capitalTotalLoot": 737657,
+    "capitalTotalLoot": 746435,
     "raidsCompleted": 9,
-    "totalAttacks": 171,
-    "enemyDistrictsDestroyed": 67,
+    "totalAttacks": 174,
+    "enemyDistrictsDestroyed": 68,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -140,10 +140,10 @@
         {
             "tag": "#V0GYVCJ9",
             "name": "YAGO",
-            "attacks": 3,
+            "attacks": 6,
             "attackLimit": 5,
             "bonusAttackLimit": 1,
-            "capitalResourcesLooted": 11496
+            "capitalResourcesLooted": 20274
         },
         {
             "tag": "#L2PQ9QLUC",
@@ -2346,9 +2346,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/UCaOeLb60hnDVWZHYNaqnbzBZM3GKeV_ABVnlBBc7lE.png"
                 }
             },
-            "attackCount": 12,
+            "attackCount": 15,
             "districtCount": 9,
-            "districtsDestroyed": 4,
+            "districtsDestroyed": 5,
             "districts": [
                 {
                     "id": 70000000,
@@ -2372,20 +2372,46 @@
                     "id": 70000002,
                     "name": "Wizard Valley",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 75,
+                    "stars": 2,
+                    "attackCount": 2,
+                    "totalLooted": 7715,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#V0GYVCJ9",
+                                "name": "YAGO"
+                            },
+                            "destructionPercent": 75,
+                            "stars": 2
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#V0GYVCJ9",
+                                "name": "YAGO"
+                            },
+                            "destructionPercent": 32,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000003,
                     "name": "Balloon Lagoon",
                     "districtHallLevel": 5,
-                    "destructionPercent": 95,
-                    "stars": 2,
-                    "attackCount": 2,
-                    "totalLooted": 9630,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 10693,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#V0GYVCJ9",
+                                "name": "YAGO"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
                         {
                             "attacker": {
                                 "tag": "#9C229UGJ",
