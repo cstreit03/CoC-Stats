@@ -2,10 +2,10 @@
     "state": "ongoing",
     "startTime": "20260424T070000.000Z",
     "endTime": "20260427T070000.000Z",
-    "capitalTotalLoot": 746435,
+    "capitalTotalLoot": 760346,
     "raidsCompleted": 9,
-    "totalAttacks": 174,
-    "enemyDistrictsDestroyed": 68,
+    "totalAttacks": 178,
+    "enemyDistrictsDestroyed": 70,
     "offensiveReward": 0,
     "defensiveReward": 0,
     "members": [
@@ -192,6 +192,14 @@
             "attackLimit": 5,
             "bonusAttackLimit": 1,
             "capitalResourcesLooted": 31320
+        },
+        {
+            "tag": "#LPU0GGCJQ",
+            "name": "night dragon",
+            "attacks": 4,
+            "attackLimit": 5,
+            "bonusAttackLimit": 1,
+            "capitalResourcesLooted": 13911
         },
         {
             "tag": "#8RJ8CC8LU",
@@ -2346,9 +2354,9 @@
                     "medium": "https://api-assets.clashofclans.com/badges/200/UCaOeLb60hnDVWZHYNaqnbzBZM3GKeV_ABVnlBBc7lE.png"
                 }
             },
-            "attackCount": 15,
+            "attackCount": 19,
             "districtCount": 9,
-            "districtsDestroyed": 5,
+            "districtsDestroyed": 7,
             "districts": [
                 {
                     "id": 70000000,
@@ -2363,20 +2371,54 @@
                     "id": 70000001,
                     "name": "Barbarian Camp",
                     "districtHallLevel": 5,
-                    "destructionPercent": 0,
-                    "stars": 0,
-                    "attackCount": 0,
-                    "totalLooted": 0
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 11398,
+                    "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#LPU0GGCJQ",
+                                "name": "night dragon"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#LPU0GGCJQ",
+                                "name": "night dragon"
+                            },
+                            "destructionPercent": 85,
+                            "stars": 1
+                        },
+                        {
+                            "attacker": {
+                                "tag": "#LPU0GGCJQ",
+                                "name": "night dragon"
+                            },
+                            "destructionPercent": 50,
+                            "stars": 1
+                        }
+                    ]
                 },
                 {
                     "id": 70000002,
                     "name": "Wizard Valley",
                     "districtHallLevel": 5,
-                    "destructionPercent": 75,
-                    "stars": 2,
-                    "attackCount": 2,
-                    "totalLooted": 7715,
+                    "destructionPercent": 100,
+                    "stars": 3,
+                    "attackCount": 3,
+                    "totalLooted": 10228,
                     "attacks": [
+                        {
+                            "attacker": {
+                                "tag": "#LPU0GGCJQ",
+                                "name": "night dragon"
+                            },
+                            "destructionPercent": 100,
+                            "stars": 3
+                        },
                         {
                             "attacker": {
                                 "tag": "#V0GYVCJ9",
