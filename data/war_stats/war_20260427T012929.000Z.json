@@ -59,7 +59,15 @@
                         "duration": 97
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#9YY90YJQC",
+                    "defenderTag": "#U90CYLQ2",
+                    "stars": 2,
+                    "destructionPercentage": 66,
+                    "order": 22,
+                    "duration": 84
+                }
             },
             {
                 "tag": "#YQYVJ92C",
@@ -83,7 +91,15 @@
                         "duration": 106
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#P2Y22GJ2",
+                    "defenderTag": "#YL0VJ2YY",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 23,
+                    "duration": 93
+                }
             },
             {
                 "tag": "#Q92RUPUJ",
@@ -266,7 +282,15 @@
                 "name": "night dragon",
                 "townhallLevel": 15,
                 "mapPosition": 16,
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#9YY90YJQC",
+                    "defenderTag": "#LPU0GGCJQ",
+                    "stars": 3,
+                    "destructionPercentage": 100,
+                    "order": 21,
+                    "duration": 81
+                }
             },
             {
                 "tag": "#LRR0LP2J0",
@@ -305,7 +329,15 @@
                         "duration": 104
                     }
                 ],
-                "opponentAttacks": 0
+                "opponentAttacks": 1,
+                "bestOpponentAttack": {
+                    "attackerTag": "#P2Y22GJ2",
+                    "defenderTag": "#2P8LYJCUR",
+                    "stars": 2,
+                    "destructionPercentage": 93,
+                    "order": 24,
+                    "duration": 106
+                }
             }
         ]
     },
@@ -318,9 +350,9 @@
             "medium": "https://api-assets.clashofclans.com/badges/200/bknttvK6yB8eTN5Z9zl_OIcO2nuu9GhF3lLrMrlSaM4.png"
         },
         "clanLevel": 28,
-        "attacks": 8,
-        "stars": 12,
-        "destructionPercentage": 20.0,
+        "attacks": 12,
+        "stars": 22,
+        "destructionPercentage": 37.95,
         "members": [
             {
                 "tag": "#8VQPU0VU",
@@ -393,6 +425,24 @@
                 "name": "Yippee Ki-yay",
                 "townhallLevel": 15,
                 "mapPosition": 15,
+                "attacks": [
+                    {
+                        "attackerTag": "#9YY90YJQC",
+                        "defenderTag": "#LPU0GGCJQ",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 21,
+                        "duration": 81
+                    },
+                    {
+                        "attackerTag": "#9YY90YJQC",
+                        "defenderTag": "#U90CYLQ2",
+                        "stars": 2,
+                        "destructionPercentage": 66,
+                        "order": 22,
+                        "duration": 84
+                    }
+                ],
                 "opponentAttacks": 1,
                 "bestOpponentAttack": {
                     "attackerTag": "#99VJ2VVPQ",
@@ -430,6 +480,24 @@
                 "name": "::Juggernaut::",
                 "townhallLevel": 18,
                 "mapPosition": 12,
+                "attacks": [
+                    {
+                        "attackerTag": "#P2Y22GJ2",
+                        "defenderTag": "#YL0VJ2YY",
+                        "stars": 3,
+                        "destructionPercentage": 100,
+                        "order": 23,
+                        "duration": 93
+                    },
+                    {
+                        "attackerTag": "#P2Y22GJ2",
+                        "defenderTag": "#2P8LYJCUR",
+                        "stars": 2,
+                        "destructionPercentage": 93,
+                        "order": 24,
+                        "duration": 106
+                    }
+                ],
                 "opponentAttacks": 0
             },
             {
