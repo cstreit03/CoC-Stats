@@ -42,7 +42,7 @@
                 <div id="headerMeta" class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-gray-400"></div>
             </div>
             <div class="flex flex-col items-end gap-1 shrink-0">
-                <button onclick="window.syncData()" class="sync-btn refresh-pill" title="Pull fresh data from Clash of Clans">
+                <button onclick="window.syncData()" class="sync-btn refresh-pill" title="Reload the latest data (collected hourly)">
                     <span class="live-dot"></span>
                     <span id="lastUpdated" class="hidden sm:inline">Loading…</span>
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
@@ -122,7 +122,7 @@
                     <div class="flex items-center gap-3">
                         <h2 class="section-title">Wars</h2>
                         <span id="warCount" class="text-[11px] md:text-[11px] font-mono text-gray-500">0 / 0</span>
-                        <button onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Sync Data">
+                        <button onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Reload latest data">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                         </button>
                     </div>
@@ -166,7 +166,7 @@
                     <div id="warDetailHeader" class="flex flex-col lg:flex-row lg:flex-wrap justify-between items-start lg:items-center gap-y-4 mb-6 px-1">
                         <div class="flex items-center gap-3">
                             <h2 class="section-title">War Details</h2>
-                            <button id="syncDetailBtn" onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Sync Data">
+                            <button id="syncDetailBtn" onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Reload latest data">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                             </button>
                         </div>
@@ -292,7 +292,7 @@
                 <div class="flex flex-col lg:flex-row lg:flex-wrap justify-between items-start lg:items-center gap-y-4 mb-6 px-1">
                     <div class="flex items-center gap-3">
                         <h2 class="section-title">Raids</h2>
-                        <button onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Sync Data">
+                        <button onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Reload latest data">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                         </button>
                     </div>

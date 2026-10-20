@@ -74,50 +74,34 @@ Cloudflare Worker (worker/)
  └─ everything else       ─► static dashboard (public/)
 ```
 
-Each hourly run stores the clan profile and roster (one snapshot per day), the current war, the CWL group and its wars, the last raid weekends, and the public war log. The war log is also used to finalise wars whose last snapshot was taken before they ended.
+Each hourly run stores the clan profile and roster (one snapshot per day), the current war, the CWL group and its wars, the latest raid weekends, and the public war log. The war log is also used to finalise wars whose last snapshot was taken before they ended.
 
-When someone opens the dashboard it also asks the Worker to refresh. The Worker only does so if the last pull was more than `REFRESH_MIN_MINUTES` (default 10) ago, so a live war stays current while people are watching without hammering the API.
+Only the hourly job talks to the Clash of Clans API. The dashboard's reload buttons just re-read the latest collected data from the Worker.
+
+The database and its tables are created automatically: `wrangler deploy` provisions the D1 database, and the Worker creates its tables on first use.
 
 ## Setup (Cloudflare)
 
 Requires Node 18+ and a free Cloudflare account.
 
-### 1. Clash of Clans API key
-Create a key at [developer.clashofclans.com](https://developer.clashofclans.com) and whitelist the IP **45.79.218.79** ([RoyaleAPI proxy](https://docs.royaleapi.com/proxy.html)). Cloudflare Workers don't have a fixed IP, so the proxy is what makes the key work.
+1. **API key.** Create a key at [developer.clashofclans.com](https://developer.clashofclans.com) with the IP **45.79.218.79** allowed ([RoyaleAPI proxy](https://docs.royaleapi.com/proxy.html)). Cloudflare Workers don't have a fixed IP, so the proxy is what makes the key work.
+2. **Clan tag.** Set `CLAN_TAG` in `wrangler.toml`.
+3. **Deploy.**
+   ```bash
+   npm install
+   npx wrangler login
+   npx wrangler secret put COC_API_TOKEN
+   npm run deploy
+   ```
+   Data appears after the next hourly run.
+4. **Custom domain (optional).** In the Cloudflare dashboard: **Workers & Pages → coc-stats → Settings → Domains & Routes → Add → Custom domain**. The domain's DNS must be on Cloudflare; if it currently points at GitHub Pages, remove that record and disable Pages.
+5. **Auto-deploy on push (optional).** **Workers & Pages → coc-stats → Settings → Build → Connect** to the GitHub repo, and add `COC_API_TOKEN` there as a secret.
 
-### 2. Create the database and configure
-```bash
-npm install
-npx wrangler login
-npx wrangler d1 create coc-stats          # copy the database_id it prints
-```
-In `wrangler.toml`, paste the `database_id` and set `CLAN_TAG`. Then:
-```bash
-npm run db:migrate                         # creates the tables
-npx wrangler secret put COC_API_TOKEN      # your CoC API token
-npx wrangler secret put ADMIN_TOKEN        # any long random string
-npm run deploy
-```
-
-### 3. First run
-History starts from the first collection. To trigger it immediately instead of waiting for the next hour:
-```bash
-curl -X POST -H "Authorization: Bearer <ADMIN_TOKEN>" https://<your-worker>/api/admin/collect
-```
-
-### 4. Custom domain
-In the Cloudflare dashboard: **Workers & Pages → coc-stats → Settings → Domains & Routes → Add → Custom domain** (e.g. `clash.example.com`). The domain's DNS must be on Cloudflare. If it is currently pointed at GitHub Pages, remove that CNAME first and disable GitHub Pages.
-
-### 5. Auto-deploy on push (optional)
-**Workers & Pages → coc-stats → Settings → Build → Connect** to the GitHub repo. Cloudflare then deploys on every push to `main` — no GitHub Actions needed.
-
-### Changing the schedule
-Edit `crons` in `wrangler.toml` (e.g. `"*/15 * * * *"` for every 15 minutes) and redeploy. The free plan allows this comfortably.
+To change the schedule, edit `crons` in `wrangler.toml` and redeploy.
 
 ## Local development
 ```bash
 cp .dev.vars.example .dev.vars             # add your token
-npm run db:migrate:local
 npm run dev                                # http://localhost:8787
 curl "http://localhost:8787/__scheduled"   # run the hourly job once
 ```
@@ -132,7 +116,7 @@ curl "http://localhost:8787/__scheduled"   # run the hourly job once
 | `GET /api/raids` | Raid weekends |
 | `GET /api/history` | Daily clan counters, joins/leaves, war log |
 | `GET /api/players/:tag` | One member's daily history |
-| `POST /api/refresh` | Rate-limited fresh pull |
+| `GET /api/status` | Time of the last collection |
 
 ## Advanced Analytics
 

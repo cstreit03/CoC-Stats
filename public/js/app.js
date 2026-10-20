@@ -11,8 +11,7 @@ import {
     fetchRaids,
     fetchCwl,
     fetchHistory,
-    fetchStatus,
-    requestRefresh
+    fetchStatus
 } from './api.js';
 import { 
     renderMembers, 
@@ -132,22 +131,22 @@ function updateFreshness() {
     const el = document.getElementById('lastUpdated');
     const dot = document.querySelector('.live-dot');
     if (!el) return;
-    if (!lastCollectAt) { el.innerText = 'Refresh'; dot?.classList.add('stale'); return; }
+    if (!lastCollectAt) { el.innerText = 'Waiting for first update'; dot?.classList.add('stale'); return; }
     el.innerText = `Updated ${timeAgo(lastCollectAt)}`;
     dot?.classList.toggle('stale', Date.now() - Date.parse(lastCollectAt) > 2 * 3600000);
 }
 
+/** Reloads the latest collected data from the Worker (it does not contact Clash of Clans). */
 window.syncData = async () => {
     const btns = document.querySelectorAll('.sync-btn');
     btns.forEach(b => b.classList.add('syncing'));
     try {
-        await requestRefresh();
         await init();
         if (activeWarFilename) {
             const warData = fullWarHistory.find(w => w.filename === activeWarFilename);
             if (warData) renderWarDetail(warData, fullWarHistory);
         }
-    } catch (e) { console.error("Sync failed", e); } finally {
+    } catch (e) { console.error("Reload failed", e); } finally {
         setTimeout(() => btns.forEach(b => b.classList.remove('syncing')), 500);
     }
 };
@@ -195,9 +194,6 @@ async function init() {
     if (clanData) {
         latestClanData = clanData;
         allMembers = clanData.memberList || [];
-        if (!lastCollectAt && clanData.snapshotDate) {
-            document.getElementById('lastUpdated').innerText = `Snapshot ${clanData.snapshotDate}`;
-        }
         updateDisplay();
         renderAbout(latestClanData);
         bindAboutPageEvents();
@@ -435,7 +431,7 @@ window.loadWarDetail = loadWarDetail;
 window.openWar = (id) => { switchView('war', false); loadWarDetail(id); };
 
 document.addEventListener('DOMContentLoaded', () => {
-    preRoute(); boot();
+    preRoute(); init();
     document.getElementById('tab-about')?.addEventListener('click', () => { switchView('about'); if (latestClanData) { renderAbout(latestClanData); renderOverviewKpis(reportContext()); } bindAboutPageEvents(); });
     document.getElementById('tab-members')?.addEventListener('click', () => {
         switchView('members');
@@ -520,8 +516,3 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateFreshness, 60000);
 });
 
-/** Shows cached data immediately, then asks the Worker for fresh data. */
-async function boot() {
-    await init();
-    if (await requestRefresh()) await init();
-}

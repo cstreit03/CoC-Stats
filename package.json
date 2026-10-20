@@ -4,11 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev --test-scheduled",
-    "deploy": "wrangler deploy",
-    "db:migrate": "wrangler d1 migrations apply coc-stats --remote",
-    "db:migrate:local": "wrangler d1 migrations apply coc-stats --local"
+    "deploy": "wrangler deploy"
   },
   "devDependencies": {
-    "wrangler": "4.42.0"
+    "wrangler": "4.151.2"
   }
 }

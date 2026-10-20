@@ -1,5 +1,5 @@
 /**
- * Data collection: runs on the hourly cron and on throttled visitor refreshes.
+ * Data collection: runs on the hourly cron.
  * Each step is independent so one failing endpoint doesn't block the rest.
  */
 import { CocApi, encodeTag, parseCocDate } from './coc.js';

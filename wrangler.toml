@@ -8,15 +8,14 @@ directory = "./public"
 binding = "ASSETS"
 run_worker_first = ["/api/*"]
 
-# Hourly data collection. Change to e.g. "*/15 * * * *" for tighter war tracking.
+# Hourly data collection.
 [triggers]
 crons = ["0 * * * *"]
 
 [[d1_databases]]
 binding = "DB"
 database_name = "coc-stats"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
-migrations_dir = "migrations"
+# No database_id: `wrangler deploy` creates the database on first deploy.
 
 [vars]
 # Clan tag including the '#'.
@@ -24,9 +23,6 @@ CLAN_TAG = "#CPJQ2JV"
 # RoyaleAPI proxy lets the CoC API key work from Cloudflare's changing IPs.
 # Whitelist 45.79.218.79 on your key at developer.clashofclans.com.
 COC_API_BASE = "https://cocproxy.royaleapi.dev/v1"
-# A visitor can trigger a fresh pull at most this often (minutes).
-REFRESH_MIN_MINUTES = "10"
 
-# Secrets (set with `npx wrangler secret put <NAME>`):
+# Secret (set with `npx wrangler secret put COC_API_TOKEN`):
 #   COC_API_TOKEN  - Clash of Clans API token
-#   ADMIN_TOKEN    - any long random string; protects /api/admin/*

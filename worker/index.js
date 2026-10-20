@@ -2,10 +2,10 @@
  * CoC Stats Worker
  * - Serves the static dashboard from ./public (via the ASSETS binding)
  * - Serves JSON from D1 under /api/*
- * - Collects fresh data from the Clash of Clans API on a cron schedule
+ * - Collects fresh data from the Clash of Clans API on the hourly cron
  */
 import { collect } from './collect.js';
-import { getMeta, setMeta } from './store.js';
+import { ensureSchema } from './schema.js';
 import * as api from './api.js';
 
 const json = (body, status = 200, maxAge = 60) => new Response(JSON.stringify(body), {
@@ -13,35 +13,11 @@ const json = (body, status = 200, maxAge = 60) => new Response(JSON.stringify(bo
     headers: { 'Content-Type': 'application/json', 'Cache-Control': `public, max-age=${maxAge}` }
 });
 
-const isAdmin = (req, env) => env.ADMIN_TOKEN && req.headers.get('Authorization') === `Bearer ${env.ADMIN_TOKEN}`;
-
-/**
- * Lets a visitor pull fresh data, at most once per REFRESH_MIN_MINUTES across
- * all visitors, so the dashboard is current whenever someone is looking.
- */
-async function refresh(env) {
-    const minMs = Number(env.REFRESH_MIN_MINUTES || 10) * 60_000;
-    const last = await getMeta(env.DB, 'last_refresh_attempt');
-    if (last && Date.now() - Date.parse(last) < minMs) {
-        return json({ refreshed: false, lastAttempt: last }, 200, 0);
-    }
-    await setMeta(env.DB, 'last_refresh_attempt', new Date().toISOString());
-    const report = await collect(env);
-    return json({ refreshed: true, report }, 200, 0);
-}
-
 async function handleApi(req, env, url) {
     const db = env.DB;
     const path = url.pathname.replace(/^\/api\/?/, '');
 
-    if (req.method === 'POST') {
-        if (path === 'refresh') return refresh(env);
-        if (path.startsWith('admin/')) {
-            if (!isAdmin(req, env)) return json({ error: 'unauthorized' }, 401, 0);
-            if (path === 'admin/collect') return json(await collect(env), 200, 0);
-        }
-        return json({ error: 'not found' }, 404, 0);
-    }
+    if (req.method !== 'GET') return json({ error: 'method not allowed' }, 405, 0);
 
     switch (path) {
         case 'clan': return json(await api.getClan(db));
@@ -63,13 +39,18 @@ export default {
     async fetch(req, env) {
         const url = new URL(req.url);
         if (url.pathname.startsWith('/api/')) {
-            try { return await handleApi(req, env, url); }
+            try {
+                await ensureSchema(env.DB);
+                return await handleApi(req, env, url);
+            }
             catch (e) { console.error(e); return json({ error: e.message }, 500, 0); }
         }
         return env.ASSETS.fetch(req);
     },
 
     async scheduled(event, env, ctx) {
-        ctx.waitUntil(collect(env).then(r => console.log('collect', JSON.stringify(r.steps))));
+        ctx.waitUntil(ensureSchema(env.DB)
+            .then(() => collect(env))
+            .then(r => console.log('collect', JSON.stringify(r.steps))));
     }
 };
