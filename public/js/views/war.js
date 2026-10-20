@@ -2,12 +2,12 @@
  * War detail: scoreboard, prediction, both sides' attacks and the base-by-base matchup.
  */
 import { store } from '../store.js';
-import { esc, thImg, starsHtml, icons, warPhase, num, parseCoc, fmtDate } from '../util.js';
-import { seg, chips, bindToggle, select, bindSelect, kpi, exportButtons, mountList } from '../ui.js';
+import { esc, thImg, starsHtml, icons, warPhase, num, parseCoc, fmtDate, debounce } from '../util.js';
+import { seg, chips, bindToggle, select, bindSelect, kpi, exportButtons, mountPagedList } from '../ui.js';
 import { warHero, fillPredictions, startCountdowns } from './warParts.js';
 import { exportExcel, exportPdf, bindExports } from '../export.js';
 
-const state = { side: 'us', filter: 'all', sort: 'pos' };
+const state = { side: 'us', filter: 'all', sort: 'pos', q: '' };
 
 function attackCell(a, targets, apm, attackerTh) {
     if (!a) return `<div class="atk empty">No attack</div>`;
@@ -55,6 +55,7 @@ export function render(root, { id }) {
     const phase = warPhase(war);
     const apm = war.attacksPerMember || 2;
     // Nothing to show per attack before battle day; open on the base matchups.
+    if (state.lastWar !== id) state.q = '';
     if (phase === 'preparation' && state.side !== 'matchup' && state.lastWar !== id) state.side = 'matchup';
     state.lastWar = id;
     const ourMap = new Map(war.clan.members.map(m => [m.tag, m]));
@@ -90,21 +91,25 @@ export function render(root, { id }) {
                     ${seg('side', 'View', [{ value: 'us', label: 'Our attacks' }, { value: 'them', label: 'Their attacks' }, { value: 'matchup', label: 'Base matchups' }], state.side)}
                     ${chips('filter', 'Filter members', [{ value: 'all', label: 'Everyone' }, { value: 'left', label: 'Attacks left' }, { value: 'noTriple', label: 'No three-star' }], state.filter)}
                     ${select('sort', 'Sort', [{ value: 'pos', label: 'Map position' }, { value: 'stars', label: 'Stars' }, { value: 'th', label: 'Town Hall' }], state.sort, { hideLabel: true })}
+                    <label class="field" style="flex:1;min-width:160px"><span class="sr-only">Search players</span>
+                        <input class="input" type="search" id="rosterSearch" placeholder="Search player" value="${esc(state.q)}" autocomplete="off"></label>
                 </div>
                 <div id="rosterHead"></div>
                 <div id="roster"></div>
             </section>
         </div>`;
 
-    const roster = mountList(root.querySelector('#roster'), { className: 'roster', step: 10, noun: 'bases', emptyHtml: '<p class="empty">No members match this filter.</p>' });
+    const roster = mountPagedList(root.querySelector('#roster'), { className: 'roster', pageSize: 10, noun: 'bases', emptyHtml: '<p class="empty">No members match this filter.</p>' });
     const head = root.querySelector('#rosterHead');
+    const matches = (m) => !state.q || (m?.name || '').toLowerCase().includes(state.q.toLowerCase());
     const draw = () => {
         if (state.side === 'matchup') {
             const n = war.teamSize;
             const byPos = (list) => new Map(list.map(m => [m.mapPosition, m]));
             const a = byPos(war.clan.members), b = byPos(war.opponent.members);
+            const positions = Array.from({ length: n }, (_, i) => i + 1).filter(p => !state.q || matches(a.get(p)) || matches(b.get(p)));
             head.innerHTML = `<div class="row" style="justify-content:space-between;font-size:12px;color:var(--muted);padding:0 12px 8px"><span>Our base · stars they took</span><span>Stars we took · their base</span></div>`;
-            roster.setItems(Array.from({ length: n }, (_, i) => matchupRow(a.get(i + 1), b.get(i + 1))));
+            roster.setItems(positions.map(p => matchupRow(a.get(p), b.get(p))));
             return;
         }
         head.innerHTML = '';
@@ -112,6 +117,7 @@ export function render(root, { id }) {
         const targets = state.side === 'us' ? theirMap : ourMap;
         const stars = (m) => (m.attacks || []).reduce((s, x) => s + x.stars, 0);
         const rows = list
+            .filter(matches)
             .filter(m => state.filter === 'all'
                 || (state.filter === 'left' && (m.attacks || []).length < apm)
                 || (state.filter === 'noTriple' && !(m.attacks || []).some(x => x.stars === 3)))
@@ -123,6 +129,7 @@ export function render(root, { id }) {
     bindToggle(root, 'side', v => { state.side = v; draw(); });
     bindToggle(root, 'filter', v => { state.filter = v; draw(); });
     bindSelect(root, 'sort', v => { state.sort = v; draw(); });
+    root.querySelector('#rosterSearch').addEventListener('input', debounce(e => { state.q = e.target.value; draw(); }, 120));
     draw();
 
     // Export: one row per attack for both sides.

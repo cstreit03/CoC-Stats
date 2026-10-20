@@ -1,13 +1,13 @@
 /**
  * Wars: the current war (with prediction) and the full war history.
  */
-import { store } from '../store.js';
+import { store, members } from '../store.js';
 import { esc, debounce } from '../util.js';
-import { seg, chips, bindToggle, kpi, noDataMessage, mountList } from '../ui.js';
+import { seg, chips, bindToggle, kpi, noDataMessage, mountPagedList, select, bindSelect } from '../ui.js';
 import { warHistory, record } from '../stats.js';
 import { warHero, warRow, fillPredictions, startCountdowns } from './warParts.js';
 
-const state = { result: 'all', kind: 'all', q: '' };
+const state = { result: 'all', kind: 'all', q: '', member: '' };
 
 export function render(root) {
     if (!store.clan) { root.innerHTML = `<h1 class="sr-only">Wars</h1>${noDataMessage()}`; return; }
@@ -35,25 +35,29 @@ export function render(root) {
                 <div class="controls" style="margin-bottom:12px">
                     ${seg('result', 'Filter by result', [{ value: 'all', label: 'All' }, { value: 'win', label: 'Wins' }, { value: 'loss', label: 'Losses' }, { value: 'draw', label: 'Draws' }], state.result)}
                     ${chips('kind', 'War type', [{ value: 'all', label: 'All types' }, { value: 'regular', label: 'Regular' }, { value: 'cwl', label: 'CWL' }], state.kind)}
-                    <label class="field" style="flex:1;min-width:180px"><span class="sr-only">Search opponent</span>
-                        <input class="input" type="search" id="warSearch" placeholder="Search opponent" value="${esc(state.q)}" autocomplete="off"></label>
+                    <label class="field" style="flex:1;min-width:180px"><span class="sr-only">Search opponent clan</span>
+                        <input class="input" type="search" id="warSearch" placeholder="Search clan name or tag" value="${esc(state.q)}" autocomplete="off"></label>
+                    ${select('member', 'Member in war', [{ value: '', label: 'Any member' }, ...[...members()].sort((a, b) => a.name.localeCompare(b.name)).map(m => ({ value: m.tag, label: `With ${m.name}` }))], state.member, { hideLabel: true })}
                 </div>
                 <div id="warList"></div>
             </section>
         </div>`;
 
-    const warList = mountList(root.querySelector('#warList'), { className: 'list', step: 10, noun: 'wars', emptyHtml: '<p class="empty">No wars match these filters.</p>' });
+    const warList = mountPagedList(root.querySelector('#warList'), { className: 'list', pageSize: 10, noun: 'wars', emptyHtml: '<p class="empty">No wars match these filters.</p>' });
     const draw = () => {
         const q = state.q.trim().toLowerCase();
         const list = past
             .filter(e => state.result === 'all' || e.result === state.result)
             .filter(e => state.kind === 'all' || e.kind === state.kind)
-            .filter(e => !q || (e.opponent?.name || '').toLowerCase().includes(q));
+            .filter(e => !q || (e.opponent?.name || '').toLowerCase().includes(q) || (e.opponent?.tag || '').toLowerCase().includes(q))
+            // Only tracked wars have line-ups, so a member filter shows tracked wars only.
+            .filter(e => !state.member || e.war?.clan.members?.some(m => m.tag === state.member));
         warList.setItems(list.map(warRow));
     };
 
     bindToggle(root, 'result', v => { state.result = v; draw(); });
     bindToggle(root, 'kind', v => { state.kind = v; draw(); });
+    bindSelect(root, 'member', v => { state.member = v; draw(); });
     root.querySelector('#warSearch').addEventListener('input', debounce(e => { state.q = e.target.value; draw(); }, 120));
     draw();
 

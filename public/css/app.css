@@ -398,8 +398,14 @@ a.list-item:hover .li-title { color: var(--accent); }
 .member-card:hover .li-title { color: var(--accent); }
 .member-stats { display: flex; gap: 14px; font-size: 12px; color: var(--muted); margin-top: 2px; }
 .member-stats b { color: var(--text-2); font-weight: 600; }
-.league { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: none; min-width: 56px; font-size: 12px; color: var(--muted); }
-.league img { width: 28px; height: 28px; }
+.member-stats span { display: flex; flex-direction: column; line-height: 1.3; }
+.league {
+    display: grid; grid-template-rows: 32px auto auto; justify-items: center; align-content: center; gap: 2px;
+    flex: none; width: 104px; text-align: center; font-size: 12px; color: var(--muted);
+}
+.league img, .league-icon-gap { width: 32px; height: 32px; object-fit: contain; }
+.league-name { line-height: 1.25; max-width: 100%; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.league-trophies { font-weight: 700; color: var(--text); font-size: 13px; }
 
 /* ---------- Wars ---------- */
 .war-hero { padding: 0; overflow: hidden; }
@@ -533,3 +539,16 @@ details.disclosure > div { padding-bottom: 14px; }
 
 .cap-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 10px; margin-top: 12px; }
 .cap-footer .note { margin-right: 4px; }
+
+.pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-top: 12px; }
+.pager-btns { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.pager-num {
+    min-width: 38px; height: 38px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--line);
+    background: var(--surface); font-size: 14px; font-weight: 600; color: var(--text-2);
+}
+.pager-num:hover:not([disabled]) { border-color: var(--line-strong); color: var(--text); }
+.pager-num[aria-current="page"] { background: var(--accent-solid); border-color: var(--accent-solid); color: #1a1405; }
+.pager-num[disabled] { opacity: 0.4; cursor: default; }
+.pager-gap { padding: 0 2px; color: var(--muted); }
+@media (max-width: 520px) { .pager { justify-content: center; } }
+#warList, #roster, [id$="Table"], #standings, #plAttacks, #plRaids, #msEvents, #msTenure, #rdMatrix, #cwlScoreTable { scroll-margin-top: 76px; }

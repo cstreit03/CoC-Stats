@@ -34,7 +34,11 @@ function card(m) {
             <p class="li-sub">${roleNames[m.role] || ''} · TH${m.townHallLevel} · XP ${m.expLevel}</p>
             <p class="member-stats"><span>Donated <b>${num(m.donations)}</b></span><span>Received <b>${num(m.donationsReceived)}</b></span></p>
         </div>
-        <div class="league">${league?.iconUrls?.small ? `<img src="${league.iconUrls.small}" alt="">` : ''}<span>${esc(league?.name || '')}</span></div>
+        <div class="league">
+            ${league?.iconUrls?.small ? `<img src="${league.iconUrls.small}" alt="">` : '<span class="league-icon-gap"></span>'}
+            <span class="league-name">${esc(league?.name || 'Unranked')}</span>
+            <span class="league-trophies" aria-label="${m.trophies} trophies">🏆 ${num(m.trophies)}</span>
+        </div>
     </a>`;
 }
 

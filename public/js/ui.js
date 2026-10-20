@@ -87,6 +87,59 @@ function onCap(container, getState, redraw) {
 }
 
 /**
+ * Pagination bar: "1–10 of 139 wars · ‹ 1 2 3 … 14 ›".
+ */
+function pagerHtml(page, pageSize, total, noun) {
+    const pages = Math.ceil(total / pageSize);
+    if (pages <= 1) return '';
+    const first = (page - 1) * pageSize + 1, last = Math.min(total, page * pageSize);
+    // First, last, and a window around the current page, with gaps as ellipses.
+    const nums = [...new Set([1, pages, page - 1, page, page + 1].filter(n => n >= 1 && n <= pages))].sort((x, y) => x - y);
+    const items = [];
+    nums.forEach((n, i) => {
+        if (i && n - nums[i - 1] > 1) items.push('<span class="pager-gap" aria-hidden="true">…</span>');
+        items.push(`<button type="button" class="pager-num" data-page="${n}" ${n === page ? 'aria-current="page"' : ''} aria-label="Page ${n}">${n}</button>`);
+    });
+    return `<nav class="pager no-print" aria-label="Pages of ${esc(noun)}">
+        <span class="note" role="status">${first}–${last} of ${total} ${esc(noun)}</span>
+        <div class="pager-btns">
+            <button type="button" class="pager-num" data-page="${page - 1}" ${page === 1 ? 'disabled' : ''} aria-label="Previous page">‹</button>
+            ${items.join('')}
+            <button type="button" class="pager-num" data-page="${page + 1}" ${page === pages ? 'disabled' : ''} aria-label="Next page">›</button>
+        </div>
+    </nav>`;
+}
+
+function onPage(container, getState, redraw) {
+    container.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-page]');
+        if (!btn || btn.disabled || !container.contains(btn)) return;
+        getState().page = +btn.dataset.page;
+        redraw();
+        // Bring the top of the list back into view and keep keyboard focus in the pager.
+        if (container.getBoundingClientRect().top < 0) container.scrollIntoView({ block: 'start' });
+        container.querySelector('.pager [aria-current="page"]')?.focus({ preventScroll: true });
+    });
+}
+
+/**
+ * A paged list of pre-rendered items (rows, cards), `pageSize` per page.
+ * Returns { setItems(htmlItems) }; filters call setItems, which goes back to page 1.
+ */
+export function mountPagedList(container, { className = '', pageSize = 10, noun = 'items', emptyHtml = '<p class="empty">Nothing to show.</p>' } = {}) {
+    const st = { items: [], page: 1 };
+    const draw = () => {
+        if (!st.items.length) { container.innerHTML = emptyHtml; return; }
+        const start = (st.page - 1) * pageSize;
+        container.innerHTML = `<div class="${className}">${st.items.slice(start, start + pageSize).join('')}</div>${pagerHtml(st.page, pageSize, st.items.length, noun)}`;
+    };
+    onPage(container, () => st, draw);
+    return {
+        setItems(items) { st.items = items; st.page = 1; draw(); }
+    };
+}
+
+/**
  * A capped list of pre-rendered items (cards, rows).
  * Returns { setItems(htmlItems) }; filters should call setItems, which resets the cap.
  */
@@ -104,12 +157,12 @@ export function mountList(container, { className = '', step = 10, noun = 'items'
 }
 
 /**
- * Sortable, accessible data table, capped at `limit` rows until expanded.
+ * Sortable, accessible data table, `limit` rows per page.
  * columns: [{ key, label, num?, value(row), render?(row), sticky?, title? }]
  * Returns { setRows(rows), getSorted() } and renders into `container`.
  */
 export function mountTable(container, { columns, rows, sort, caption, rowClass, limit = 10, noun = 'rows' }) {
-    let state = { rows, sort: sort || null, shown: limit, step: limit };
+    let state = { rows, sort: sort || null, page: 1 };
 
     const sorted = () => {
         if (!state.sort) return state.rows;
@@ -126,7 +179,8 @@ export function mountTable(container, { columns, rows, sort, caption, rowClass, 
 
     const render = () => {
         const all = sorted();
-        const list = all.slice(0, state.shown);
+        state.page = Math.min(state.page, Math.max(1, Math.ceil(all.length / limit)));
+        const list = all.slice((state.page - 1) * limit, state.page * limit);
         container.innerHTML = `<div class="table-wrap"><table class="table">
             ${caption ? `<caption class="sr-only">${esc(caption)}</caption>` : ''}
             <thead><tr>${columns.map(c => {
@@ -138,9 +192,9 @@ export function mountTable(container, { columns, rows, sort, caption, rowClass, 
             <tbody>${list.length === 0 ? `<tr><td colspan="${columns.length}" class="muted center">No data</td></tr>` : list.map(r =>
                 `<tr class="${rowClass ? rowClass(r) : ''}">${columns.map(c =>
                     `<td class="${[c.num ? 'num' : '', c.sticky ? 'sticky-col' : '', c.className || ''].join(' ')}">${c.render ? c.render(r) : esc(c.value(r) ?? '—')}</td>`).join('')}</tr>`).join('')}</tbody>
-        </table></div>${capFooter(state.shown, all.length, noun, limit)}`;
+        </table></div>${pagerHtml(state.page, limit, all.length, noun)}`;
     };
-    onCap(container, () => state, render);
+    onPage(container, () => state, render);
 
     container.addEventListener('click', (e) => {
         const btn = e.target.closest('[data-sort]');
@@ -151,13 +205,14 @@ export function mountTable(container, { columns, rows, sort, caption, rowClass, 
         state.sort = state.sort?.key === key
             ? { key, dir: state.sort.dir === 'asc' ? 'desc' : 'asc' }
             : { key, dir: firstDir };
+        state.page = 1;
         render();
         container.querySelector(`[data-sort="${key}"]`)?.focus();
     });
 
     render();
     return {
-        setRows(rows) { state.rows = rows; state.shown = limit; render(); },
+        setRows(rows) { state.rows = rows; state.page = 1; render(); },
         getSorted: sorted
     };
 }
