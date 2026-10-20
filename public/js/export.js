@@ -27,10 +27,10 @@ async function ensure(lib) {
 }
 
 /**
- * The PDF's built-in font only covers Latin-1: stars become '*', accents are
- * dropped (Việt -> Viet) and other scripts fall back to '?'.
+ * The PDF's built-in font only covers Latin-1: accents are dropped
+ * (Việt -> Viet) and other scripts fall back to '?'.
  */
-const pdfText = (v) => typeof v !== 'string' ? v : v.replace(/★/g, '*').normalize('NFKD')
+const pdfText = (v) => typeof v !== 'string' ? v : v.normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '').replace(/[^\x20-\x7e\xa0-\xff]/g, '?');
 
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');

@@ -45,10 +45,10 @@ export function mountScorecard(root, season) {
         })),
         { key: 'attacks', label: 'Attacks', num: true, value: r => r.attacks, render: r => `${r.attacks}/${r.wars}` },
         { key: 'stars', label: 'Stars', num: true, value: r => r.stars },
-        { key: 'triples', label: '3★', num: true, value: r => r.triples },
+        { key: 'triples', label: '3-star', num: true, value: r => r.triples },
         { key: 'avg', label: 'Avg %', num: true, value: r => r.avgDestruction, render: r => r.avgDestruction == null ? '—' : `${Math.round(r.avgDestruction)}%` },
         { key: 'missed', label: 'Missed', num: true, value: r => r.missed, render: r => r.missed ? `<span class="down">${r.missed}</span>` : '0' },
-        { key: 'conceded', label: 'Def ★', num: true, value: r => r.conceded, title: 'Stars conceded on own base' },
+        { key: 'conceded', label: 'Def stars', num: true, value: r => r.conceded, title: 'Stars conceded on own base' },
         { key: 'score', label: 'Score', num: true, value: r => r.score, render: r => `<b>${round2(r.score)}</b>` }
     ];
 
@@ -86,11 +86,11 @@ export function mountScorecard(root, season) {
         xlsx: () => exportScorecardExcel(title, season, compute(), weights, rounds),
         pdf: () => {
             const { summary } = compute();
-            const header = ['#', 'Player', 'TH', ...Array.from({ length: rounds }, (_, i) => `R${i + 1}`), 'Attacks', 'Stars', '3★', 'Avg %', 'Missed', 'Def ★', 'Score'];
+            const header = ['#', 'Player', 'TH', ...Array.from({ length: rounds }, (_, i) => `R${i + 1}`), 'Attacks', 'Stars', '3-star', 'Avg %', 'Missed', 'Def stars', 'Score'];
             const body = summary.map(p => [p.rank, p.name, p.th,
                 ...Array.from({ length: rounds }, (_, i) => {
                     const x = p.rounds[i + 1];
-                    return !x ? '' : x.missed ? 'MISS' : x.pending ? '…' : `${x.stars}★ ${x.destruction}% #${x.defPos}`;
+                    return !x ? '' : x.missed ? 'MISS' : x.pending ? '…' : `${x.stars} star ${x.destruction}% #${x.defPos}`;
                 }),
                 `${p.attacks}/${p.wars}`, p.stars, p.triples, p.avgDestruction == null ? '' : Math.round(p.avgDestruction), p.missed, p.conceded, round2(p.score)]);
             const rules = Object.keys(defaultWeights).map(k => `${weightLabels[k]}: ${weights[k]}`).join(' · ');

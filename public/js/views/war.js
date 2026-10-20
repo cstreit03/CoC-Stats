@@ -27,7 +27,7 @@ function rosterRow(m, targets, apm) {
     return `<div class="roster-row">
         <span class="pos">#${m.mapPosition}</span>
         <div class="row min-w-0"><img class="th-sm" src="${thImg(m.townhallLevel)}" alt="TH${m.townhallLevel}">
-            <div class="min-w-0"><p class="li-title">${esc(m.name)}</p><p class="li-sub">TH${m.townhallLevel}${m.bestOpponentAttack ? ` · defended ${m.bestOpponentAttack.stars}★` : ''}</p></div></div>
+            <div class="min-w-0"><p class="li-title">${esc(m.name)}</p><p class="li-sub">TH${m.townhallLevel}${m.bestOpponentAttack ? ` · conceded ${m.bestOpponentAttack.stars} star${m.bestOpponentAttack.stars === 1 ? '' : 's'}` : ''}</p></div></div>
         <div class="attacks" style="--apm:${apm}">${cells}</div>
         <div class="roster-total"><b>${total}</b><p class="li-sub">stars</p></div>
     </div>`;

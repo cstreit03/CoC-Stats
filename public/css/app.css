@@ -405,7 +405,8 @@ a.list-item:hover .li-title { color: var(--accent); }
 }
 .league img, .league-icon-gap { width: 32px; height: 32px; object-fit: contain; }
 .league-name { line-height: 1.25; max-width: 100%; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.league-trophies { font-weight: 700; color: var(--text); font-size: 13px; }
+.league-trophies { font-weight: 700; color: var(--text); font-size: 13px; display: inline-flex; align-items: center; gap: 4px; }
+.league-trophies svg { width: 14px; height: 14px; color: var(--accent-solid); }
 
 /* ---------- Wars ---------- */
 .war-hero { padding: 0; overflow: hidden; }
@@ -458,8 +459,9 @@ a.war-row:hover .li-title { color: var(--accent); }
 .atk-target { color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .atk-bar { height: 4px; background: var(--surface-3); border-radius: 4px; margin-top: 6px; overflow: hidden; }
 .atk-bar span { display: block; height: 100%; background: var(--chart-good); }
-.stars { color: var(--accent); letter-spacing: 1px; white-space: nowrap; }
-.stars .off { color: var(--line-strong); }
+.stars { color: var(--accent-solid); white-space: nowrap; display: inline-flex; align-items: center; gap: 1px; vertical-align: -2px; }
+.stars .off { color: var(--line-strong); display: inline-flex; gap: 1px; }
+.stars svg { width: 14px; height: 14px; flex: none; }
 .roster-total { text-align: right; min-width: 52px; }
 .roster-total b { font-size: 18px; }
 @media (max-width: 700px) {

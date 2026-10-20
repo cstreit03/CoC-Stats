@@ -2,7 +2,7 @@
  * Members: searchable, filterable roster for any snapshot date.
  */
 import { store, members, fetchMembersOn } from '../store.js';
-import { esc, num, thImg, roleNames, roleWeight, fmtDate, debounce } from '../util.js';
+import { esc, num, thImg, roleNames, roleWeight, fmtDate, debounce, icons } from '../util.js';
 import { seg, bindToggle, select, bindSelect, noDataMessage, mountList } from '../ui.js';
 
 const state = { role: 'all', sort: 'league', q: '', date: null, list: null };
@@ -37,7 +37,7 @@ function card(m) {
         <div class="league">
             ${league?.iconUrls?.small ? `<img src="${league.iconUrls.small}" alt="">` : '<span class="league-icon-gap"></span>'}
             <span class="league-name">${esc(league?.name || 'Unranked')}</span>
-            <span class="league-trophies" aria-label="${m.trophies} trophies">🏆 ${num(m.trophies)}</span>
+            <span class="league-trophies" aria-label="${m.trophies} trophies">${icons.trophy}${num(m.trophies)}</span>
         </div>
     </a>`;
 }

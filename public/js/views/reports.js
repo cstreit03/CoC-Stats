@@ -41,11 +41,11 @@ const REPORTS = [
                 { key: 'missed', label: 'Missed', num: true, value: r => r.missed, render: r => r.missed ? `<span class="down">${r.missed}</span>` : '0' },
                 { key: 'usage', label: 'Usage', num: true, value: r => r.usage, render: r => pctCell(r.usage), exportValue: r => r.usage == null ? '' : +(r.usage * 100).toFixed(1) },
                 { key: 'stars', label: 'Stars', num: true, value: r => r.stars },
-                { key: 'avg', label: 'Avg ★', num: true, value: r => r.avgStars, render: r => fix(r.avgStars), exportValue: r => r.avgStars == null ? '' : +r.avgStars.toFixed(2) },
-                { key: 'triple', label: '3★ rate', num: true, value: r => r.tripleRate, render: r => pctCell(r.tripleRate), exportValue: r => r.tripleRate == null ? '' : +(r.tripleRate * 100).toFixed(1) },
+                { key: 'avg', label: 'Avg stars', num: true, value: r => r.avgStars, render: r => fix(r.avgStars), exportValue: r => r.avgStars == null ? '' : +r.avgStars.toFixed(2) },
+                { key: 'triple', label: '3-star rate', num: true, value: r => r.tripleRate, render: r => pctCell(r.tripleRate), exportValue: r => r.tripleRate == null ? '' : +(r.tripleRate * 100).toFixed(1) },
                 { key: 'dest', label: 'Avg %', num: true, value: r => r.avgDestruction, render: r => r.avgDestruction == null ? '—' : `${r.avgDestruction.toFixed(1)}%`, exportValue: r => r.avgDestruction == null ? '' : +r.avgDestruction.toFixed(1) },
                 { key: 'thdiff', label: 'Avg TH hit', num: true, title: 'Average Town Hall difference of targets (+ = attacked up)', value: r => r.avgThDiff, render: r => r.avgThDiff == null ? '—' : (r.avgThDiff > 0 ? '+' : '') + r.avgThDiff.toFixed(1), exportValue: r => r.avgThDiff == null ? '' : +r.avgThDiff.toFixed(2) },
-                { key: 'def', label: 'Def ★ conceded', num: true, value: r => r.avgConceded, render: r => fix(r.avgConceded), exportValue: r => r.avgConceded == null ? '' : +r.avgConceded.toFixed(2) }
+                { key: 'def', label: 'Def stars conceded', num: true, value: r => r.avgConceded, render: r => fix(r.avgConceded), exportValue: r => r.avgConceded == null ? '' : +r.avgConceded.toFixed(2) }
             ];
             const allColumns = columns;
             const visibleColumns = columns.filter(c => !c.hidden);
@@ -61,7 +61,7 @@ const REPORTS = [
                 body.querySelector('#mpKpis').innerHTML = [
                     kpi('Wars', t.wars, rangeLabel(s.range)),
                     kpi('Avg stars', fix(t.avgStars), `${num(t.attacks)} attacks`),
-                    kpi('3★ rate', pctCell(t.tripleRate), `${t.triples} triples`),
+                    kpi('3-star rate', pctCell(t.tripleRate), `${t.triples} triples`),
                     kpi('Missed attacks', t.missed, t.wars ? `${(t.missed / t.wars).toFixed(1)} per war` : '', t.missed ? 'down' : ''),
                     kpi('Avg destruction', t.avgDestruction == null ? '—' : `${t.avgDestruction.toFixed(1)}%`)
                 ].join('');
@@ -118,7 +118,7 @@ const REPORTS = [
                     kpi('Win rate', rec.total ? `${Math.round(rec.winRate * 100)}%` : '—'),
                     kpi('Star rate', pctCell(t.starRate), 'tracked wars'),
                     kpi('Avg stars / attack', fix(t.avgStars)),
-                    kpi('3★ rate', pctCell(t.tripleRate))
+                    kpi('3-star rate', pctCell(t.tripleRate))
                 ].join('');
                 if (!table) table = mountTable(body.querySelector('#wsTable'), { columns: visible, rows: list, sort: { key: 'date', dir: 'desc' }, caption: 'All wars', noun: 'wars' });
                 else table.setRows(list);

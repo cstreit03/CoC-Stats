@@ -10,10 +10,10 @@ Live example: https://clash.kenaz.dev
 
 ## Features
 
-### Overview
+### <img src="demo-images/icons/overview.svg" width="20" height="20" alt=""> Overview
 Headline numbers (members and 30-day change, recent form, all-time wins, capital gold), the current war with its prediction, recent results, the membership trend and the clan profile.
 
-### ⚔️ Wars
+### <img src="demo-images/icons/wars.svg" width="20" height="20" alt=""> Wars
 The current war sits on top: preparation or battle day, a countdown, and the **predicted chance of a win, draw or loss**. Below it is the full war history (tracked wars plus the clan's public war log), filterable by result, war type and opponent. Results only appear once a war has ended.
 
 ![Wars](demo-images/wars.png)
@@ -31,7 +31,7 @@ Every remaining attack is simulated 2,000 times (1,200 for wars bigger than 30 v
 
 Stars already on the board are kept; only the remaining attacks are simulated.
 
-### 🛡️ CWL
+### <img src="demo-images/icons/cwl.svg" width="20" height="20" alt=""> CWL
 Clan War League is captured every hour during league week:
 - **Standings & rounds:** group table (with the +10 star war-win bonus, W-L-D, destruction) and our result in each round
 - **Member scorecard:** a spreadsheet of every lineup slot per round (target, Town Hall gap, stars, destruction, missed attacks, stars conceded), scored with **rules you set** (points per star, per % destruction, three-star bonus, attacking up, missed attack, defense)
@@ -44,12 +44,12 @@ The API only exposes the current season's group, so CWL history starts from the 
 
 ![CWL scorecard](demo-images/cwl-scorecard.png)
 
-### 📈 Reports
+### <img src="demo-images/icons/reports.svg" width="20" height="20" alt=""> Reports
 Pick a report, view it, export it to **Excel or PDF**:
 
 | Report | What's in it |
 |---|---|
-| Member war performance | Attacks used/missed, usage %, stars, avg stars, 3★ rate, avg destruction, TH targeted, stars conceded. Filter by time range, war type, current/former members |
+| Member war performance | Attacks used/missed, usage %, stars, avg stars, 3-star rate, avg destruction, TH targeted, stars conceded. Filter by time range, war type, current/former members |
 | Clan war statistics | Record and win rate, star rate, wins/losses/draws by month, stars won per war, every war result |
 | CWL scorecard | The scorecard above, for any recorded season |
 | Membership | Members per day, weekly joins/departures, roster change log, tenure |
@@ -61,17 +61,17 @@ Pick a report, view it, export it to **Excel or PDF**:
 
 ![Clan war statistics](demo-images/report-war-stats.png)
 
-### 👥 Members & player profiles
+### <img src="demo-images/icons/members.svg" width="20" height="20" alt=""> Members & player profiles
 Search, filter by role, sort, and look at the roster on any past date. Each player has a profile: tenure, war attacks and misses, average stars, capital gold, donations over time and every war attack, also exportable.
 
 ![Player profile](demo-images/player.png)
 
-### 🏆 Raids
+### <img src="demo-images/icons/raids.svg" width="20" height="20" alt=""> Raids
 Per-weekend player summary (attacks, capital gold, stars, damage), our raids on other capitals, and defenses.
 
 ![Raids](demo-images/raids.png)
 
-### 📱 Mobile, light/dark and accessibility
+### <img src="demo-images/icons/mobile.svg" width="20" height="20" alt=""> Mobile, light/dark and accessibility
 - Bottom tab bar on phones, top navigation on desktop
 - Light and dark themes: follows the device, with a toggle in the header
 - Built for keyboard and screen readers: skip link, landmarks, labelled controls and charts, sortable tables announced with `aria-sort`, visible focus, and reduced-motion support. Every page passes an automated WCAG 2.1 AA audit (axe-core) in both themes, at phone and desktop widths
@@ -121,7 +121,8 @@ In `wrangler.toml`, set:
 1. Cloudflare dashboard → **Workers & Pages → Create → Import a repository** → pick this repo. Keep the deploy command `npx wrangler deploy`.
 2. Add the API token as a **runtime** secret: open the Worker → **Settings → Variables and Secrets → Add** → Type **Secret**, name `COC_API_TOKEN`, paste the token, **Deploy**.
 
-> ⚠️ Don't use the **Variables and secrets** box inside **Settings → Build**. Those are only available while building; the running Worker can't see them, and the site will report "COC_API_TOKEN secret is not set".
+> [!WARNING]
+> Don't use the **Variables and secrets** box inside **Settings → Build**. Those are only available while building; the running Worker can't see them, and the site will report "COC_API_TOKEN secret is not set".
 
 **Option B: from your machine**
 ```bash

@@ -94,7 +94,7 @@ export function predictionHtml(p, war, detailed) {
                 <div class="table-wrap"><table class="table">
                     <thead><tr><th scope="col"></th><th scope="col" class="num">Us</th><th scope="col" class="num">Opponent</th></tr></thead>
                     <tbody>
-                        <tr><td>Skill (expected ★ vs. equal TH)</td><td class="num">${p.inputs.ourSkill.toFixed(2)}</td><td class="num">${p.inputs.theirSkill.toFixed(2)}</td></tr>
+                        <tr><td>Skill (expected stars vs. equal TH)</td><td class="num">${p.inputs.ourSkill.toFixed(2)}</td><td class="num">${p.inputs.theirSkill.toFixed(2)}</td></tr>
                         <tr><td>Attack usage</td><td class="num">${pc(p.inputs.ourUsage)}</td><td class="num">${pc(p.inputs.theirUsage)}</td></tr>
                         <tr><td>Average Town Hall</td><td class="num">${p.inputs.ourAvgTh.toFixed(1)}</td><td class="num">${p.inputs.theirAvgTh.toFixed(1)}</td></tr>
                         <tr><td>Projected stars (80% range)</td><td class="num">${Math.round(p.us.mean)} (${p.us.lo}–${p.us.hi})</td><td class="num">${Math.round(p.them.mean)} (${p.them.lo}–${p.them.hi})</td></tr>
