@@ -1,6 +1,6 @@
 # CoC Clan Stats Dashboard
 
-A dashboard for tracking a Clash of Clans clan: roster history, wars, Clan War League, raid weekends and trend reports, with live win-probability analysis for the current war.
+A dashboard for tracking a Clash of Clans clan: wars with live win/draw/loss predictions, Clan War League with a member scorecard, raid weekends, roster history and exportable reports. Works on phones and desktops, in light and dark mode.
 
 It runs entirely on Cloudflare's free tier. A Worker serves the dashboard, pulls fresh data from the Clash of Clans API every hour, and stores the history in a D1 (SQLite) database. There are no GitHub Actions and no data committed to the repo.
 
@@ -11,64 +11,77 @@ Live example: https://clash.kenaz.dev
 ## Features
 
 ### Overview
-Headline numbers (members and 30-day change, current or last war, recent form, capital gold), then the clan profile: description, war record, capital and join requirements.
-
-### Members
-The roster filtered by role and sorted by league, trophies, Town Hall, XP or donations. Pick any past date to see the roster as it was that day.
-
-Click a member anywhere on the site to open their **player profile**: how long they've been in the clan, war attacks used and missed, average stars and three-star rate, capital gold, donations over time and recent attacks.
-
-![Members and player profile](demo-images/members.png)
+Headline numbers (members and 30-day change, recent form, all-time wins, capital gold), the current war with its prediction, recent results, the membership trend and the clan profile.
 
 ### ⚔️ Wars
-Every tracked war (regular and CWL), filterable by result and date range.
+The current war sits on top: preparation or battle day, a countdown, and the **predicted chance of a win, draw or loss**. Below it is the full war history (tracked wars plus the clan's public war log), filterable by result, war type and opponent. Results only appear once a war has ended.
 
-![War history](demo-images/wars.png)
+![Wars](demo-images/wars.png)
 
-Each war has a full breakdown:
-- **Win probability** for wars in progress, based on:
-  - each attacker's month-to-date star average for their likely matchup
-  - Town Hall ceiling caps (e.g. TH14 vs TH18 = 1–2 star max)
-  - defense insurance when the opponent lacks high-level threats
-  - late-war volatility and the score gap vs. stars still available
-- Metrics: average stars, average destruction, win probability, cleanup needed
-- Both rosters, attacks and defenses, with filters and sorting
+Each tracked war opens a breakdown: scoreboard, prediction (with how it was calculated), averages, three-stars, attacks left or missed, bases to clean up, and the line-up three ways: **our attacks**, **their attacks**, and **base-by-base matchups**. Export any war to Excel or PDF.
 
 ![War detail](demo-images/war-detail.png)
 
+#### How the prediction works
+Every remaining attack is simulated 2,000 times (1,200 for wars bigger than 30 v 30):
+- **Attacker skill.** Our clan's level comes from its war log. Each member is then adjusted up or down from that level by their own tracked attacks, allowing for the Town Halls they hit. The opponent's level comes from **their public war log**, which the Worker fetches when a war starts. If their log is private, it comes from their win/loss record; with no data at all, from how our recent opponents performed against us. Attacks they make during the war refine it further.
+- **Town Hall gap.** Attacking up is penalised and capped; attacking down helps a little.
+- **Attack usage.** How often each side actually uses its attacks.
+- **Form.** Every run draws each clan's level from its recent wars, so good and bad days, perfect clears that end in draws, and upsets happen as often as they really do. Backtested on our last 30 wars, the model gives 44% win / 50% draw / 6% loss against the actual 47% / 40% / 13%.
+
+Stars already on the board are kept; only the remaining attacks are simulated.
+
 ### 🛡️ CWL
 Clan War League is captured every hour during league week:
-- **Group standings** with the +10 star war-win bonus, W-L-D and total destruction
-- **Round-by-round results**; click a round for its full war breakdown
-- **Member performance**: attacks used, stars, triples, average destruction, stars conceded
+- **Standings & rounds:** group table (with the +10 star war-win bonus, W-L-D, destruction) and our result in each round
+- **Member scorecard:** a spreadsheet of every lineup slot per round (target, Town Hall gap, stars, destruction, missed attacks, stars conceded), scored with **rules you set** (points per star, per % destruction, three-star bonus, attacking up, missed attack, defense)
+
+The scorecard's **Excel export keeps the scoring live**: the weights sit on a *Scoring* sheet, every attack's score is a formula, and the summary uses `SUMIFS`, so you can keep adjusting the rules in Excel.
 
 The API only exposes the current season's group, so CWL history starts from the first league after deployment.
 
-![CWL](demo-images/cwl.png)
+![CWL standings](demo-images/cwl.png)
 
-### 🏆 Raids
-Raid weekend summary (attacks, capital gold, stars, damage per player), plus attack and defense logs per district.
-
-![Raids](demo-images/raids.png)
+![CWL scorecard](demo-images/cwl-scorecard.png)
 
 ### 📈 Reports
-- **Membership over time** with weekly joins and departures, and a log of recent roster changes
-- **War record by month** (tracked wars plus the public war log)
-- **Win rate, average stars, three-star rate and missed attacks** for the selected range
-- **War reliability**: attacks used vs. available per member
-- **War stars achieved** per war, **stars earned breakdown** and **star conversion rates**
-- **Top donors** this season with donation ratio
-- **Town Hall spread** of the current roster
-- **Raid weekends**: capital gold per weekend
+Pick a report, view it, export it to **Excel or PDF**:
 
-Time ranges: all time, last 90/30/7 days, this month, previous war.
+| Report | What's in it |
+|---|---|
+| Member war performance | Attacks used/missed, usage %, stars, avg stars, 3★ rate, avg destruction, TH targeted, stars conceded. Filter by time range, war type, current/former members |
+| Clan war statistics | Record and win rate, star rate, wins/losses/draws by month, stars won per war, every war result |
+| CWL scorecard | The scorecard above, for any recorded season |
+| Membership | Members per day, weekly joins/departures, roster change log, tenure |
+| Donations | Donated, received, net and ratio for any snapshot date |
+| Raid weekends | Capital gold per weekend and a player-by-weekend gold sheet |
+| Roster composition | Town Hall levels, roles and leagues |
 
 ![Reports](demo-images/reports.png)
 
-### 📱 Mobile
-Every view works on phones.
+![Clan war statistics](demo-images/report-war-stats.png)
 
-<img src="demo-images/mobile.png" alt="Mobile" width="320">
+### 👥 Members & player profiles
+Search, filter by role, sort, and look at the roster on any past date. Each player has a profile: tenure, war attacks and misses, average stars, capital gold, donations over time and every war attack, also exportable.
+
+![Player profile](demo-images/player.png)
+
+### 🏆 Raids
+Per-weekend player summary (attacks, capital gold, stars, damage), our raids on other capitals, and defenses.
+
+![Raids](demo-images/raids.png)
+
+### 📱 Mobile, light/dark and accessibility
+- Bottom tab bar on phones, top navigation on desktop
+- Light and dark themes: follows the device, with a toggle in the header
+- Built for keyboard and screen readers: skip link, landmarks, labelled controls and charts, sortable tables announced with `aria-sort`, visible focus, and reduced-motion support. Every page passes an automated WCAG 2.1 AA audit (axe-core) in both themes, at phone and desktop widths
+
+<p>
+<img src="demo-images/mobile.png" alt="Mobile, dark" width="280">
+<img src="demo-images/mobile-light.png" alt="Mobile, light" width="280">
+</p>
+
+![Light mode](demo-images/light.png)
 
 ## How it works
 
@@ -81,7 +94,7 @@ Cloudflare Worker (worker/)
 
 Each hourly run stores:
 - the clan profile and roster (one snapshot per day, so membership and donations can be charted over time)
-- the current war
+- the current war, plus the opponent's clan profile and public war-log summary (for the prediction)
 - the CWL group and all of its wars
 - the latest raid weekends
 - the public war log, which is also used to finalise wars whose last snapshot was taken before they ended
@@ -155,7 +168,9 @@ curl "http://localhost:8787/__scheduled"   # run the hourly job once
 
 ## Project layout
 ```
-public/       Static dashboard (HTML, CSS, JS modules)
+public/       Static dashboard (HTML, CSS, JS modules; no build step)
+  js/views/   One module per page
+  js/predict.js  War outcome simulation
 worker/       Cloudflare Worker: API, hourly collector, D1 schema
 wrangler.toml Worker name, clan tag, cron schedule, D1 binding
 ```

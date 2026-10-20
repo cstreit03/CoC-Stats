@@ -14,12 +14,15 @@ export class CocApi {
         this.token = env.COC_API_TOKEN;
     }
 
-    /** GET a path; returns parsed JSON, or null on 404 (e.g. no CWL group). */
-    async get(path) {
+    /**
+     * GET a path; returns parsed JSON, or null for "not found" statuses
+     * (404 by default; the CWL group endpoint also answers 500 outside league week).
+     */
+    async get(path, { nullOn = [404] } = {}) {
         const res = await fetch(`${this.base}${path}`, {
             headers: { Authorization: `Bearer ${this.token}`, Accept: 'application/json' }
         });
-        if (res.status === 404) return null;
+        if (nullOn.includes(res.status)) return null;
         if (!res.ok) {
             const body = await res.text().catch(() => '');
             throw new Error(`CoC API ${res.status} for ${path}: ${body.slice(0, 200)}`);

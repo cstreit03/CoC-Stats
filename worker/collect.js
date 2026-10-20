@@ -4,6 +4,7 @@
  */
 import { CocApi, encodeTag, parseCocDate } from './coc.js';
 import { storeClan, storeWar, storeRaid, setMeta } from './store.js';
+import { clanWarProfile } from './opponent.js';
 
 export async function collect(env) {
     const db = env.DB;
@@ -45,6 +46,7 @@ export async function collect(env) {
         const isCwl = await db.prepare("SELECT 1 FROM wars WHERE kind = 'cwl' AND ours = 1 AND start_time = ?")
             .bind(war.startTime).first();
         if (isCwl) return 'cwl war (stored by cwl step)';
+        await attachOpponentProfile(api, db, `war_${war.startTime}`, war, war.opponent?.tag);
         await storeWar(db, war, { kind: 'regular', clanTag });
         return war.state;
     });
@@ -66,7 +68,7 @@ export async function collect(env) {
 }
 
 async function collectCwl(api, db, clanTag, tag) {
-    const group = await api.get(`/clans/${tag}/currentwar/leaguegroup`);
+    const group = await api.get(`/clans/${tag}/currentwar/leaguegroup`, { nullOn: [404, 500] });
     if (!group || !group.season) return 'no active CWL';
 
     await db.prepare('INSERT OR REPLACE INTO cwl_groups (season, state, data, updated_at) VALUES (?, ?, ?, ?)')
@@ -83,6 +85,10 @@ async function collectCwl(api, db, clanTag, tag) {
             const war = await api.get(`/clanwarleagues/wars/${encodeTag(warTag)}`);
             if (!war || war.state === 'notInWar') continue;
             const ours = war.clan?.tag === clanTag || war.opponent?.tag === clanTag;
+            if (ours) {
+                const opponentTag = war.clan?.tag === clanTag ? war.opponent?.tag : war.clan?.tag;
+                await attachOpponentProfile(api, db, `cwl_${warTag.replace('#', '')}`, war, opponentTag);
+            }
             await storeWar(db, { attacksPerMember: 1, ...war }, {
                 kind: 'cwl', ours, season: group.season, round: i + 1, warTag, clanTag
             });
@@ -105,13 +111,13 @@ async function collectWarLog(api, db, tag) {
     await db.batch(items.map(item => db.prepare('INSERT OR REPLACE INTO warlog (end_time, result, data) VALUES (?, ?, ?)')
         .bind(item.endTime, item.result || null, JSON.stringify(item))));
 
-    const byEnd = new Map(items.map(i => [i.endTime, i]));
-    const { results } = await db.prepare("SELECT id, data, end_time FROM wars WHERE kind = 'regular' AND state != 'warEnded'").all();
+    const { results } = await db.prepare("SELECT id, data, end_time FROM wars WHERE kind = 'regular' AND state = 'inWar'").all();
     let finalised = 0;
     for (const row of results) {
-        const entry = byEnd.get(row.end_time);
-        if (!entry || parseCocDate(row.end_time) > new Date()) continue;
+        if (parseCocDate(row.end_time) > new Date()) continue;
         const war = JSON.parse(row.data);
+        const entry = findLogEntry(items, war);
+        if (!entry) continue;
         for (const side of ['clan', 'opponent']) {
             Object.assign(war[side], {
                 stars: entry[side].stars,
@@ -125,4 +131,30 @@ async function collectWarLog(api, db, tag) {
         finalised++;
     }
     return `${items.length} entries, ${finalised} wars finalised`;
+}
+
+/**
+ * Adds the opponent's clan profile and war-log summary to a war (input for
+ * the win predictor). Fetched once per war and carried over on later updates.
+ */
+async function attachOpponentProfile(api, db, id, war, opponentTag) {
+    const row = await db.prepare('SELECT data FROM wars WHERE id = ?').bind(id).first();
+    const existing = row ? JSON.parse(row.data).opponentProfile : null;
+    if (existing) { war.opponentProfile = existing; return; }
+    if (!opponentTag || war.state === 'warEnded') return;
+    try {
+        war.opponentProfile = await clanWarProfile(api, opponentTag);
+    } catch (e) {
+        console.error('opponent profile', e);
+    }
+}
+
+/**
+ * The war log's end time can differ from the war's by a second, so match on
+ * the opponent and an end time within an hour.
+ */
+export function findLogEntry(items, war) {
+    const end = parseCocDate(war.endTime).getTime();
+    return items.find(i => i.opponent?.tag === war.opponent?.tag
+        && Math.abs(parseCocDate(i.endTime).getTime() - end) < 3600_000);
 }
