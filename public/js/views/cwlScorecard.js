@@ -62,7 +62,7 @@ export function mountScorecard(root, season) {
     const draw = () => {
         const { summary } = compute();
         if (!summary.length) { tableEl.innerHTML = '<p class="empty">No attacks yet this season.</p>'; return; }
-        if (!table) table = mountTable(tableEl, { columns: columns(), rows: summary, sort: { key: 'score', dir: 'desc' }, caption: 'CWL scorecard' });
+        if (!table) table = mountTable(tableEl, { columns: columns(), rows: summary, sort: { key: 'score', dir: 'desc' }, caption: 'CWL scorecard', limit: 15, noun: 'members' });
         else table.setRows(summary);
     };
 

@@ -3,7 +3,7 @@
  */
 import { store, members, fetchMembersOn } from '../store.js';
 import { esc, num, thImg, roleNames, roleWeight, fmtDate, debounce } from '../util.js';
-import { seg, bindToggle, select, bindSelect, noDataMessage } from '../ui.js';
+import { seg, bindToggle, select, bindSelect, noDataMessage, mountList } from '../ui.js';
 
 const state = { role: 'all', sort: 'league', q: '', date: null, list: null };
 
@@ -56,9 +56,10 @@ export function render(root) {
                 ${select('date', 'Roster on', store.memberDates.map((d, i) => ({ value: d, label: i === 0 ? `${fmtDate(d)} (latest)` : fmtDate(d) })), state.date)}
             </div>
             ${seg('role', 'Filter by role', [{ value: 'all', label: 'All' }, { value: 'leader', label: 'Leader' }, { value: 'coLeader', label: 'Co-leaders' }, { value: 'admin', label: 'Elders' }, { value: 'member', label: 'Members' }], state.role)}
-            <div class="member-grid" id="memberGrid" aria-live="polite"></div>
+            <div id="memberGrid"></div>
         </div>`;
 
+    const grid = mountList(root.querySelector('#memberGrid'), { className: 'member-grid', step: 12, noun: 'members', emptyHtml: '<p class="empty">No members match.</p>' });
     const draw = () => {
         const q = state.q.trim().toLowerCase();
         const all = roster();
@@ -66,7 +67,7 @@ export function render(root) {
             .filter(m => state.role === 'all' || m.role === state.role)
             .filter(m => !q || m.name.toLowerCase().includes(q) || m.tag.toLowerCase().includes(q))
             .sort(sorters[state.sort]);
-        root.querySelector('#memberGrid').innerHTML = list.map(card).join('') || '<p class="empty">No members match.</p>';
+        grid.setItems(list.map(card));
         root.querySelector('#memberCount').textContent = `${list.length === all.length ? `${all.length} members` : `${list.length} of ${all.length} members`}${state.date !== latest ? ` on ${fmtDate(state.date)}` : ''}`;
     };
 

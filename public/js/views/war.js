@@ -3,7 +3,7 @@
  */
 import { store } from '../store.js';
 import { esc, thImg, starsHtml, icons, warPhase, num, parseCoc, fmtDate } from '../util.js';
-import { seg, chips, bindToggle, select, bindSelect, kpi, exportButtons } from '../ui.js';
+import { seg, chips, bindToggle, select, bindSelect, kpi, exportButtons, mountList } from '../ui.js';
 import { warHero, fillPredictions, startCountdowns } from './warParts.js';
 import { exportExcel, exportPdf, bindExports } from '../export.js';
 
@@ -91,20 +91,23 @@ export function render(root, { id }) {
                     ${chips('filter', 'Filter members', [{ value: 'all', label: 'Everyone' }, { value: 'left', label: 'Attacks left' }, { value: 'noTriple', label: 'No three-star' }], state.filter)}
                     ${select('sort', 'Sort', [{ value: 'pos', label: 'Map position' }, { value: 'stars', label: 'Stars' }, { value: 'th', label: 'Town Hall' }], state.sort, { hideLabel: true })}
                 </div>
-                <div class="roster" id="roster"></div>
+                <div id="rosterHead"></div>
+                <div id="roster"></div>
             </section>
         </div>`;
 
+    const roster = mountList(root.querySelector('#roster'), { className: 'roster', step: 10, noun: 'bases', emptyHtml: '<p class="empty">No members match this filter.</p>' });
+    const head = root.querySelector('#rosterHead');
     const draw = () => {
-        const el = root.querySelector('#roster');
         if (state.side === 'matchup') {
             const n = war.teamSize;
             const byPos = (list) => new Map(list.map(m => [m.mapPosition, m]));
             const a = byPos(war.clan.members), b = byPos(war.opponent.members);
-            el.innerHTML = `<div class="row" style="justify-content:space-between;font-size:12px;color:var(--muted);padding:0 12px"><span>Our base · stars they took</span><span>Stars we took · their base</span></div>`
-                + Array.from({ length: n }, (_, i) => matchupRow(a.get(i + 1), b.get(i + 1))).join('');
+            head.innerHTML = `<div class="row" style="justify-content:space-between;font-size:12px;color:var(--muted);padding:0 12px 8px"><span>Our base · stars they took</span><span>Stars we took · their base</span></div>`;
+            roster.setItems(Array.from({ length: n }, (_, i) => matchupRow(a.get(i + 1), b.get(i + 1))));
             return;
         }
+        head.innerHTML = '';
         const list = state.side === 'us' ? war.clan.members : war.opponent.members;
         const targets = state.side === 'us' ? theirMap : ourMap;
         const stars = (m) => (m.attacks || []).reduce((s, x) => s + x.stars, 0);
@@ -115,7 +118,7 @@ export function render(root, { id }) {
             .sort(state.sort === 'stars' ? (x, y) => stars(y) - stars(x) || x.mapPosition - y.mapPosition
                 : state.sort === 'th' ? (x, y) => y.townhallLevel - x.townhallLevel || x.mapPosition - y.mapPosition
                 : (x, y) => x.mapPosition - y.mapPosition);
-        el.innerHTML = rows.map(m => rosterRow(m, targets, apm)).join('') || '<p class="empty">No members match this filter.</p>';
+        roster.setItems(rows.map(m => rosterRow(m, targets, apm)));
     };
     bindToggle(root, 'side', v => { state.side = v; draw(); });
     bindToggle(root, 'filter', v => { state.filter = v; draw(); });

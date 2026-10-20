@@ -65,7 +65,7 @@ const REPORTS = [
                     kpi('Missed attacks', t.missed, t.wars ? `${(t.missed / t.wars).toFixed(1)} per war` : '', t.missed ? 'down' : ''),
                     kpi('Avg destruction', t.avgDestruction == null ? '—' : `${t.avgDestruction.toFixed(1)}%`)
                 ].join('');
-                if (!table) table = mountTable(body.querySelector('#mpTable'), { columns: visibleColumns, rows, sort: { key: 'stars', dir: 'desc' }, caption: 'Member war performance', tall: true });
+                if (!table) table = mountTable(body.querySelector('#mpTable'), { columns: visibleColumns, rows, sort: { key: 'stars', dir: 'desc' }, caption: 'Member war performance', noun: 'members' });
                 else table.setRows(rows);
             };
             bindToggle(body, 'range', v => { s.range = v; draw(); });
@@ -120,7 +120,7 @@ const REPORTS = [
                     kpi('Avg stars / attack', fix(t.avgStars)),
                     kpi('3★ rate', pctCell(t.tripleRate))
                 ].join('');
-                if (!table) table = mountTable(body.querySelector('#wsTable'), { columns: visible, rows: list, sort: { key: 'date', dir: 'desc' }, caption: 'All wars', tall: true });
+                if (!table) table = mountTable(body.querySelector('#wsTable'), { columns: visible, rows: list, sort: { key: 'date', dir: 'desc' }, caption: 'All wars', noun: 'wars' });
                 else table.setRows(list);
 
                 const months = recordByMonth(list);
@@ -205,8 +205,8 @@ const REPORTS = [
                 { key: 'since', label: 'Member since', value: r => r.since, render: r => r.since ? `${r.before ? 'before ' : ''}${fmtDate(r.since)}` : '—', exportValue: r => r.since ? `${r.before ? 'before ' : ''}${r.since}` : '' },
                 { key: 'days', label: 'Days', num: true, value: r => r.since ? Math.round((Date.now() - Date.parse(r.since)) / 86400000) : null, render: r => r.since ? `${r.before ? '>' : ''}${Math.round((Date.now() - Date.parse(r.since)) / 86400000)}` : '—' }
             ];
-            mountTable(body.querySelector('#msEvents'), { columns: evCols, rows: events, caption: 'Roster changes', tall: true });
-            mountTable(body.querySelector('#msTenure'), { columns: tnCols, rows: tenure, sort: { key: 'days', dir: 'desc' }, caption: 'Tenure', tall: true });
+            mountTable(body.querySelector('#msEvents'), { columns: evCols, rows: events, caption: 'Roster changes', noun: 'changes' });
+            mountTable(body.querySelector('#msTenure'), { columns: tnCols, rows: tenure, sort: { key: 'days', dir: 'desc' }, caption: 'Tenure', noun: 'members' });
             return {
                 xlsx: () => exportExcel('Membership', [
                     { name: 'Members per day', header: ['Date', 'Members', 'Clan level', 'War wins', 'War losses'], body: daily.map(d => [d.date, d.member_count, d.clan_level, d.war_wins, d.war_losses]) },
@@ -239,7 +239,7 @@ const REPORTS = [
                 const given = rows.reduce((a, m) => a + m.donations, 0), got = rows.reduce((a, m) => a + m.donationsReceived, 0);
                 const top = [...rows].sort((a, b) => b.donations - a.donations)[0];
                 body.querySelector('#dnKpis').innerHTML = [kpi('Donated', num(given)), kpi('Received', num(got)), kpi('Top donor', top ? esc(top.name) : '—', top ? num(top.donations) : ''), kpi('Members donating', rows.filter(m => m.donations > 0).length, `of ${rows.length}`)].join('');
-                if (!table) table = mountTable(body.querySelector('#dnTable'), { columns, rows, sort: { key: 'don', dir: 'desc' }, caption: 'Donations', tall: true });
+                if (!table) table = mountTable(body.querySelector('#dnTable'), { columns, rows, sort: { key: 'don', dir: 'desc' }, caption: 'Donations', noun: 'members' });
                 else table.setRows(rows);
             };
             bindSelect(body, 'date', v => { s.date = v; draw(); });
@@ -285,8 +285,8 @@ const REPORTS = [
                 ...recent.map((r, i) => ({ key: `w${i}`, label: fmtDay(parseCoc(r.startTime)), num: true, value: p => p.gold[i], render: p => p.gold[i] == null ? '<span class="muted">—</span>' : num(p.gold[i]) })),
                 { key: 'total', label: 'Total', num: true, value: r => r.total, render: r => `<b>${num(r.total)}</b>` }
             ];
-            mountTable(body.querySelector('#rdTable'), { columns: wkCols, rows: [...raids].reverse(), caption: 'Raid weekends' });
-            const mx = mountTable(body.querySelector('#rdMatrix'), { columns: mxCols, rows: matrix, sort: { key: 'total', dir: 'desc' }, caption: 'Capital gold by player', tall: true });
+            mountTable(body.querySelector('#rdTable'), { columns: wkCols, rows: [...raids].reverse(), caption: 'Raid weekends', noun: 'weekends' });
+            const mx = mountTable(body.querySelector('#rdMatrix'), { columns: mxCols, rows: matrix, sort: { key: 'total', dir: 'desc' }, caption: 'Capital gold by player', noun: 'players' });
             return {
                 xlsx: () => exportExcel('Raid weekends', [{ name: 'Weekends', ...tableData(wkCols, [...raids].reverse()) }, { name: 'Gold by player', ...tableData(mxCols, mx.getSorted()) }]),
                 pdf: () => exportPdf('Raid weekends', `${raids.length} weekends`, [{ title: 'Weekends', ...tableData(wkCols, [...raids].reverse()) }, { title: 'Gold by player', ...tableData(mxCols, mx.getSorted()) }], { charts: [body.querySelector('#rdChart')] })

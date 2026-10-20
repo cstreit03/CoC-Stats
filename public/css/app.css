@@ -340,7 +340,6 @@ a.card:hover { border-color: var(--line-strong); }
 
 /* ---------- Tables ---------- */
 .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); }
-.table-wrap.tall { max-height: 560px; overflow-y: auto; }
 .table { width: 100%; font-size: 14px; }
 .table caption { text-align: left; padding: 0 0 8px; color: var(--muted); font-size: 13px; }
 .table th, .table td { padding: 10px 12px; text-align: left; white-space: nowrap; border-bottom: 1px solid var(--line); }
@@ -531,3 +530,6 @@ details.disclosure > div { padding-bottom: 14px; }
     }
     .page-title { font-size: 22px; }
 }
+
+.cap-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 10px; margin-top: 12px; }
+.cap-footer .note { margin-right: 4px; }

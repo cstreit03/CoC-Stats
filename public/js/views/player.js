@@ -74,14 +74,14 @@ export function render(root, { tag }) {
             { key: 'stars', label: 'Stars', num: true, value: r => r.stars, render: r => starsHtml(r.stars) },
             { key: 'dest', label: 'Destruction', num: true, value: r => r.dest, render: r => `${r.dest}%` }
         ];
-        mountTable(root.querySelector('#plAttacks'), { columns: atkCols, rows: attacks, caption: 'War attacks', tall: true });
+        mountTable(root.querySelector('#plAttacks'), { columns: atkCols, rows: attacks, caption: 'War attacks', noun: 'attacks' });
 
         const raidCols = [
             { key: 'date', label: 'Weekend', value: r => r.raid.startTime, render: r => fmtDate(parseCoc(r.raid.startTime)), exportValue: r => parseCoc(r.raid.startTime).toISOString().slice(0, 10) },
             { key: 'attacks', label: 'Attacks', num: true, value: r => r.m.attacks, render: r => `${r.m.attacks}/${r.m.attackLimit + r.m.bonusAttackLimit}` },
             { key: 'gold', label: 'Capital gold', num: true, value: r => r.m.capitalResourcesLooted, render: r => num(r.m.capitalResourcesLooted) }
         ];
-        if (raids.length) mountTable(root.querySelector('#plRaids'), { columns: raidCols, rows: raids, caption: 'Raid weekends' });
+        if (raids.length) mountTable(root.querySelector('#plRaids'), { columns: raidCols, rows: raids, caption: 'Raid weekends', noun: 'weekends' });
 
         if (daily.length > 1) {
             chart(root.querySelector('#plDonations'), lineConfig(daily.map(d => fmtDay(d.date)), daily.map(d => d.donations), { label: 'Donated', color: cssVar('--series-1') }));

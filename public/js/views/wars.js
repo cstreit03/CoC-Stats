@@ -3,11 +3,11 @@
  */
 import { store } from '../store.js';
 import { esc, debounce } from '../util.js';
-import { seg, chips, bindToggle, kpi, noDataMessage } from '../ui.js';
+import { seg, chips, bindToggle, kpi, noDataMessage, mountList } from '../ui.js';
 import { warHistory, record } from '../stats.js';
 import { warHero, warRow, fillPredictions, startCountdowns } from './warParts.js';
 
-const state = { result: 'all', kind: 'all', q: '', shown: 30 };
+const state = { result: 'all', kind: 'all', q: '' };
 
 export function render(root) {
     if (!store.clan) { root.innerHTML = `<h1 class="sr-only">Wars</h1>${noDataMessage()}`; return; }
@@ -38,25 +38,23 @@ export function render(root) {
                     <label class="field" style="flex:1;min-width:180px"><span class="sr-only">Search opponent</span>
                         <input class="input" type="search" id="warSearch" placeholder="Search opponent" value="${esc(state.q)}" autocomplete="off"></label>
                 </div>
-                <div class="list" id="warList" aria-live="polite"></div>
-                <div class="row" style="justify-content:center;margin-top:12px"><button type="button" class="btn" id="moreWars">Show more</button></div>
+                <div id="warList"></div>
             </section>
         </div>`;
 
+    const warList = mountList(root.querySelector('#warList'), { className: 'list', step: 10, noun: 'wars', emptyHtml: '<p class="empty">No wars match these filters.</p>' });
     const draw = () => {
         const q = state.q.trim().toLowerCase();
         const list = past
             .filter(e => state.result === 'all' || e.result === state.result)
             .filter(e => state.kind === 'all' || e.kind === state.kind)
             .filter(e => !q || (e.opponent?.name || '').toLowerCase().includes(q));
-        root.querySelector('#warList').innerHTML = list.slice(0, state.shown).map(warRow).join('') || '<p class="empty">No wars match these filters.</p>';
-        root.querySelector('#moreWars').hidden = list.length <= state.shown;
+        warList.setItems(list.map(warRow));
     };
 
-    bindToggle(root, 'result', v => { state.result = v; state.shown = 30; draw(); });
-    bindToggle(root, 'kind', v => { state.kind = v; state.shown = 30; draw(); });
+    bindToggle(root, 'result', v => { state.result = v; draw(); });
+    bindToggle(root, 'kind', v => { state.kind = v; draw(); });
     root.querySelector('#warSearch').addEventListener('input', debounce(e => { state.q = e.target.value; draw(); }, 120));
-    root.querySelector('#moreWars').addEventListener('click', () => { state.shown += 30; draw(); });
     draw();
 
     fillPredictions(root);

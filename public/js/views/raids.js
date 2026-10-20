@@ -72,15 +72,15 @@ export function render(root, { start }) {
         { key: 'destroyed', label: 'Districts destroyed', num: true, value: r => r.destroyed, render: r => `${r.destroyed}/${r.districts}${r.done ? ' <span class="badge win">Cleared</span>' : ''}`, exportValue: r => `${r.destroyed}/${r.districts}` }
     ];
     const views = {
-        summary: { columns: playerCols, rows: players, sort: { key: 'gold', dir: 'desc' }, title: 'Players' },
-        attacks: { columns: clanCols('Target clan'), rows: logRows(raid.attackLog, 'defender'), title: 'Our raids' },
-        defenses: { columns: clanCols('Attacking clan'), rows: logRows(raid.defenseLog, 'attacker'), title: 'Defenses' }
+        summary: { columns: playerCols, rows: players, sort: { key: 'gold', dir: 'desc' }, title: 'Players', noun: 'players' },
+        attacks: { columns: clanCols('Target clan'), rows: logRows(raid.attackLog, 'defender'), title: 'Our raids', noun: 'raids' },
+        defenses: { columns: clanCols('Attacking clan'), rows: logRows(raid.defenseLog, 'attacker'), title: 'Defenses', noun: 'defenses' }
     };
     const drawTable = () => {
         const v = views[state.tab];
         const el = root.querySelector('#raidTable');
         el.replaceWith(Object.assign(document.createElement('div'), { id: 'raidTable' }));
-        mountTable(root.querySelector('#raidTable'), { columns: v.columns, rows: v.rows, sort: v.sort, caption: v.title });
+        mountTable(root.querySelector('#raidTable'), { columns: v.columns, rows: v.rows, sort: v.sort, caption: v.title, noun: v.noun });
     };
     bindToggle(root, 'tab', v => { state.tab = v; drawTable(); });
     bindSelect(root, 'weekend', v => { location.hash = `#/raids/${v}`; });

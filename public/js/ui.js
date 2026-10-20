@@ -56,12 +56,60 @@ export function exportButtons() {
 }
 
 /**
- * Sortable, accessible data table.
+ * "Showing 10 of 49 · Show more · Show all" controls under a capped list.
+ * Long lists start short so pages don't scroll forever; exports always include everything.
+ */
+function capFooter(shown, total, noun, step) {
+    if (total <= step) return '';
+    const parts = [`<span class="note" role="status">Showing ${Math.min(shown, total)} of ${total} ${noun}</span>`];
+    if (shown < total) {
+        if (total - shown > step) parts.push(`<button type="button" class="btn" data-cap="more">Show ${step} more</button>`);
+        parts.push(`<button type="button" class="btn" data-cap="all">Show all</button>`);
+    } else {
+        parts.push(`<button type="button" class="btn" data-cap="less">Show fewer</button>`);
+    }
+    return `<div class="cap-footer no-print">${parts.join('')}</div>`;
+}
+
+function onCap(container, getState, redraw) {
+    container.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-cap]');
+        if (!btn || !container.contains(btn)) return;
+        const st = getState();
+        const action = btn.dataset.cap;
+        if (action === 'more') st.shown += st.step;
+        else if (action === 'all') st.shown = Infinity;
+        else { st.shown = st.step; container.scrollIntoView({ block: 'nearest' }); }
+        redraw();
+        // Keep keyboard focus on the footer after re-rendering.
+        container.querySelector('.cap-footer button')?.focus({ preventScroll: true });
+    });
+}
+
+/**
+ * A capped list of pre-rendered items (cards, rows).
+ * Returns { setItems(htmlItems) }; filters should call setItems, which resets the cap.
+ */
+export function mountList(container, { className = '', step = 10, noun = 'items', emptyHtml = '<p class="empty">Nothing to show.</p>' } = {}) {
+    const st = { items: [], shown: step, step };
+    const draw = () => {
+        container.innerHTML = st.items.length
+            ? `<div class="${className}">${st.items.slice(0, st.shown).join('')}</div>${capFooter(st.shown, st.items.length, noun, step)}`
+            : emptyHtml;
+    };
+    onCap(container, () => st, draw);
+    return {
+        setItems(items) { st.items = items; st.shown = step; draw(); }
+    };
+}
+
+/**
+ * Sortable, accessible data table, capped at `limit` rows until expanded.
  * columns: [{ key, label, num?, value(row), render?(row), sticky?, title? }]
  * Returns { setRows(rows), getSorted() } and renders into `container`.
  */
-export function mountTable(container, { columns, rows, sort, caption, rowClass, tall = false }) {
-    let state = { rows, sort: sort || null };
+export function mountTable(container, { columns, rows, sort, caption, rowClass, limit = 10, noun = 'rows' }) {
+    let state = { rows, sort: sort || null, shown: limit, step: limit };
 
     const sorted = () => {
         if (!state.sort) return state.rows;
@@ -77,8 +125,9 @@ export function mountTable(container, { columns, rows, sort, caption, rowClass, 
     };
 
     const render = () => {
-        const list = sorted();
-        container.innerHTML = `<div class="table-wrap ${tall ? 'tall' : ''}"><table class="table">
+        const all = sorted();
+        const list = all.slice(0, state.shown);
+        container.innerHTML = `<div class="table-wrap"><table class="table">
             ${caption ? `<caption class="sr-only">${esc(caption)}</caption>` : ''}
             <thead><tr>${columns.map(c => {
                 const ariaSort = state.sort?.key === c.key ? (state.sort.dir === 'asc' ? 'ascending' : 'descending') : 'none';
@@ -89,8 +138,9 @@ export function mountTable(container, { columns, rows, sort, caption, rowClass, 
             <tbody>${list.length === 0 ? `<tr><td colspan="${columns.length}" class="muted center">No data</td></tr>` : list.map(r =>
                 `<tr class="${rowClass ? rowClass(r) : ''}">${columns.map(c =>
                     `<td class="${[c.num ? 'num' : '', c.sticky ? 'sticky-col' : '', c.className || ''].join(' ')}">${c.render ? c.render(r) : esc(c.value(r) ?? '—')}</td>`).join('')}</tr>`).join('')}</tbody>
-        </table></div>`;
+        </table></div>${capFooter(state.shown, all.length, noun, limit)}`;
     };
+    onCap(container, () => state, render);
 
     container.addEventListener('click', (e) => {
         const btn = e.target.closest('[data-sort]');
@@ -107,7 +157,7 @@ export function mountTable(container, { columns, rows, sort, caption, rowClass, 
 
     render();
     return {
-        setRows(rows) { state.rows = rows; render(); },
+        setRows(rows) { state.rows = rows; state.shown = limit; render(); },
         getSorted: sorted
     };
 }
