@@ -37,12 +37,14 @@ async function handleApi(req, env, url) {
 }
 
 /**
- * A brand-new deployment would otherwise show nothing until the next top of
- * the hour, so the first request kicks off one collection. After that only
- * the cron collects.
+ * Until the first successful collection (new deployment, or a token that was
+ * just added), requests retry a collection at most every 5 minutes so data
+ * shows up without waiting for the top of the hour. After that only the cron collects.
  */
 async function bootstrap(env, ctx) {
-    if (await getMeta(env.DB, 'last_collect')) return;
+    if (await getMeta(env.DB, 'last_success')) return;
+    const last = await getMeta(env.DB, 'last_collect');
+    if (last && Date.now() - Date.parse(last.startedAt) < 5 * 60_000) return;
     await setMeta(env.DB, 'last_collect', { startedAt: new Date().toISOString(), steps: {}, bootstrap: true });
     ctx.waitUntil(collect(env));
 }
