@@ -52,3 +52,7 @@ yarn-error.log
 # Misc
 .cache/
 *.log
+
+# Wrangler
+.wrangler/
+.dev.vars

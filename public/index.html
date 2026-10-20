@@ -2,40 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CoC War Stats</title>
-    
-    <!-- External Dependencies -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Custom Styles -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0d12">
+    <title>Clan Stats</title>
+
+    <!-- External Dependencies (pinned) -->
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        base: '#0b0d12', panel: '#11141b', card: '#161a22', raised: '#1d222c', line: '#262b35',
+                        gold: { DEFAULT: '#e9b949', 50: '#fdf6e3' },
+                        gray: { 50: '#f6f7f9', 100: '#eceef2', 200: '#d5d9e0', 300: '#b3bac6', 400: '#8c95a5', 500: '#6b7485', 600: '#4f5767', 700: '#373d4a', 800: '#262b35', 900: '#181c24' }
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                }
+            }
+        };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%E2%9A%94%EF%B8%8F%3C/text%3E%3C/svg%3E">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="p-3 md:p-10">
-    <!-- Header Section -->
-    <div class="w-full mb-6 flex flex-col items-center text-center">
-        <div id="headerContent" class="flex items-center gap-3 md:gap-4">
-            <img id="clanBadge" class="w-10 h-10 md:w-16 md:h-16 hidden" alt="Clan Badge">
-            <h1 id="pageTitle" class="text-2xl md:text-5xl font-bold gold medieval uppercase tracking-tighter">Dashboard</h1>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="max-w-7xl mx-auto px-4 md:px-8 pt-5 md:pt-8 pb-4 flex items-center gap-4">
+            <img id="clanBadge" class="w-12 h-12 md:w-16 md:h-16 hidden drop-shadow-lg" alt="Clan badge">
+            <div class="min-w-0 flex-1">
+                <h1 id="pageTitle" class="text-2xl md:text-4xl font-extrabold tracking-tight text-white truncate">Clan Stats</h1>
+                <div id="headerMeta" class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-gray-400"></div>
+            </div>
+            <div class="flex flex-col items-end gap-1 shrink-0">
+                <button onclick="window.syncData()" class="sync-btn refresh-pill" title="Pull fresh data from Clash of Clans">
+                    <span class="live-dot"></span>
+                    <span id="lastUpdated" class="hidden sm:inline">Loading…</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                </button>
+            </div>
         </div>
-        <div class="h-1 w-16 bg-[#d4af37] mt-2"></div>
-    </div>
 
-    <!-- Main Navigation Tabs -->
-    <div class="flex mb-6 rounded-t-lg overflow-hidden border border-[#333]">
-        <button id="tab-about" class="tab-btn medieval uppercase tracking-widest">About</button>
-        <button id="tab-members" class="tab-btn medieval uppercase tracking-widest">Members</button>
-        <button id="tab-war" class="tab-btn medieval uppercase tracking-widest">Wars</button>
-        <button id="tab-raids" class="tab-btn medieval uppercase tracking-widest">Raids</button>
-        <button id="tab-stats" class="tab-btn medieval uppercase tracking-widest">Stats</button>
-    </div>
+        <!-- Main Navigation Tabs -->
+        <nav class="max-w-7xl mx-auto px-4 md:px-8">
+            <div class="tab-bar">
+                <button id="tab-about" class="tab-btn">Overview</button>
+                <button id="tab-members" class="tab-btn">Members</button>
+                <button id="tab-war" class="tab-btn">Wars</button>
+                <button id="tab-cwl" class="tab-btn">CWL</button>
+                <button id="tab-raids" class="tab-btn">Raids</button>
+                <button id="tab-stats" class="tab-btn">Reports</button>
+            </div>
+        </nav>
+    </header>
 
-    <div class="w-full">
+    <main class="max-w-7xl mx-auto px-3 md:px-8 py-5 md:py-8">
         <!-- Section: About -->
         <div id="section-about" class="lg:col-span-12 hidden-section">
             <div id="aboutContent"></div>
@@ -47,12 +75,12 @@
                 <!-- Shared Members Header -->
                 <div class="flex flex-col lg:flex-row lg:flex-wrap justify-between items-start lg:items-center gap-y-4 mb-6 px-1">
                     <div class="flex items-center gap-3">
-                        <h2 id="memberTitle" class="medieval text-base md:text-lg font-bold uppercase">Members</h2>
-                        <span id="memberCount" class="text-[9px] md:text-[10px] font-mono text-gray-500">0 / 50</span>
+                        <h2 id="memberTitle" class="section-title">Members</h2>
+                        <span id="memberCount" class="text-[11px] md:text-[11px] font-mono text-gray-500">0 / 50</span>
                     </div>                    
                     <!-- Sub-tabs Row (Mobile: 2nd, Desktop: bottom) -->
                     <div class="w-full order-2 lg:order-3 lg:mt-2">
-                        <div class="flex items-center gap-2 p-1 bg-[#1a1a1a] rounded-lg border border-gray-800 w-fit">
+                        <div class="flex items-center gap-2 p-1 bg-card rounded-lg border border-gray-800 w-fit">
                             <button data-role="all" class="sub-tab-btn active uppercase tracking-wider">All</button>
                             <button data-role="leader" class="sub-tab-btn uppercase tracking-wider">Leader</button>
                             <button data-role="coLeader" class="sub-tab-btn uppercase tracking-wider">Co-Leader</button>
@@ -64,11 +92,11 @@
                     <!-- Header Controls (Mobile: 3rd, Desktop: top-right) -->
                     <div class="flex flex-row items-end gap-2 lg:gap-4 lg:ml-auto order-3 lg:order-2">
                         <div class="flex flex-col gap-1">
-                            <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Date</span>
+                            <span class="control-label">Date</span>
                             <input type="text" id="memberDate" class="control-base w-24 sm:w-32 font-mono text-center" placeholder="Select...">
                         </div>
                         <div class="flex flex-col gap-1">
-                            <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Sort</span>
+                            <span class="control-label">Sort</span>
                             <select id="sortBy" class="control-base h-8 w-28 sm:min-w-[140px]">
                                 <option value="league" selected>League + Trophies</option>
                                 <option value="trophies">Trophies Only</option>
@@ -82,7 +110,7 @@
                         <button id="resetMembersFilters" class="btn-reset h-8">Reset</button>
                     </div>
                 </div>
-                <div id="memberList" class="space-y-2"></div>
+                <div id="memberList" class="grid grid-cols-1 lg:grid-cols-2 gap-2"></div>
             </div>
         </div>
 
@@ -92,8 +120,8 @@
                 <!-- Shared War Header -->
                 <div id="warMainHeader" class="flex flex-col lg:flex-row lg:flex-wrap justify-between items-start lg:items-center gap-y-4 mb-6 px-1">
                     <div class="flex items-center gap-3">
-                        <h2 class="medieval text-base md:text-lg font-bold uppercase">Wars</h2>
-                        <span id="warCount" class="text-[9px] md:text-[10px] font-mono text-gray-500">0 / 0</span>
+                        <h2 class="section-title">Wars</h2>
+                        <span id="warCount" class="text-[11px] md:text-[11px] font-mono text-gray-500">0 / 0</span>
                         <button onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Sync Data">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                         </button>
@@ -104,10 +132,10 @@
                         <!-- Controls for History -->
                         <div id="warHistoryControls" class="flex flex-row items-end gap-2 sm:gap-3">
                             <div class="flex flex-col gap-1">
-                                <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Date Range</span>
+                                <span class="control-label">Date Range</span>
                                 <div class="flex items-center gap-1">
                                     <input type="text" id="warStartDate" class="control-base w-20 sm:w-32 font-mono text-center" placeholder="Start Date">
-                                    <span class="text-gray-600 text-[10px]">-</span>
+                                    <span class="text-gray-600 text-[11px]">-</span>
                                     <input type="text" id="warEndDate" class="control-base w-20 sm:w-32 font-mono text-center" placeholder="End Date">
                                 </div>
                             </div>
@@ -117,7 +145,7 @@
 
                     <!-- Sub-tabs Row (Mobile: 2nd, Desktop: bottom) -->
                     <div class="w-full order-2 lg:order-3 lg:mt-2">
-                        <div class="flex items-center gap-2 p-1 bg-[#1a1a1a] rounded-lg border border-gray-800 w-fit">
+                        <div class="flex items-center gap-2 p-1 bg-card rounded-lg border border-gray-800 w-fit">
                             <button data-war-filter="all" class="sub-tab-btn active uppercase tracking-wider">All</button>
                             <button data-war-filter="victory" class="sub-tab-btn uppercase tracking-wider">Victory</button>
                             <button data-war-filter="loss" class="sub-tab-btn uppercase tracking-wider">Defeat</button>
@@ -137,7 +165,7 @@
                     
                     <div id="warDetailHeader" class="flex flex-col lg:flex-row lg:flex-wrap justify-between items-start lg:items-center gap-y-4 mb-6 px-1">
                         <div class="flex items-center gap-3">
-                            <h2 class="medieval text-base md:text-lg font-bold uppercase whitespace-nowrap">War Details</h2>
+                            <h2 class="section-title">War Details</h2>
                             <button id="syncDetailBtn" onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Sync Data">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                             </button>
@@ -146,7 +174,7 @@
                         <!-- Sub-navigation row -->
                         <div class="w-full order-2 lg:order-3 lg:mt-2">
                             <div class="flex flex-col lg:flex-row lg:items-center gap-4 w-full">
-                                <div id="warDetailToggles" class="flex items-center gap-2 p-1 bg-[#1a1a1a] rounded-lg border border-gray-800 w-fit shrink-0"></div>
+                                <div id="warDetailToggles" class="flex items-center gap-2 p-1 bg-card rounded-lg border border-gray-800 w-fit shrink-0"></div>
                                 <div id="warMetrics" class="flex flex-wrap lg:flex-nowrap items-center gap-2 flex-1"></div>
                             </div>
                         </div>
@@ -156,7 +184,7 @@
                     <div id="warDetailSummaryCard" class="my-6"></div>
                     
                     <!-- Dynamic Controls Container (Clan Toggle, Filters, Reset) -->
-                    <div id="warDetailControls" class="flex flex-col lg:flex-row lg:flex-wrap items-start lg:items-center gap-4 mb-6 p-4 bg-[#1a1a1a] rounded-xl border border-gray-800"></div>
+                    <div id="warDetailControls" class="flex flex-col lg:flex-row lg:flex-wrap items-start lg:items-center gap-4 mb-6 p-4 bg-card rounded-xl border border-gray-800"></div>
 
                     <!-- Attacks/Map container -->
                     <div id="warResults" class="space-y-4 mt-8"></div>
@@ -164,60 +192,106 @@
             </div>
         </div>
 
-        <!-- Section: Stats -->
-        <div id="section-stats" class="lg:col-span-12 hidden-section">
+        <!-- Section: CWL -->
+        <div id="section-cwl" class="hidden-section">
             <div class="panel p-3 md:p-6">
-                <!-- Shared Stats Header -->
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-y-4 mb-6 px-1">
-                    <div class="flex items-center gap-3">
-                        <h2 class="medieval text-base md:text-lg font-bold uppercase whitespace-nowrap">Stats</h2>
-                        <button onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Sync Data">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                        </button>
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 px-1">
+                    <div>
+                        <h2 class="section-title">Clan War League</h2>
+                        <p id="cwlSubtitle" class="text-xs text-gray-500 mt-1"></p>
                     </div>
-
-                    <!-- Header Controls -->
-                    <div class="flex flex-row items-end gap-2 lg:gap-4 lg:ml-auto">
-                        <div class="flex flex-col gap-1">
-                            <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Time Range</span>
-                            <select id="statsTimeRange" class="control-base h-8 w-32">
-                                <option value="month">This Month</option>
-                                <option value="week">This Week</option>
-                                <option value="prev">Previous War</option>
-                            </select>
-                        </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="control-label">Season</span>
+                        <select id="cwlSeason" class="control-base h-8 w-36"></select>
                     </div>
                 </div>
-
-                <div class="space-y-8">
-                    <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
-                        <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">War Stars Achieved (%)</h3>
-                        <div id="starsTrendContainer" style="height: 180px;">
-                            <canvas id="starsTrendChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
-                            <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Stars Earned Breakdown</h3>
-                            <div id="topPerformersContainer" class="overflow-x-auto"></div>
-                        </div>
-                        <div class="bg-[#1a1a1a] p-4 rounded-xl border border-gray-800">
-                            <h3 class="text-[10px] font-bold text-gray-500 uppercase mb-4 tracking-widest">Stars Conversion Rates</h3>
-                            <div id="efficiencyContainer">
-                                <canvas id="efficiencyChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div id="cwlContent"></div>
             </div>
         </div>
 
+        <!-- Section: Reports -->
+        <div id="section-stats" class="hidden-section">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-5 px-1">
+                <div>
+                    <h2 class="section-title">Reports</h2>
+                    <p class="text-xs text-gray-500 mt-1">Roster, war, donation and raid trends from every hourly snapshot.</p>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="control-label">War time range</span>
+                    <select id="statsTimeRange" class="control-base h-8 w-40">
+                        <option value="month">This month</option>
+                        <option value="30d">Last 30 days</option>
+                        <option value="90d">Last 90 days</option>
+                        <option value="all" selected>All time</option>
+                        <option value="week">Last 7 days</option>
+                        <option value="prev">Previous war</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="reportKpis" class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6"></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                <section class="report-card lg:col-span-2">
+                    <div class="report-head">
+                        <div><h3>Membership over time</h3><p>Members in the clan each day, with joins and departures.</p></div>
+                    </div>
+                    <div style="height: 200px;"><canvas id="membershipChart"></canvas></div>
+                    <p class="control-label mt-4 mb-2">Joins and departures per week</p>
+                    <div style="height: 110px;"><canvas id="churnChart"></canvas></div>
+                    <div class="chart-legend"><span><i style="background:var(--good)"></i>Joined</span><span><i style="background:var(--critical)"></i>Left</span></div>
+                </section>
+                <section class="report-card">
+                    <div class="report-head"><div><h3>Roster changes</h3><p>Most recent joins and departures.</p></div></div>
+                    <div id="rosterEvents" class="roster-events"></div>
+                </section>
+
+                <section class="report-card lg:col-span-2">
+                    <div class="report-head"><div><h3>War record by month</h3><p>Wins, losses and draws, including the API war log.</p></div></div>
+                    <div style="height: 240px;"><canvas id="warRecordChart"></canvas></div>
+                    <div class="chart-legend"><span><i style="background:var(--good)"></i>Wins</span><span><i style="background:var(--critical)"></i>Losses</span><span><i style="background:var(--neutral)"></i>Draws</span></div>
+                </section>
+                <section class="report-card">
+                    <div class="report-head"><div><h3>Town Hall spread</h3><p>Current roster by Town Hall level.</p></div></div>
+                    <div id="thDistribution"></div>
+                </section>
+
+                <section class="report-card lg:col-span-3">
+                    <div class="report-head"><div><h3>War stars achieved</h3><p>Share of available stars won in each finished war.</p></div></div>
+                    <div id="starsTrendContainer" style="height: 200px;"><canvas id="starsTrendChart"></canvas></div>
+                </section>
+
+                <section class="report-card lg:col-span-2">
+                    <div class="report-head"><div><h3>War reliability</h3><p>Attacks used vs. available per member. Sorted by missed attacks.</p></div></div>
+                    <div id="reliabilityTable" class="overflow-x-auto"></div>
+                </section>
+                <section class="report-card">
+                    <div class="report-head"><div><h3>Stars earned breakdown</h3><p>Top attackers by total stars.</p></div></div>
+                    <div id="topPerformersContainer" class="overflow-x-auto"></div>
+                </section>
+
+                <section class="report-card lg:col-span-2">
+                    <div class="report-head"><div><h3>Star conversion rates</h3><p>Outcome mix per attacker (top 25 by 3★ rate).</p></div></div>
+                    <div id="efficiencyContainer"><canvas id="efficiencyChart"></canvas></div>
+                    <div class="chart-legend"><span><i style="background:var(--star-3)"></i>3★</span><span><i style="background:var(--star-2)"></i>2★</span><span><i style="background:var(--star-1)"></i>1★</span><span><i style="background:var(--star-0)"></i>0★</span></div>
+                </section>
+                <section class="report-card">
+                    <div class="report-head"><div><h3>Top donors this season</h3><p>Troops donated vs. received.</p></div></div>
+                    <div id="donationsTable" class="overflow-x-auto"></div>
+                </section>
+
+                <section class="report-card lg:col-span-3">
+                    <div class="report-head"><div><h3>Raid weekends</h3><p>Capital gold looted per weekend.</p></div></div>
+                    <div style="height: 220px;"><canvas id="raidTrendChart"></canvas></div>
+                </section>
+            </div>
+        </div>
         <!-- Section: Raids -->
         <div id="section-raids" class="lg:col-span-12 hidden-section">
             <div class="panel p-3 md:p-6">
                 <div class="flex flex-col lg:flex-row lg:flex-wrap justify-between items-start lg:items-center gap-y-4 mb-6 px-1">
                     <div class="flex items-center gap-3">
-                        <h2 class="medieval text-base md:text-lg font-bold uppercase whitespace-nowrap">Raids</h2>
+                        <h2 class="section-title">Raids</h2>
                         <button onclick="window.syncData()" class="sync-btn text-gray-600 hover:text-gold transition-all" title="Sync Data">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                         </button>
@@ -225,7 +299,7 @@
                     
                     <div class="flex flex-row items-end gap-2 lg:gap-4 lg:ml-auto order-3 lg:order-2">
                         <div class="flex flex-col gap-1">
-                            <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Date</span>
+                            <span class="control-label">Date</span>
                             <input type="text" id="raidWeekendCalendar" class="control-base h-8 w-32 sm:w-40 font-mono text-center" placeholder="Select Date...">
                         </div>
                         <button id="resetRaidSort" class="btn-reset h-8">Reset</button>
@@ -233,7 +307,7 @@
 
 
                     <div class="w-full order-2 lg:order-3 lg:mt-2">
-                        <div class="flex items-center gap-2 p-1 bg-[#1a1a1a] rounded-lg border border-gray-800 w-fit">
+                        <div class="flex items-center gap-2 p-1 bg-card rounded-lg border border-gray-800 w-fit">
                             <button id="raid-subtab-summary" class="sub-tab-btn active uppercase tracking-wider">Summary</button>
                             <button id="raid-subtab-attacks" class="sub-tab-btn uppercase tracking-wider">Attacks</button>
                             <button id="raid-subtab-defenses" class="sub-tab-btn uppercase tracking-wider">Defenses</button>
@@ -246,7 +320,7 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-[#1a1a1a] text-[10px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-800">
+                                <tr class="bg-card text-[11px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-800">
                                     <th class="p-3 cursor-pointer hover:text-gold transition-colors raid-sort-btn group" data-sort="name" data-table="summary">
                                         <div class="flex items-center">
                                             Player
@@ -296,7 +370,7 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-[#1a1a1a] text-[10px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-800">
+                                <tr class="bg-card text-[11px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-800">
                                                                         <th class="p-3 cursor-pointer hover:text-gold transition-colors raid-sort-btn group" data-sort="index" data-table="attacks">
                                         <div class="flex items-center">Raid # <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5 ml-1 opacity-20 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg></div>
                                     </th>
@@ -325,7 +399,7 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-[#1a1a1a] text-[10px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-800">
+                                <tr class="bg-card text-[11px] font-bold text-gray-500 uppercase tracking-widest border-b border-gray-800">
                                                                         <th class="p-3 cursor-pointer hover:text-gold transition-colors raid-sort-btn group" data-sort="index" data-table="defenses">
                                         <div class="flex items-center">Raid # <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5 ml-1 opacity-20 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg></div>
                                     </th>
@@ -350,9 +424,17 @@
                 </div>
             </div>
         </div>
+    </main>
+
+    <!-- Player profile drawer -->
+    <div id="playerModal" class="modal hidden" role="dialog" aria-modal="true">
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-panel">
+            <button class="modal-close" data-close aria-label="Close">✕</button>
+            <div id="playerContent"></div>
+        </div>
     </div>
 
-    <!-- Main Entry Point -->
     <script type="module" src="js/app.js"></script>
 </body>
 </html>

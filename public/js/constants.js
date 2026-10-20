@@ -37,3 +37,18 @@ export function parseCoCDate(dateStr) {
     const sec = dateStr.substring(13, 15);
     return new Date(Date.UTC(year, month, day, hour, min, sec));
 }
+
+/** Escapes text for safe interpolation into HTML strings. */
+export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/** 'victory' | 'loss' | 'draw' from our clan's perspective. */
+export function warResult(war) {
+    const cs = war.clan?.stars || 0, os = war.opponent?.stars || 0;
+    if (cs !== os) return cs > os ? 'victory' : 'loss';
+    const cd = war.clan?.destructionPercentage || 0, od = war.opponent?.destructionPercentage || 0;
+    if (cd !== od) return cd > od ? 'victory' : 'loss';
+    return 'draw';
+}
+
+/** True once a war's end time has passed. */
+export const isFinished = (war, now = new Date()) => war.state !== 'preparation' && parseCoCDate(war.endTime) < now;

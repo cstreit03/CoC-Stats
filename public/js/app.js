@@ -3,14 +3,16 @@
  * Orchestrates the data loading flow, global event listeners, and view switching.
  */
 import { roleWeight, parseCoCDate } from './constants.js';
-import { 
-    fetchClanData, 
-    fetchMembersIndex, 
-    fetchHistoricalMembers, 
-    fetchWarIndex, 
-    fetchWarData,
-    fetchRaidIndex,
-    fetchRaidData
+import {
+    fetchClanData,
+    fetchMemberDates,
+    fetchMembersOn,
+    fetchWars,
+    fetchRaids,
+    fetchCwl,
+    fetchHistory,
+    fetchStatus,
+    requestRefresh
 } from './api.js';
 import { 
     renderMembers, 
@@ -23,7 +25,9 @@ import {
     setRaidSort,
     resetRaidSort
 } from './render.js';
-import { renderCharts } from './charts.js';
+import { renderCharts, renderOverviewKpis } from './charts.js';
+import { renderCwl } from './cwl.js';
+import { openPlayer, closePlayer } from './player.js';
 
 // Global state variables
 let allMembers = [];           
@@ -38,6 +42,9 @@ let raidFp = null;
 let activeWarFilename = null;  
 let warHistoryPickers = []; 
 let currentRaidIndex = 0;      
+let history = null;            // { clanDaily, events, joinedAt, warlog }
+let cwlSeasons = [];
+let lastCollectAt = null;
 
 /**
  * UI View Controllers
@@ -81,7 +88,7 @@ function switchRaidSubView(subviewId, updateHash = true) {
 
 function updateMemberCount(count) {
     const el = document.getElementById('memberCount');
-    if (el) el.innerText = `${count} / 50`;
+    if (el) el.innerText = `${count} / ${allMembers.length}`;
 }
 
 function updateWarCount(filtered, total) {
@@ -89,20 +96,52 @@ function updateWarCount(filtered, total) {
     if (el) el.innerText = `${filtered} / ${total}`;
 }
 
-function updateHeader(name, badgeUrl) {
+function updateHeader(clan) {
     const title = document.getElementById('pageTitle');
     const badge = document.getElementById('clanBadge');
-    if (title) title.innerText = name;
+    const meta = document.getElementById('headerMeta');
+    const badgeUrl = clan.badgeUrls?.medium || clan.badgeUrls?.small;
+    if (title) title.innerText = clan.name;
+    document.title = `${clan.name} · Clan Stats`;
     if (badge && badgeUrl) {
         badge.src = badgeUrl;
         badge.classList.remove('hidden');
     }
+    if (meta) {
+        const chips = [
+            `<span class="font-mono">${clan.tag}</span>`,
+            `<span>Level ${clan.clanLevel}</span>`,
+            `<span>${(clan.memberList || []).length} members</span>`,
+            clan.warLeague?.name ? `<span>${clan.warLeague.name}</span>` : '',
+            clan.warWinStreak ? `<span class="gold">${clan.warWinStreak} war win streak</span>` : ''
+        ].filter(Boolean);
+        meta.innerHTML = chips.join('<span class="meta-sep">•</span>');
+    }
+}
+
+function timeAgo(iso) {
+    const mins = Math.round((Date.now() - Date.parse(iso)) / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins} min ago`;
+    const hrs = Math.round(mins / 60);
+    if (hrs < 48) return `${hrs} hr${hrs === 1 ? '' : 's'} ago`;
+    return `${Math.round(hrs / 24)} days ago`;
+}
+
+function updateFreshness() {
+    const el = document.getElementById('lastUpdated');
+    const dot = document.querySelector('.live-dot');
+    if (!el) return;
+    if (!lastCollectAt) { el.innerText = 'Refresh'; dot?.classList.add('stale'); return; }
+    el.innerText = `Updated ${timeAgo(lastCollectAt)}`;
+    dot?.classList.toggle('stale', Date.now() - Date.parse(lastCollectAt) > 2 * 3600000);
 }
 
 window.syncData = async () => {
     const btns = document.querySelectorAll('.sync-btn');
     btns.forEach(b => b.classList.add('syncing'));
     try {
+        await requestRefresh();
         await init();
         if (activeWarFilename) {
             const warData = fullWarHistory.find(w => w.filename === activeWarFilename);
@@ -120,70 +159,76 @@ function preRoute() {
     const tabWar = document.getElementById('tab-war');
     const tabStats = document.getElementById('tab-stats');
     const tabRaids = document.getElementById('tab-raids');
-    if (!tabAbout || !tabMembers || !tabWar || !tabStats || !tabRaids) return;
-    [tabAbout, tabMembers, tabWar, tabStats, tabRaids].forEach(t => t.classList.remove('active'));
+    const tabCwl = document.getElementById('tab-cwl');
+    if (!tabAbout || !tabMembers || !tabWar || !tabStats || !tabRaids || !tabCwl) return;
+    [tabAbout, tabMembers, tabWar, tabStats, tabRaids, tabCwl].forEach(t => t.classList.remove('active'));
     if (!hash || hash === 'about') tabAbout.classList.add('active');
     else if (hash === 'members') tabMembers.classList.add('active');
     else if (hash.startsWith('war')) tabWar.classList.add('active');
     else if (hash === 'stats') tabStats.classList.add('active');
     else if (hash.startsWith('raids')) tabRaids.classList.add('active');
+    else if (hash === 'cwl') tabCwl.classList.add('active');
+}
+
+/** Everything the Overview/Reports/CWL views need, in one object. */
+function reportContext() {
+    return { clan: latestClanData, members: latestClanData?.memberList || [], wars: fullWarHistory, raids: fullRaidHistory, history, cwl: cwlSeasons };
 }
 
 async function init() {
-    try {
-        const clanData = await fetchClanData();
+    const [clanRes, datesRes, warsRes, raidsRes, historyRes, cwlRes, statusRes] = await Promise.allSettled([
+        fetchClanData(), fetchMemberDates(), fetchWars(), fetchRaids(), fetchHistory(), fetchCwl(), fetchStatus()
+    ]);
+    const ok = (r, label) => {
+        if (r.status === 'fulfilled') return r.value;
+        console.error(`Could not load ${label}.`, r.reason);
+        return null;
+    };
+
+    history = ok(historyRes, 'roster history');
+    cwlSeasons = ok(cwlRes, 'CWL') || [];
+    const status = ok(statusRes, 'status');
+    lastCollectAt = status?.lastSuccess || null;
+    updateFreshness();
+
+    const clanData = ok(clanRes, 'latest clan data');
+    if (clanData) {
         latestClanData = clanData;
-        allMembers = clanData.memberList || clanData.members || [];
+        allMembers = clanData.memberList || [];
+        if (!lastCollectAt && clanData.snapshotDate) {
+            document.getElementById('lastUpdated').innerText = `Snapshot ${clanData.snapshotDate}`;
+        }
         updateDisplay();
         renderAbout(latestClanData);
         bindAboutPageEvents();
-        updateHeader(clanData.name, clanData.badgeUrls?.medium || clanData.badgeUrls?.small);
-    } catch (e) { console.error("Could not load latest clan data.", e); }
+        updateHeader(clanData);
+    }
 
-    try {
-        const memberIndex = await fetchMembersIndex();
-        const todayStr = new Date().toISOString().split('T')[0];
-        availableMemberDates = memberIndex.map(f => {
-            const dateStr = f.replace('members_', '').replace('.json', '');
-            return `${dateStr.substring(0,4)}-${dateStr.substring(4,6)}-${dateStr.substring(6,8)}`;
-        });
-        let bestDefaultDate = availableMemberDates[0] || todayStr;
-        if (!availableMemberDates.includes(todayStr)) availableMemberDates.push(todayStr);
+    const dates = ok(datesRes, 'member snapshot dates');
+    if (dates) {
+        availableMemberDates = dates;
         if (fp) fp.destroy();
         fp = flatpickr("#memberDate", {
-            defaultDate: bestDefaultDate, enable: availableMemberDates, dateFormat: "Y-m-d",
+            defaultDate: availableMemberDates[0], enable: availableMemberDates, dateFormat: "Y-m-d",
             disableMobile: true,
             onChange: function(selectedDates, dateStr) { handleMemberDateChange(dateStr); }
         });
-    } catch (e) { console.warn("Could not setup member date filters.", e); }
+    }
 
-    try {
-        const warIndex = await fetchWarIndex();
-        const warDataPromises = warIndex.reverse().map(async (filename) => {
-            try {
-                const data = await fetchWarData(filename);
-                return { ...data, filename };
-            } catch (e) { return null; }
-        });
-        fullWarHistory = (await Promise.all(warDataPromises)).filter(w => w !== null);
+    const wars = ok(warsRes, 'war history');
+    if (wars) {
+        fullWarHistory = wars.reverse(); // newest first
         filterWarHistory();
         setupWarHistoryPickers();
-    } catch (e) { console.error("Could not load war history.", e); }
+    }
 
-    try {
-        const raidIndex = await fetchRaidIndex();
-        const raidDataPromises = raidIndex.reverse().map(async (filename) => {
-            try {
-                const data = await fetchRaidData(filename);
-                const items = data.items || [data];
-                return items.map(item => ({ ...item, filename }));
-            } catch (e) { return null; }
-        });
-        const raidResults = await Promise.all(raidDataPromises);
-        fullRaidHistory = raidResults.flat().filter(r => r !== null);
+    const raids = ok(raidsRes, 'raid history');
+    if (raids) {
+        fullRaidHistory = raids;
         setupRaidCalendar();
-        handleInitialRoute();
-    } catch (e) { console.error("Could not load raid history.", e); handleInitialRoute(); }
+    }
+    renderOverviewKpis(reportContext());
+    handleInitialRoute();
 }
 
 function setupRaidCalendar() {
@@ -267,10 +312,11 @@ function setupWarHistoryPickers() {
 function handleInitialRoute() {
     const hash = window.location.hash.replace('#', '');
     if (!hash || hash === 'about') { switchView('about', false); return; }
+    if (hash === 'cwl') { switchView('cwl', false); renderCwl(cwlSeasons, fullWarHistory); return; }
     if (hash === 'members') { switchView(hash, false); }
     else if (hash === 'stats') {
         switchView('stats', false);
-        renderCharts(fullWarHistory, document.getElementById('statsTimeRange')?.value || 'month');
+        renderCharts(reportContext(), document.getElementById('statsTimeRange')?.value || 'all');
     }
     else if (hash.startsWith('raids')) {
         const parts = hash.split('/');
@@ -281,7 +327,6 @@ function handleInitialRoute() {
     else if (hash.startsWith('war/')) {
         const parts = hash.split('/');
         let detailFile = parts[2];
-        if (detailFile && !detailFile.endsWith('.json')) detailFile += '.json';
         switchView('war', false);
         if (detailFile) loadWarDetail(detailFile, false); 
     } else if (hash === 'war') { switchView('war', false); }
@@ -292,16 +337,15 @@ function bindAboutPageEvents() {
     if (btn) btn.onclick = () => { switchView('war'); };
 }
 
-async function handleMemberDateChange(dateValue, shouldFetch = true) {
+async function handleMemberDateChange(dateValue) {
     if (!dateValue) return;
-    const snapshotName = `members_${dateValue.replace(/-/g, '')}.json`;
     try {
-        let data = await fetchHistoricalMembers(snapshotName);
-        allMembers = data.memberList || data.members || [];
-        updateDisplay();
+        const data = await fetchMembersOn(dateValue);
+        allMembers = data.members || [];
     } catch (e) {
-        const fb = await fetchClanData(); allMembers = fb.memberList || fb.members || []; updateDisplay();
+        allMembers = latestClanData?.memberList || [];
     }
+    updateDisplay();
 }
 
 function filterWarHistory() {
@@ -388,10 +432,11 @@ function showWarList() {
 }
 
 window.loadWarDetail = loadWarDetail;
+window.openWar = (id) => { switchView('war', false); loadWarDetail(id); };
 
 document.addEventListener('DOMContentLoaded', () => {
-    preRoute(); init();
-    document.getElementById('tab-about')?.addEventListener('click', () => { switchView('about'); if (latestClanData) renderAbout(latestClanData); bindAboutPageEvents(); });
+    preRoute(); boot();
+    document.getElementById('tab-about')?.addEventListener('click', () => { switchView('about'); if (latestClanData) { renderAbout(latestClanData); renderOverviewKpis(reportContext()); } bindAboutPageEvents(); });
     document.getElementById('tab-members')?.addEventListener('click', () => {
         switchView('members');
         currentRoleFilter = 'all';
@@ -408,8 +453,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.getElementById('tab-stats')?.addEventListener('click', () => { 
         switchView('stats'); 
-        renderCharts(fullWarHistory, document.getElementById('statsTimeRange')?.value || 'month');
+        renderCharts(reportContext(), document.getElementById('statsTimeRange')?.value || 'all');
     });
+    document.getElementById('tab-cwl')?.addEventListener('click', () => { switchView('cwl'); renderCwl(cwlSeasons, fullWarHistory); });
     document.getElementById('tab-raids')?.addEventListener('click', () => { switchView('raids'); switchRaidSubView('summary'); });
     document.getElementById('raid-subtab-summary')?.addEventListener('click', () => switchRaidSubView('summary'));
     document.getElementById('raid-subtab-attacks')?.addEventListener('click', () => switchRaidSubView('attacks'));
@@ -431,7 +477,7 @@ document.addEventListener('DOMContentLoaded', () => {
         switchRaidSubView(activeSubTab, false);
     });
 
-    document.getElementById('statsTimeRange')?.addEventListener('change', (e) => { renderCharts(fullWarHistory, e.target.value); });
+    document.getElementById('statsTimeRange')?.addEventListener('change', (e) => { renderCharts(reportContext(), e.target.value); });
     document.getElementById('sortBy')?.addEventListener('change', updateDisplay);
     document.getElementById('backToWarList')?.addEventListener('click', showWarList);
     document.getElementById('resetMembersFilters')?.addEventListener('click', () => {
@@ -463,4 +509,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     document.addEventListener('click', () => { document.querySelectorAll('.info-tooltip').forEach(t => t.classList.remove('active')); });
+
+    // Player profiles: any element with data-player-tag opens the drawer.
+    document.addEventListener('click', (e) => {
+        const el = e.target.closest('[data-player-tag]');
+        if (el) openPlayer(el.getAttribute('data-player-tag'), reportContext());
+        if (e.target.closest('[data-close]')) closePlayer();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePlayer(); });
+    setInterval(updateFreshness, 60000);
 });
+
+/** Shows cached data immediately, then asks the Worker for fresh data. */
+async function boot() {
+    await init();
+    if (await requestRefresh()) await init();
+}

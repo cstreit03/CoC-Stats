@@ -17,23 +17,23 @@ export function renderMembers(list) {
     container.innerHTML = list.map(m => {
         const leagueIcon = m.leagueTier?.iconUrls?.small || m.league?.iconUrls?.small || '';
         return `
-        <div class="flex items-center gap-2 md:gap-3 p-2 md:p-3 bg-[#252525] border border-transparent rounded-lg">
+        <div class="member-row flex items-center gap-2 md:gap-3 p-2 md:p-3 bg-raised border border-transparent rounded-lg" data-player-tag="${m.tag}">
             <img src="${getTHImage(m.townHallLevel)}" class="th-icon">
             <div class="flex-1 min-w-0">
                 <div class="flex items-baseline gap-1 md:gap-2 truncate">
                     <span class="font-bold text-[11px] md:text-xs text-white">${m.name}</span>
-                    <span class="text-[7px] md:text-[8px] text-gray-500 font-mono">XP ${m.expLevel}</span>
+                    <span class="text-[10px] md:text-[10px] text-gray-500 font-mono">XP ${m.expLevel}</span>
                 </div>
-                <span class="text-[7px] md:text-[8px] gold font-bold uppercase block">${roleMap[m.role]}</span>
+                <span class="text-[10px] md:text-[10px] gold font-bold uppercase block">${roleMap[m.role]}</span>
                 <div class="flex gap-3 md:gap-4 mt-1 md:mt-1.5">
-                    <div><p class="stat-label">Donated</p><p class="stat-value text-green-500 text-[8px] md:text-[9px]">${m.donations}</p></div>
-                    <div><p class="stat-label">Received</p><p class="stat-value text-red-400 text-[8px] md:text-[9px]">${m.donationsReceived}</p></div>
+                    <div><p class="stat-label">Donated</p><p class="stat-value text-green-500 text-[10px] md:text-[11px]">${m.donations}</p></div>
+                    <div><p class="stat-label">Received</p><p class="stat-value text-red-400 text-[10px] md:text-[11px]">${m.donationsReceived}</p></div>
                 </div>
             </div>
             <div class="flex flex-col items-center justify-center min-w-[50px] md:min-w-[60px]">
                 ${leagueIcon ? `<img src="${leagueIcon}" class="w-5 h-5 md:w-6 md:h-6 object-contain mb-1" title="${m.leagueTier?.name || m.league?.name || 'Unranked'}">` : ''}
-                <p class="text-[11px] md:text-xs font-bold text-[#d4af37]">${m.trophies.toLocaleString()}</p>
-                <p class="text-[7px] md:text-[8px] text-gray-600 uppercase font-bold tracking-tighter">Trophies</p>
+                <p class="text-[11px] md:text-xs font-bold text-gold">${m.trophies.toLocaleString()}</p>
+                <p class="text-[10px] md:text-[10px] text-gray-600 uppercase font-bold tracking-tighter">Trophies</p>
             </div>
         </div>`;
     }).join('');
@@ -57,11 +57,11 @@ export function renderAtkSmall(atk, infoMap, isDefense = false, memberTH = "?", 
     const label = labelOverride || `Attack #${atk?.order || '?'}`;
     if (!atk) return `
         <div class="flex flex-col gap-1 h-full">
-            <p class="text-[7px] font-black text-gray-600 uppercase tracking-widest pl-1">${labelOverride || 'No Attack'}</p>
-            <div class="flex items-center gap-2 p-2 bg-[#1a1a1a] rounded-lg border border-dashed border-gray-800 opacity-40 h-[58px]">
-                <div class="w-6 h-6 flex items-center justify-center text-[8px] text-gray-600 uppercase font-bold">---</div>
+            <p class="text-[10px] font-black text-gray-600 uppercase tracking-widest pl-1">${labelOverride || 'No Attack'}</p>
+            <div class="flex items-center gap-2 p-2 bg-card rounded-lg border border-dashed border-gray-800 opacity-40 h-[58px]">
+                <div class="w-6 h-6 flex items-center justify-center text-[10px] text-gray-600 uppercase font-bold">---</div>
                 <div class="flex-1 min-w-0">
-                    <p class="text-[9px] text-gray-600 font-bold italic">No Data</p>
+                    <p class="text-[11px] text-gray-600 font-bold italic">No Data</p>
                 </div>
             </div>
         </div>`;
@@ -81,22 +81,22 @@ export function renderAtkSmall(atk, infoMap, isDefense = false, memberTH = "?", 
 
     return `
         <div class="flex flex-col gap-1 h-full">
-            <p class="text-[7px] font-black text-gray-600 uppercase tracking-widest pl-1">${label}</p>
-            <div class="p-2 bg-[#1a1a1a] rounded-lg border border-gray-800 h-[58px] relative">
-                <span class="absolute top-1 right-2 text-[7px] font-black uppercase ${diffColor}">${diffLabel}</span>
+            <p class="text-[10px] font-black text-gray-600 uppercase tracking-widest pl-1">${label}</p>
+            <div class="p-2 bg-card rounded-lg border border-gray-800 h-[58px] relative">
+                <span class="absolute top-1 right-2 text-[10px] font-black uppercase ${diffColor}">${diffLabel}</span>
                 <div class="flex items-center gap-2 mb-1.5">
-                    <span class="text-[9px] font-mono text-gray-500">#${info.pos}</span>
+                    <span class="text-[11px] font-mono text-gray-500">#${info.pos}</span>
                     <img src="${getTHImage(info.th)}" class="w-6 h-6 object-contain">
                     <div class="flex-1 min-w-0">
-                        <p class="text-[9px] text-white font-bold truncate">${info.name} (TH${info.th})</p>
+                        <p class="text-[11px] text-white font-bold truncate">${info.name} (TH${info.th})</p>
                     </div>
-                    <span class="text-[10px] gold leading-none font-mono">${stars}</span>
+                    <span class="text-[11px] gold leading-none font-mono">${stars}</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <div class="flex-1 bg-gray-900 h-1 rounded-full overflow-hidden">
                         <div class="${bgColorClass} h-full transition-all duration-500" style="width: ${pct}%"></div>
                     </div>
-                    <span class="text-[9px] font-black ${colorClass} min-w-[30px] text-right">${pct}%</span>
+                    <span class="text-[11px] font-black ${colorClass} min-w-[30px] text-right">${pct}%</span>
                 </div>
             </div>
         </div>`;
@@ -142,7 +142,7 @@ function getWarSummaryHtml(war, now) {
     let isPinned = now < end;
     if (now < start) { statusLabel = "Preparation Day"; countdownTarget = war.startTime; }
     else if (now < end) { statusLabel = "War Day"; countdownTarget = war.endTime; }
-    const pinnedClass = isPinned ? 'border-gold bg-[#2a2618]' : 'border-gray-700 bg-[#252525]';
+    const pinnedClass = isPinned ? 'border-gold bg-gold/10' : 'border-gray-700 bg-raised';
     const clanStars = war.clan.stars || 0;
     const opponentStars = war.opponent.stars || 0;
     const clanDest = war.clan.destructionPercentage || 0;
@@ -155,33 +155,37 @@ function getWarSummaryHtml(war, now) {
         else {
             if (clanDest > opponentDest) { resultLabel = "Victory"; scoreColor = "text-green-500"; }
             else if (clanDest < opponentDest) { resultLabel = "Loss"; scoreColor = "text-red-500"; }
-            else { resultLabel = "Draw"; scoreColor = "text-gray-400"; }
+            else { resultLabel = "Draw"; scoreColor = "text-gray-200"; }
         }
     }
     
     return `
     <div class="p-2.5 md:p-3.5 rounded-xl border ${pinnedClass} transition-colors relative overflow-hidden">
-        <div class="flex justify-between items-center mb-1">
-            <span class="text-[8px] md:text-[9px] font-bold text-gray-500 uppercase tracking-widest">${formattedDate}</span>
+        <div class="flex justify-between items-center mb-1 gap-2">
+            <span class="text-[10px] md:text-[11px] font-bold text-gray-500 uppercase tracking-widest">${formattedDate}</span>
+            <span class="flex gap-1.5">
+                ${war.kind === 'cwl' ? `<span class="pill gold">CWL · Round ${war.round}</span>` : ''}
+                ${!isPinned && war.state !== 'warEnded' ? `<span class="pill" title="The last snapshot was taken before this war ended, so the final attacks are missing.">Final score not captured</span>` : ''}
+            </span>
         </div>
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-2 md:gap-3 w-1/3 text-left">
                 <img src="${war.clan.badgeUrls.small}" class="w-7 h-7 md:w-9 md:h-9">
                 <div class="min-w-0">
-                    <p class="text-[10px] md:text-xs font-bold text-white truncate">${war.clan.name}</p>
-                    <p class="text-[7px] md:text-[8px] text-gray-500">${clanAttacks}/${totalPossibleAttacks} Atks</p>
+                    <p class="text-[11px] md:text-xs font-bold text-white truncate">${war.clan.name}</p>
+                    <p class="text-[10px] md:text-[10px] text-gray-500">${clanAttacks}/${totalPossibleAttacks} Atks</p>
                 </div>
             </div>
             <div class="flex flex-col items-center justify-center w-1/3 text-center px-1">
-                ${countdownTarget ? `<p id="cd-${war.filename || 'detail'}" class="mb-0.5 font-mono gold text-[9px] md:text-[10px]">${getCountdown(countdownTarget)}</p>` : ''}
-                <p class="text-[9px] md:text-[11px] font-black ${isPinned ? 'gold' : scoreColor} uppercase tracking-widest leading-none mb-0.5">${resultLabel}</p>
+                ${countdownTarget ? `<p id="cd-${war.filename || 'detail'}" class="mb-0.5 font-mono gold text-[11px] md:text-[11px]">${getCountdown(countdownTarget)}</p>` : ''}
+                <p class="text-[11px] md:text-[11px] font-black ${isPinned ? 'gold' : scoreColor} uppercase tracking-widest leading-none mb-0.5">${resultLabel}</p>
                 <p class="medieval ${isPinned ? 'gold' : scoreColor} text-base md:text-xl">${war.clan.stars} - ${war.opponent.stars}</p>
-                <p class="text-[7px] md:text-[8px] text-gray-500 mt-0.5">${war.clan.destructionPercentage.toFixed(1)}% vs ${war.opponent.destructionPercentage.toFixed(1)}%</p>
+                <p class="text-[10px] md:text-[10px] text-gray-500 mt-0.5">${war.clan.destructionPercentage.toFixed(1)}% vs ${war.opponent.destructionPercentage.toFixed(1)}%</p>
             </div>
             <div class="flex items-center gap-2 md:gap-3 text-right justify-end w-1/3">
                 <div class="min-w-0">
-                    <p class="text-[10px] md:text-xs font-bold text-white truncate">${war.opponent.name}</p>
-                    <p class="text-[7px] md:text-[8px] text-gray-500">${opponentAttacks}/${totalPossibleAttacks} Atks</p>
+                    <p class="text-[11px] md:text-xs font-bold text-white truncate">${war.opponent.name}</p>
+                    <p class="text-[10px] md:text-[10px] text-gray-500">${opponentAttacks}/${totalPossibleAttacks} Atks</p>
                 </div>
                 <img src="${war.opponent.badgeUrls.small}" class="w-7 h-7 md:w-9 md:h-9">
             </div>
@@ -237,18 +241,18 @@ function renderMemberCard(m, infoMap, totalAttacks, warAttacksMap = {}) {
     const totalStars = (m.attacks || []).reduce((sum, a) => sum + a.stars, 0);
 
     return `
-        <div class="flex flex-col lg:flex-row lg:items-center gap-3 md:gap-4 p-3 bg-[#252525] rounded-xl border border-gray-800">
+        <div class="flex flex-col lg:flex-row lg:items-center gap-3 md:gap-4 p-3 bg-raised rounded-xl border border-gray-800">
             <div class="flex items-center justify-between lg:justify-start gap-3 lg:min-w-[130px] lg:max-w-[130px]">
                 <div class="flex items-center gap-3">
                     <span class="text-xs font-mono text-gray-600">#${m.mapPosition}</span>
                     <img src="${getTHImage(m.townhallLevel || m.townHallLevel)}" class="w-8 h-8">
                     <div class="min-w-0">
                         <p class="font-bold text-[11px] text-white truncate">${m.name}</p>
-                        <p class="text-[9px] gold font-bold uppercase tracking-tighter">TH${m.townhallLevel || m.townHallLevel}</p>
+                        <p class="text-[11px] gold font-bold uppercase tracking-tighter">TH${m.townhallLevel || m.townHallLevel}</p>
                     </div>
                 </div>
                 <div class="lg:hidden flex flex-col items-center justify-center">
-                    <p class="text-[8px] font-black text-gray-500 uppercase tracking-widest leading-tight text-center w-full">${isDefMode ? 'Defenses Won' : 'Total Stars'}</p>
+                    <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest leading-tight text-center w-full">${isDefMode ? 'Defenses Won' : 'Total Stars'}</p>
                     <p class="text-lg font-bold gold leading-none mt-1 text-center w-full">${isDefMode ? `${defensesWon}/${defensesAgainst.length}` : totalStars}</p>
                 </div>
             </div>
@@ -262,7 +266,7 @@ function renderMemberCard(m, infoMap, totalAttacks, warAttacksMap = {}) {
                 }
             </div>
             <div class="hidden lg:flex flex-col items-center justify-center min-w-[110px] border-l border-gray-800/30 pl-4 h-full">
-                <p class="text-[7px] font-black text-gray-500 uppercase tracking-widest leading-tight text-center w-full">${isDefMode ? 'Defenses Won' : 'Total Stars'}</p>
+                <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest leading-tight text-center w-full">${isDefMode ? 'Defenses Won' : 'Total Stars'}</p>
                 <p class="text-xl font-bold gold leading-none mt-1.5 text-center w-full">${isDefMode ? `${defensesWon}/${defensesAgainst.length}` : totalStars}</p>
             </div>
         </div>`;
@@ -431,48 +435,48 @@ export function renderWarDetail(warData, history = []) {
     summaryContainer.innerHTML = getWarSummaryHtml(warData, new Date());
 
     metricsContainer.innerHTML = `
-        <div onclick="window.toggleStatInfo('avg', event)" class="flex flex-col justify-center items-center bg-[#1a1a1a] px-3 py-1 rounded-lg border border-gray-800 relative min-w-[70px] h-10 flex-1 cursor-pointer hover:bg-[#222] transition-colors">
-            <button class="absolute top-1 right-1 text-[8px] text-gray-500 pointer-events-none">ⓘ</button>
+        <div onclick="window.toggleStatInfo('avg', event)" class="flex flex-col justify-center items-center bg-card px-3 py-1 rounded-lg border border-gray-800 relative min-w-[70px] h-10 flex-1 cursor-pointer hover:bg-raised transition-colors">
+            <button class="absolute top-1 right-1 text-[10px] text-gray-500 pointer-events-none">ⓘ</button>
             <div id="tooltip-avg" class="info-tooltip">Average Stars: The current efficiency of used attacks for your clan (Stars ÷ Attacks).</div>
-            <span class="text-[7px] font-black text-gray-500 uppercase tracking-tighter leading-none mb-0.5">Avg Stars</span>
+            <span class="text-[10px] font-black text-gray-500 uppercase tracking-tighter leading-none mb-0.5">Avg Stars</span>
             <p class="text-[11px] font-bold ${avgStarsColor} leading-none">${avgStarsAtk}</p>
         </div>
-        <div onclick="window.toggleStatInfo('avgDest', event)" class="flex flex-col justify-center items-center bg-[#1a1a1a] px-3 py-1 rounded-lg border border-gray-800 relative min-w-[70px] h-10 flex-1 cursor-pointer hover:bg-[#222] transition-colors">
-            <button class="absolute top-1 right-1 text-[8px] text-gray-500 pointer-events-none">ⓘ</button>
+        <div onclick="window.toggleStatInfo('avgDest', event)" class="flex flex-col justify-center items-center bg-card px-3 py-1 rounded-lg border border-gray-800 relative min-w-[70px] h-10 flex-1 cursor-pointer hover:bg-raised transition-colors">
+            <button class="absolute top-1 right-1 text-[10px] text-gray-500 pointer-events-none">ⓘ</button>
             <div id="tooltip-avgDest" class="info-tooltip">Average %: The average destruction percentage achieved per used attack (Total Destruction ÷ Used Attacks).</div>
-            <span class="text-[7px] font-black text-gray-500 uppercase tracking-tighter leading-none mb-0.5">Avg %</span>
+            <span class="text-[10px] font-black text-gray-500 uppercase tracking-tighter leading-none mb-0.5">Avg %</span>
             <p class="text-[11px] font-bold ${avgDestColor} leading-none">${avgDestAtk}%</p>
         </div>
-        <div onclick="window.toggleStatInfo('probWin', event)" class="flex flex-col justify-center items-center bg-[#1a1a1a] px-3 py-1 rounded-lg border border-gray-800 relative min-w-[70px] h-10 flex-1 cursor-pointer hover:bg-[#222] transition-colors">
-            <button class="absolute top-1 right-1 text-[8px] text-gray-500 pointer-events-none">ⓘ</button>
+        <div onclick="window.toggleStatInfo('probWin', event)" class="flex flex-col justify-center items-center bg-card px-3 py-1 rounded-lg border border-gray-800 relative min-w-[70px] h-10 flex-1 cursor-pointer hover:bg-raised transition-colors">
+            <button class="absolute top-1 right-1 text-[10px] text-gray-500 pointer-events-none">ⓘ</button>
             <div id="tooltip-probWin" class="info-tooltip">Win Probability: A weighted calculation of the likelihood of victory factoring in score and resource exhaustion (Simulated Outcomes).</div>
-            <span class="text-[7px] font-black text-gray-500 uppercase tracking-tighter leading-none mb-0.5">Win Prob.</span>
+            <span class="text-[10px] font-black text-gray-500 uppercase tracking-tighter leading-none mb-0.5">Win Prob.</span>
             <p class="text-[11px] font-bold ${winProbColor} leading-none">${winProb}%</p>
         </div>
-        <div onclick="window.toggleStatInfo('clean', event)" class="flex flex-col justify-center items-center bg-[#1a1a1a] px-3 py-1 rounded-lg border border-gray-800 relative min-w-[70px] h-10 flex-1 cursor-pointer hover:bg-[#222] transition-colors">
-            <button class="absolute top-1 right-1 text-[8px] text-gray-500 pointer-events-none">ⓘ</button>
+        <div onclick="window.toggleStatInfo('clean', event)" class="flex flex-col justify-center items-center bg-card px-3 py-1 rounded-lg border border-gray-800 relative min-w-[70px] h-10 flex-1 cursor-pointer hover:bg-raised transition-colors">
+            <button class="absolute top-1 right-1 text-[10px] text-gray-500 pointer-events-none">ⓘ</button>
             <div id="tooltip-clean" class="info-tooltip">Cleanup Needed: The count of enemy bases that have been attacked but not 3-starred (1-2 Star Bases Count).</div>
-            <span class="text-[7px] font-black text-gray-500 uppercase tracking-tighter leading-none mb-0.5">Cleanup</span>
+            <span class="text-[10px] font-black text-gray-500 uppercase tracking-tighter leading-none mb-0.5">Cleanup</span>
             <p class="text-[11px] font-bold ${cleanupColor} leading-none">${cleanupNeeded}</p>
         </div>
     `;
 
     controlsContainer.innerHTML = `
         <div class="flex flex-col gap-1 w-full lg:w-1/3 pr-0 lg:pr-2 mb-2 lg:mb-0">
-            <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Side</span>
+            <span class="text-[11px] font-bold text-gray-500 uppercase pl-1">Side</span>
             <div class="flex items-center gap-1.5 w-full">
                 <button id="toggleClan" class="flex flex-1 items-center justify-center gap-1.5 px-2 py-1 rounded-lg border ${currentWarFilters.selectedClan === 'clan' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all h-8 min-w-0">
-                    <img src="${warData.clan.badgeUrls.small}" class="w-4 h-4 shrink-0"><span class="text-[9px] font-bold uppercase truncate">${warData.clan.name}</span>
+                    <img src="${warData.clan.badgeUrls.small}" class="w-4 h-4 shrink-0"><span class="text-[11px] font-bold uppercase truncate">${warData.clan.name}</span>
                 </button>
                 <button id="toggleOpponent" class="flex flex-1 items-center justify-center gap-1.5 px-2 py-1 rounded-lg border ${currentWarFilters.selectedClan === 'opponent' ? 'border-gold bg-gold/10 text-gold' : 'border-gray-700 text-gray-500 hover:border-gray-500'} transition-all h-8 min-w-0">
-                    <img src="${warData.opponent.badgeUrls.small}" class="w-4 h-4 shrink-0"><span class="text-[9px] font-bold uppercase truncate">${warData.opponent.name}</span>
+                    <img src="${warData.opponent.badgeUrls.small}" class="w-4 h-4 shrink-0"><span class="text-[11px] font-bold uppercase truncate">${warData.opponent.name}</span>
                 </button>
             </div>
         </div>
         <div class="flex flex-row items-end gap-1.5 sm:gap-2 lg:gap-4 flex-1">
             <div class="flex flex-col gap-1">
-                <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Attacks</span>
-                <select id="filterAttacks" class="control-base h-8 w-[80px] sm:w-28 px-1 text-[9px] sm:text-[10px]">
+                <span class="text-[11px] font-bold text-gray-500 uppercase pl-1">Attacks</span>
+                <select id="filterAttacks" class="control-base h-8 w-[80px] sm:w-28 px-1 text-[11px] sm:text-[11px]">
                     <option value="all" ${currentWarFilters.attacks === 'all' ? 'selected' : ''}>All Members</option>
                     <option value="atk1used" ${currentWarFilters.attacks === 'atk1used' ? 'selected' : ''}>Attack #1 Used</option>
                     <option value="atk2used" ${currentWarFilters.attacks === 'atk2used' ? 'selected' : ''}>Attack #2 Used</option>
@@ -481,8 +485,8 @@ export function renderWarDetail(warData, history = []) {
                 </select>
             </div>
             <div class="flex flex-col gap-1">
-                <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Results</span>
-                <select id="filterPerformance" class="control-base h-8 w-[80px] sm:w-28 px-1 text-[9px] sm:text-[10px]">
+                <span class="text-[11px] font-bold text-gray-500 uppercase pl-1">Results</span>
+                <select id="filterPerformance" class="control-base h-8 w-[80px] sm:w-28 px-1 text-[11px] sm:text-[11px]">
                     <option value="all" ${currentWarFilters.performance === 'all' ? 'selected' : ''}>All Stars</option>
                     <option value="0-2" ${currentWarFilters.performance === '0-2' ? 'selected' : ''}>0-2 Stars</option>
                     <option value="3-5" ${currentWarFilters.performance === '3-5' ? 'selected' : ''}>3-5 Stars</option>
@@ -490,8 +494,8 @@ export function renderWarDetail(warData, history = []) {
                 </select>
             </div>
             <div class="flex flex-col gap-1">
-                <span class="text-[9px] font-bold text-gray-500 uppercase pl-1">Sort</span>
-                <select id="filterSort" class="control-base h-8 w-[85px] sm:w-28 px-1 text-[9px] sm:text-[10px] truncate">
+                <span class="text-[11px] font-bold text-gray-500 uppercase pl-1">Sort</span>
+                <select id="filterSort" class="control-base h-8 w-[85px] sm:w-28 px-1 text-[11px] sm:text-[11px] truncate">
                     <option value="mapPosition" ${currentWarFilters.sortBy === 'mapPosition' ? 'selected' : ''}>Map Position</option>
                     <option value="stars" ${currentWarFilters.sortBy === 'stars' ? 'selected' : ''}>Total Stars</option>
                 </select>
@@ -559,25 +563,21 @@ export function renderWarDetail(warData, history = []) {
     container.className = "space-y-3";
     container.innerHTML = `
         <div class="flex items-center justify-between px-1 mb-2">
-            <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">War Roster</p>
+            <p class="text-[11px] font-black text-gray-500 uppercase tracking-widest">War Roster</p>
         </div>
         ${filtered.map(m => renderMemberCard(m, infoInfoMap, warData.teamSize * 2, warAttacksMap)).join('')}`;
 }
 
 export function renderAbout(clanData) {
     const container = document.getElementById('aboutContent'); if (!container || !clanData) return;
-    const labelsHtml = (clanData.labels || []).map(l => `<div class="flex items-center gap-1.5 bg-[#252525] px-2 py-1 rounded border border-gray-800"><img src="${l.iconUrls.small}" class="w-3.5 h-3.5"><span class="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase">${l.name}</span></div>`).join('');
-    container.innerHTML = `<div class="panel p-4 md:p-6 space-y-6 md:space-y-8">
-        <div class="bg-[#1a1a1a] p-4 md:p-6 rounded-xl border border-gray-800">
+    const labelsHtml = (clanData.labels || []).map(l => `<div class="flex items-center gap-1.5 bg-raised px-2 py-1 rounded border border-gray-800"><img src="${l.iconUrls.small}" class="w-3.5 h-3.5"><span class="text-[10px] md:text-[11px] font-bold text-gray-400 uppercase">${l.name}</span></div>`).join('');
+    container.innerHTML = `<div class="space-y-5 md:space-y-6">
+        <div id="overviewKpis" class="grid grid-cols-2 lg:grid-cols-4 gap-3"></div>
+        <div class="panel p-4 md:p-6 space-y-6 md:space-y-8">
+        <div class="bg-card p-4 md:p-6 rounded-xl border border-gray-800">
             <div class="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
                 <div class="flex-1 space-y-4 w-full">
-                    <div class="flex items-center gap-4">
-                        <img src="${clanData.badgeUrls.medium}" class="w-16 h-16 md:w-20 md:h-20">
-                        <div>
-                            <h2 class="medieval text-xl md:text-2xl font-bold gold">${clanData.name}</h2>
-                            <div class="flex items-center gap-2 mt-1"><span class="text-[10px] md:text-xs font-mono text-gray-500">${clanData.tag}</span></div>
-                        </div>
-                    </div>
+                    <h3 class="text-sm font-bold text-gray-200">About the clan</h3>
                     <p class="text-[11px] md:text-sm text-gray-300 leading-relaxed italic">${clanData.description}</p>
                 </div>
                 <div class="grid grid-cols-2 gap-x-4 md:gap-x-8 gap-y-4 w-full md:w-auto md:min-w-[350px]">
@@ -590,50 +590,51 @@ export function renderAbout(clanData) {
             </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-[#1a1a1a] p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]">
+            <div class="bg-card p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]">
                 <div class="flex-1 flex flex-col">
                     <h3 class="medieval text-xs md:text-sm font-bold gold mb-4 flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                         War Performance
                     </h3>
                     <div class="space-y-3 md:space-y-4 flex-1">
-                        <div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">War League</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.warLeague?.name || 'Unranked'}</p></div>
+                        <div class="p-3 bg-raised rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">War League</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.warLeague?.name || 'Unranked'}</p></div>
                         <div class="grid grid-cols-3 gap-2">
-                            <div class="text-center p-2 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Victories</p><p class="text-green-500 font-bold text-[11px] md:text-xs">${clanData.warWins}</p></div>
-                            <div class="text-center p-2 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Defeats</p><p class="text-red-500 font-bold text-[11px] md:text-xs">${clanData.warLosses}</p></div>
-                            <div class="text-center p-2 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">DRAWS</p><p class="text-gray-500 font-bold text-[11px] md:text-xs">${clanData.warTies}</p></div>
+                            <div class="text-center p-2 bg-raised rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Victories</p><p class="text-green-500 font-bold text-[11px] md:text-xs">${clanData.warWins}</p></div>
+                            <div class="text-center p-2 bg-raised rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Defeats</p><p class="text-red-500 font-bold text-[11px] md:text-xs">${clanData.warLosses}</p></div>
+                            <div class="text-center p-2 bg-raised rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">DRAWS</p><p class="text-gray-500 font-bold text-[11px] md:text-xs">${clanData.warTies}</p></div>
                         </div>
-                        <button id="viewWarHistoryBtn" class="w-full py-2 bg-[#252525] border border-gray-700 rounded h-[58px] text-[9px] md:text-[10px] font-bold uppercase hover:border-gold transition-colors">View War History <span class="ml-1 opacity-70">›</span></button>
+                        <button id="viewWarHistoryBtn" class="w-full py-2 bg-raised border border-gray-700 rounded h-[58px] text-[11px] md:text-[11px] font-bold uppercase hover:border-gold transition-colors">View War History <span class="ml-1 opacity-70">›</span></button>
                     </div>
                 </div>
             </div>
-            <div class="bg-[#1a1a1a] p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]">
+            <div class="bg-card p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]">
                 <div>
                     <h3 class="medieval text-xs md:text-sm font-bold gold mb-4 flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H5a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m0 10V4m-2 4h1m1 4h1m-3 10a1 1 0 011-1h2a1 1 0 011 1v3a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3z" /></svg>
                         Clan Capital
                     </h3>
                     <div class="space-y-3 md:space-y-4">
-                        <div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Capital League</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.capitalLeague?.name || 'Unranked'}</p></div>
-                        <div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Capital Hall Level</p><p class="stat-value text-white text-[11px] md:text-xs">Level ${clanData.clanCapital?.capitalHallLevel || 'Unknown'}</p></div>
-                        <div class="p-3 bg-[#252525] rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Districts Unlocked</p><p class="stat-value text-white text-[11px] md:text-xs">${(clanData.clanCapital?.districts || []).length} Districts</p></div>
+                        <div class="p-3 bg-raised rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Capital League</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.capitalLeague?.name || 'Unranked'}</p></div>
+                        <div class="p-3 bg-raised rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Capital Hall Level</p><p class="stat-value text-white text-[11px] md:text-xs">Level ${clanData.clanCapital?.capitalHallLevel || 'Unknown'}</p></div>
+                        <div class="p-3 bg-raised rounded-lg h-[58px] flex flex-col justify-center"><p class="stat-label">Districts Unlocked</p><p class="stat-value text-white text-[11px] md:text-xs">${(clanData.clanCapital?.districts || []).length} Districts</p></div>
                     </div>
                 </div>
             </div>
-            <div class="bg-[#1a1a1a] p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]">
+            <div class="bg-card p-4 md:p-5 rounded-xl border border-gray-800 flex flex-col justify-between min-h-[250px] md:min-h-[300px]">
                 <div>
                     <h3 class="medieval text-xs md:text-sm font-bold gold mb-4 flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         Join Requirements
                     </h3>
                     <div class="space-y-3 md:space-y-4">
-                        <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Required Trophies</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.requiredTrophies.toLocaleString()}</p></div>
-                        <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Min. Town Hall</p><p class="stat-value text-white text-[11px] md:text-xs">TH${clanData.requiredTownhallLevel}</p></div>
-                        <div class="p-3 bg-[#252525] rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Builder Trophies</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.requiredBuilderBaseTrophies.toLocaleString()}</p></div>
+                        <div class="p-3 bg-raised rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Required Trophies</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.requiredTrophies.toLocaleString()}</p></div>
+                        <div class="p-3 bg-raised rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Min. Town Hall</p><p class="stat-value text-white text-[11px] md:text-xs">TH${clanData.requiredTownhallLevel}</p></div>
+                        <div class="p-3 bg-raised rounded-lg flex justify-between items-center h-[58px]"><p class="stat-label">Builder Trophies</p><p class="stat-value text-white text-[11px] md:text-xs">${clanData.requiredBuilderBaseTrophies.toLocaleString()}</p></div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>`;
 }
 
@@ -729,13 +730,13 @@ export function renderRaidSummary(raidData, membersLookup = []) {
         const thLevel = mInfo?.townHallLevel || mInfo?.townhallLevel || 1;
 
         return `
-            <tr class="border-b border-gray-800/50 hover:bg-[#1a1a1a] transition-colors">
+            <tr class="border-b border-gray-800/50 hover:bg-card transition-colors">
                 <td class="p-3">
                     <div class="flex items-center gap-3">
                         <img src="${getTHImage(thLevel)}" class="w-8 h-8">
                         <div class="min-w-0">
                             <p class="font-bold text-[11px] text-white truncate">${member.name}</p>
-                            <p class="text-[9px] gold font-bold uppercase tracking-tighter">TH${thLevel}</p>
+                            <p class="text-[11px] gold font-bold uppercase tracking-tighter">TH${thLevel}</p>
                         </div>
                     </div>
                 </td>
@@ -775,10 +776,10 @@ export function renderRaidAttacks(raidData) {
     });
 
     tableBody.innerHTML = log.map(r => `
-        <tr class="border-b border-gray-800/50 hover:bg-[#1a1a1a] transition-colors">
+        <tr class="border-b border-gray-800/50 hover:bg-card transition-colors">
             <td class="p-3 text-gray-500 font-mono">#${r.index}</td>
             <td class="p-3"><div class="flex items-center gap-2"><img src="${r.defender.badgeUrls.small}" class="w-5 h-5"><span class="font-bold text-white">${r.defender.name}</span></div></td>
-            <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${r.status === 'Defeated' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}">${r.status}</span></td>
+            <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full text-[11px] font-bold uppercase ${r.status === 'Defeated' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}">${r.status}</span></td>
             <td class="p-3 text-center text-gray-400">${r.attackCount}</td>
             <td class="p-3 text-center text-gold font-bold">${r.districtsDestroyed} / ${r.districtCount}</td>
         </tr>`).join('');
@@ -811,10 +812,10 @@ export function renderRaidDefenses(raidData) {
     });
 
     tableBody.innerHTML = log.map(r => `
-        <tr class="border-b border-gray-800/50 hover:bg-[#1a1a1a] transition-colors">
+        <tr class="border-b border-gray-800/50 hover:bg-card transition-colors">
             <td class="p-3 text-gray-500 font-mono">#${r.index}</td>
             <td class="p-3"><div class="flex items-center gap-2"><img src="${r.attacker.badgeUrls.small}" class="w-5 h-5"><span class="font-bold text-white">${r.attacker.name}</span></div></td>
-            <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${r.status === 'Defeated' ? 'bg-red-500/10 text-red-500' : 'bg-yellow-500/10 text-yellow-500'}">${r.status}</span></td>
+            <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full text-[11px] font-bold uppercase ${r.status === 'Defeated' ? 'bg-red-500/10 text-red-500' : 'bg-yellow-500/10 text-yellow-500'}">${r.status}</span></td>
             <td class="p-3 text-center text-gray-400">${r.attackCount}</td>
             <td class="p-3 text-center text-red-400 font-bold">${r.districtsDestroyed} / ${r.districtCount}</td>
         </tr>`).join('');
