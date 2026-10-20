@@ -3,11 +3,22 @@
  */
 import { store, members } from '../store.js';
 import { esc, debounce } from '../util.js';
-import { seg, chips, bindToggle, kpi, noDataMessage, mountPagedList, select, bindSelect } from '../ui.js';
+import { seg, chips, bindToggle, kpi, noDataMessage, mountPagedList, mountMultiSelect } from '../ui.js';
 import { warHistory, record } from '../stats.js';
 import { warHero, warRow, fillPredictions, startCountdowns } from './warParts.js';
 
-const state = { result: 'all', kind: 'all', q: '', member: '' };
+const state = { result: 'all', kind: 'all', q: '', members: [], match: 'any' };
+
+/** Current members plus anyone who appears in a tracked war line-up. */
+function memberOptions() {
+    const current = new Map(members().map(m => [m.tag, m]));
+    const all = new Map();
+    for (const m of current.values()) all.set(m.tag, { value: m.tag, label: m.name, sub: `TH${m.townHallLevel}` });
+    for (const w of store.wars) for (const m of w.clan.members || []) {
+        if (!all.has(m.tag)) all.set(m.tag, { value: m.tag, label: m.name, sub: `TH${m.townhallLevel} · former` });
+    }
+    return [...all.values()].sort((a, b) => a.label.localeCompare(b.label));
+}
 
 export function render(root) {
     if (!store.clan) { root.innerHTML = `<h1 class="sr-only">Wars</h1>${noDataMessage()}`; return; }
@@ -37,7 +48,10 @@ export function render(root) {
                     ${chips('kind', 'War type', [{ value: 'all', label: 'All types' }, { value: 'regular', label: 'Regular' }, { value: 'cwl', label: 'CWL' }], state.kind)}
                     <label class="field" style="flex:1;min-width:180px"><span class="sr-only">Search opponent clan</span>
                         <input class="input" type="search" id="warSearch" placeholder="Search clan name or tag" value="${esc(state.q)}" autocomplete="off"></label>
-                    ${select('member', 'Member in war', [{ value: '', label: 'Any member' }, ...[...members()].sort((a, b) => a.name.localeCompare(b.name)).map(m => ({ value: m.tag, label: `With ${m.name}` }))], state.member, { hideLabel: true })}
+                </div>
+                <div class="controls" style="margin-bottom:12px">
+                    <div id="memberFilter" style="flex:1;min-width:240px"></div>
+                    <div id="matchMode"></div>
                 </div>
                 <div id="warList"></div>
             </section>
@@ -51,16 +65,32 @@ export function render(root) {
             .filter(e => state.kind === 'all' || e.kind === state.kind)
             .filter(e => !q || (e.opponent?.name || '').toLowerCase().includes(q) || (e.opponent?.tag || '').toLowerCase().includes(q))
             // Only tracked wars have line-ups, so a member filter shows tracked wars only.
-            .filter(e => !state.member || e.war?.clan.members?.some(m => m.tag === state.member));
+            .filter(e => {
+                if (!state.members.length) return true;
+                const lineup = new Set((e.war?.clan.members || []).map(m => m.tag));
+                return state.match === 'all' ? state.members.every(t => lineup.has(t)) : state.members.some(t => lineup.has(t));
+            });
         warList.setItems(list.map(warRow));
     };
 
     bindToggle(root, 'result', v => { state.result = v; draw(); });
     bindToggle(root, 'kind', v => { state.kind = v; draw(); });
-    bindSelect(root, 'member', v => { state.member = v; draw(); });
+    // "Any of / All of" only matters once two or more members are picked.
+    const drawMatch = () => {
+        const el = root.querySelector('#matchMode');
+        el.innerHTML = state.members.length > 1 ? seg('match', 'Match wars with', [{ value: 'any', label: 'Any of them' }, { value: 'all', label: 'All of them' }], state.match) : '';
+        bindToggle(el, 'match', v => { state.match = v; draw(); });
+    };
+    const picker = mountMultiSelect(root.querySelector('#memberFilter'), {
+        label: 'Filter by members in the war', placeholder: 'Filter by member in war…',
+        options: memberOptions(), selected: state.members,
+        onChange: (tags) => { state.members = tags; drawMatch(); draw(); }
+    });
+    drawMatch();
     root.querySelector('#warSearch').addEventListener('input', debounce(e => { state.q = e.target.value; draw(); }, 120));
     draw();
 
     fillPredictions(root);
-    return startCountdowns(root);
+    const stop = startCountdowns(root);
+    return () => { stop(); picker.destroy(); };
 }

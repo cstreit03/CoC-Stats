@@ -555,3 +555,36 @@ details.disclosure > div { padding-bottom: 14px; }
 .pager-gap { padding: 0 2px; color: var(--muted); }
 @media (max-width: 520px) { .pager { justify-content: center; } }
 #warList, #roster, [id$="Table"], #standings, #plAttacks, #plRaids, #msEvents, #msTenure, #rdMatrix, #cwlScoreTable { scroll-margin-top: 76px; }
+
+/* ---------- Multi-select ---------- */
+.ms { position: relative; min-width: 220px; flex: 1; }
+.ms-control {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 38px; padding: 4px 8px;
+    border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: text;
+}
+.ms-control:hover { border-color: var(--line-strong); }
+.ms-control:focus-within { outline: 2px solid var(--focus); outline-offset: 1px; }
+.ms-chips { display: contents; }
+.ms-chip {
+    display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 4px 0 10px; border-radius: 999px;
+    background: var(--accent-bg); color: var(--accent); font-size: 13px; font-weight: 600; max-width: 100%;
+}
+.ms-chip button { all: unset; cursor: pointer; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; }
+.ms-chip button:hover { background: color-mix(in srgb, var(--accent) 18%, transparent); }
+.ms-chip button:focus-visible { outline: 2px solid var(--focus); }
+.ms-chip svg { width: 12px; height: 12px; }
+.ms-input { flex: 1; min-width: 120px; border: 0; outline: 0; background: transparent; height: 28px; font-size: 14px; }
+.ms-input::placeholder { color: var(--muted); }
+.ms-list {
+    position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + 4px); margin: 0; padding: 4px; list-style: none;
+    max-height: 300px; overflow-y: auto; background: var(--surface); border: 1px solid var(--line-strong);
+    border-radius: 12px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+.ms-option { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+.ms-option.active, .ms-option:hover { background: var(--surface-2); }
+.ms-check { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid var(--line-strong); flex: none; display: grid; place-items: center; }
+.ms-option[aria-selected="true"] .ms-check { background: var(--accent-solid); border-color: var(--accent-solid); }
+.ms-option[aria-selected="true"] .ms-check::after { content: ''; width: 9px; height: 5px; border: 2px solid #1a1405; border-top: 0; border-right: 0; transform: rotate(-45deg) translate(1px, -1px); }
+.ms-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.ms-sub { color: var(--muted); font-size: 12px; flex: none; }
+.ms-empty { padding: 10px; color: var(--muted); font-size: 14px; }

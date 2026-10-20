@@ -40,6 +40,103 @@ export function bindSelect(root, name, onChange) {
     root.querySelector(`[data-select="${name}"]`)?.addEventListener('change', (e) => onChange(e.target.value));
 }
 
+let msCount = 0;
+
+/**
+ * Searchable multi-select (ARIA combobox + listbox). Type to filter, Enter or
+ * click to toggle, Backspace removes the last pick, Escape closes.
+ * options: [{ value, label, sub? }]; onChange(selectedValues).
+ */
+export function mountMultiSelect(container, { label, placeholder = 'Search…', options, selected = [], onChange }) {
+    const id = `ms${++msCount}`;
+    let picked = [...selected], query = '', open = false, active = 0;
+    const byValue = new Map(options.map(o => [o.value, o]));
+
+    container.innerHTML = `<div class="ms">
+        <label class="sr-only" for="${id}-input">${esc(label)}</label>
+        <div class="ms-control">
+            <span class="ms-chips"></span>
+            <input id="${id}-input" class="ms-input" type="text" autocomplete="off" placeholder="${esc(placeholder)}"
+                role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="${id}-list">
+        </div>
+        <ul class="ms-list" id="${id}-list" role="listbox" aria-multiselectable="true" aria-label="${esc(label)}" hidden></ul>
+    </div>`;
+    const input = container.querySelector('.ms-input');
+    const list = container.querySelector('.ms-list');
+    const chipsEl = container.querySelector('.ms-chips');
+
+    const matches = () => {
+        const q = query.trim().toLowerCase();
+        return options.filter(o => !q || o.label.toLowerCase().includes(q) || (o.sub || '').toLowerCase().includes(q));
+    };
+    const renderChips = () => {
+        chipsEl.innerHTML = picked.map(v => `<span class="ms-chip">${esc(byValue.get(v)?.label ?? v)}
+            <button type="button" data-remove="${esc(v)}" aria-label="Remove ${esc(byValue.get(v)?.label ?? v)}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></button></span>`).join('');
+        input.placeholder = picked.length ? '' : placeholder;
+    };
+    const renderList = () => {
+        const items = matches();
+        active = Math.min(active, Math.max(0, items.length - 1));
+        list.innerHTML = items.length ? items.map((o, i) => `<li id="${id}-opt-${i}" role="option" class="ms-option${i === active ? ' active' : ''}"
+            aria-selected="${picked.includes(o.value)}" data-value="${esc(o.value)}">
+            <span class="ms-check" aria-hidden="true"></span><span class="ms-label">${esc(o.label)}</span>${o.sub ? `<span class="ms-sub">${esc(o.sub)}</span>` : ''}</li>`).join('')
+            : '<li class="ms-empty" role="presentation">No matches</li>';
+        input.setAttribute('aria-activedescendant', items.length ? `${id}-opt-${active}` : '');
+        list.querySelector('.ms-option.active')?.scrollIntoView({ block: 'nearest' });
+    };
+    const setOpen = (v) => {
+        open = v;
+        list.hidden = !v;
+        input.setAttribute('aria-expanded', String(v));
+        if (v) renderList();
+    };
+    const toggle = (value) => {
+        picked = picked.includes(value) ? picked.filter(v => v !== value) : [...picked, value];
+        renderChips();
+        if (open) renderList();
+        onChange(picked);
+    };
+
+    input.addEventListener('focus', () => setOpen(true));
+    input.addEventListener('input', () => { query = input.value; active = 0; setOpen(true); });
+    input.addEventListener('keydown', (e) => {
+        const items = matches();
+        if (e.key === 'ArrowDown') { e.preventDefault(); if (!open) setOpen(true); else { active = Math.min(items.length - 1, active + 1); renderList(); } }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(0, active - 1); renderList(); }
+        else if (e.key === 'Enter') { e.preventDefault(); if (open && items[active]) toggle(items[active].value); }
+        else if (e.key === 'Escape') { setOpen(false); }
+        else if (e.key === 'Backspace' && !input.value && picked.length) { toggle(picked[picked.length - 1]); }
+    });
+    // Keep the list open while picking several members (mouse and touch):
+    // pointerdown flags the pick so the input's blur doesn't close the list.
+    let picking = false;
+    list.addEventListener('pointerdown', (e) => { e.preventDefault(); picking = true; });
+    list.addEventListener('click', (e) => {
+        const li = e.target.closest('[data-value]');
+        picking = false;
+        if (!li) return;
+        toggle(li.dataset.value);
+        input.focus({ preventScroll: true });
+    });
+    chipsEl.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-remove]');
+        if (btn) { toggle(btn.dataset.remove); input.focus(); }
+    });
+    container.querySelector('.ms-control').addEventListener('mousedown', (e) => {
+        if (e.target === e.currentTarget || e.target === chipsEl) { e.preventDefault(); input.focus(); }
+    });
+    const outside = (e) => { if (!container.contains(e.target)) setOpen(false); };
+    document.addEventListener('mousedown', outside);
+    input.addEventListener('blur', () => setTimeout(() => { if (!picking && !container.contains(document.activeElement)) setOpen(false); }, 0));
+
+    renderChips();
+    return {
+        clear() { picked = []; renderChips(); if (open) renderList(); onChange(picked); },
+        destroy() { document.removeEventListener('mousedown', outside); }
+    };
+}
+
 export function kpi(label, value, sub = '', subClass = '') {
     return `<div class="kpi"><p class="kpi-label">${label}</p><p class="kpi-value">${value}</p>${sub ? `<p class="kpi-sub ${subClass}">${sub}</p>` : ''}</div>`;
 }
