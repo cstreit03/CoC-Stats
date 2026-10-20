@@ -94,8 +94,8 @@ Requires Node 18+ and a free Cloudflare account.
    npm run deploy
    ```
    Data appears after the next hourly run.
-4. **Custom domain (optional).** In the Cloudflare dashboard: **Workers & Pages → coc-stats → Settings → Domains & Routes → Add → Custom domain**. The domain's DNS must be on Cloudflare; if it currently points at GitHub Pages, remove that record and disable Pages.
-5. **Auto-deploy on push (optional).** **Workers & Pages → coc-stats → Settings → Build → Connect** to the GitHub repo, and add `COC_API_TOKEN` there as a secret.
+4. **Custom domain (optional).** In the Cloudflare dashboard: **Workers & Pages → clash-of-clans-stats → Settings → Domains & Routes → Add → Custom domain**. The domain's DNS must be on Cloudflare; if it currently points at GitHub Pages, remove that record and disable Pages.
+5. **Auto-deploy on push (optional).** **Workers & Pages → clash-of-clans-stats → Settings → Build → Connect** to the GitHub repo, and add `COC_API_TOKEN` there as a secret.
 
 To change the schedule, edit `crons` in `wrangler.toml` and redeploy.
 

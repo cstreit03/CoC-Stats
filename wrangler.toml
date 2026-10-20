@@ -1,4 +1,4 @@
-name = "coc-stats"
+name = "clash-of-clans-stats"
 main = "worker/index.js"
 compatibility_date = "2026-09-01"
 # Keep variables added in the Cloudflare dashboard when deploying from Git.
