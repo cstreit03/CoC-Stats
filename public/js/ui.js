@@ -189,18 +189,34 @@ function onCap(container, getState, redraw) {
 /**
  * Pagination bar: "1–10 of 139 wars · ‹ 1 2 3 … 14 ›".
  */
-function pagerHtml(page, pageSize, total, noun) {
+/**
+ * Page numbers to show, always exactly `slots` entries (null = gap) once there
+ * are more pages than slots, so the pager never changes width between pages.
+ */
+function pageSlots(page, pages, slots) {
+    const range = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
+    if (pages <= slots) return range(1, pages);
+    if (slots === 5) {
+        if (page <= 3) return [1, 2, 3, null, pages];
+        if (page >= pages - 2) return [1, null, pages - 2, pages - 1, pages];
+        return [1, null, page, null, pages];
+    }
+    if (page <= 4) return [1, 2, 3, 4, 5, null, pages];
+    if (page >= pages - 3) return [1, null, ...range(pages - 4, pages)];
+    return [1, null, page - 1, page, page + 1, null, pages];
+}
+
+/** Narrow hosts (phones, half-width cards) get the stacked 5-slot pager. */
+const isNarrow = (container) => container.clientWidth < 520;
+
+function pagerHtml(page, pageSize, total, noun, narrow) {
     const pages = Math.ceil(total / pageSize);
     if (pages <= 1) return '';
     const first = (page - 1) * pageSize + 1, last = Math.min(total, page * pageSize);
-    // First, last, and a window around the current page, with gaps as ellipses.
-    const nums = [...new Set([1, pages, page - 1, page, page + 1].filter(n => n >= 1 && n <= pages))].sort((x, y) => x - y);
-    const items = [];
-    nums.forEach((n, i) => {
-        if (i && n - nums[i - 1] > 1) items.push('<span class="pager-gap" aria-hidden="true">…</span>');
-        items.push(`<button type="button" class="pager-num" data-page="${n}" ${n === page ? 'aria-current="page"' : ''} aria-label="Page ${n}">${n}</button>`);
-    });
-    return `<nav class="pager no-print" aria-label="Pages of ${esc(noun)}">
+    const items = pageSlots(page, pages, narrow ? 5 : 7).map(n => n === null
+        ? '<span class="pager-gap" aria-hidden="true">…</span>'
+        : `<button type="button" class="pager-num" data-page="${n}" ${n === page ? 'aria-current="page"' : ''} aria-label="Page ${n}">${n}</button>`);
+    return `<nav class="pager no-print ${narrow ? 'narrow' : ''}" aria-label="Pages of ${esc(noun)}">
         <span class="note" role="status">${first}–${last} of ${total} ${esc(noun)}</span>
         <div class="pager-btns">
             <button type="button" class="pager-num" data-page="${page - 1}" ${page === 1 ? 'disabled' : ''} aria-label="Previous page">‹</button>
@@ -222,20 +238,29 @@ function onPage(container, getState, redraw) {
     });
 }
 
+/** Keeps a paged block at the tallest height it has shown, so the last page doesn't shrink the page. */
+function holdHeight(el, st) {
+    if (!el) return;
+    el.style.minHeight = st.minHeight ? `${st.minHeight}px` : '';
+    st.minHeight = Math.max(st.minHeight || 0, el.offsetHeight);
+    el.style.minHeight = `${st.minHeight}px`;
+}
+
 /**
  * A paged list of pre-rendered items (rows, cards), `pageSize` per page.
  * Returns { setItems(htmlItems) }; filters call setItems, which goes back to page 1.
  */
 export function mountPagedList(container, { className = '', pageSize = 10, noun = 'items', emptyHtml = '<p class="empty">Nothing to show.</p>' } = {}) {
-    const st = { items: [], page: 1 };
+    const st = { items: [], page: 1, minHeight: 0 };
     const draw = () => {
         if (!st.items.length) { container.innerHTML = emptyHtml; return; }
         const start = (st.page - 1) * pageSize;
-        container.innerHTML = `<div class="${className}">${st.items.slice(start, start + pageSize).join('')}</div>${pagerHtml(st.page, pageSize, st.items.length, noun)}`;
+        container.innerHTML = `<div class="${className}">${st.items.slice(start, start + pageSize).join('')}</div>${pagerHtml(st.page, pageSize, st.items.length, noun, isNarrow(container))}`;
+        if (st.items.length > pageSize) holdHeight(container.firstElementChild, st);
     };
     onPage(container, () => st, draw);
     return {
-        setItems(items) { st.items = items; st.page = 1; draw(); }
+        setItems(items) { st.items = items; st.page = 1; st.minHeight = 0; draw(); }
     };
 }
 
@@ -262,7 +287,7 @@ export function mountList(container, { className = '', step = 10, noun = 'items'
  * Returns { setRows(rows), getSorted() } and renders into `container`.
  */
 export function mountTable(container, { columns, rows, sort, caption, rowClass, limit = 10, noun = 'rows' }) {
-    let state = { rows, sort: sort || null, page: 1 };
+    let state = { rows, sort: sort || null, page: 1, widths: null, minHeight: 0 };
 
     const sorted = () => {
         if (!state.sort) return state.rows;
@@ -277,11 +302,8 @@ export function mountTable(container, { columns, rows, sort, caption, rowClass, 
         });
     };
 
-    const render = () => {
-        const all = sorted();
-        state.page = Math.min(state.page, Math.max(1, Math.ceil(all.length / limit)));
-        const list = all.slice((state.page - 1) * limit, state.page * limit);
-        container.innerHTML = `<div class="table-wrap"><table class="table">
+    const tableHtml = (list, widths) => `<table class="table" ${widths ? `style="table-layout:fixed;width:max(100%, ${widths.reduce((a, b) => a + b, 0)}px)"` : ''}>
+            ${widths ? `<colgroup>${widths.map(w => `<col style="width:${w}px">`).join('')}</colgroup>` : ''}
             ${caption ? `<caption class="sr-only">${esc(caption)}</caption>` : ''}
             <thead><tr>${columns.map(c => {
                 const ariaSort = state.sort?.key === c.key ? (state.sort.dir === 'asc' ? 'ascending' : 'descending') : 'none';
@@ -292,8 +314,34 @@ export function mountTable(container, { columns, rows, sort, caption, rowClass, 
             <tbody>${list.length === 0 ? `<tr><td colspan="${columns.length}" class="muted center">No data</td></tr>` : list.map(r =>
                 `<tr class="${rowClass ? rowClass(r) : ''}">${columns.map(c =>
                     `<td class="${[c.num ? 'num' : '', c.sticky ? 'sticky-col' : '', c.className || ''].join(' ')}">${c.render ? c.render(r) : esc(c.value(r) ?? '—')}</td>`).join('')}</tr>`).join('')}</tbody>
-        </table></div>${pagerHtml(state.page, limit, all.length, noun)}`;
+        </table>`;
+
+    // Column widths come from every row (not just this page) so columns don't
+    // shift between pages: lay the whole table out invisibly once and measure it.
+    const measure = (all) => {
+        const probe = document.createElement('div');
+        probe.className = 'table-wrap';
+        probe.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none;left:0;top:0;width:auto;overflow:visible';
+        probe.innerHTML = tableHtml(all, null);
+        container.appendChild(probe);
+        const widths = [...probe.querySelectorAll('thead th')].map(th => Math.ceil(th.getBoundingClientRect().width));
+        probe.remove();
+        return widths;
     };
+
+    const render = () => {
+        const all = sorted();
+        const paged = all.length > limit;
+        state.page = Math.min(state.page, Math.max(1, Math.ceil(all.length / limit)));
+        const list = all.slice((state.page - 1) * limit, state.page * limit);
+        if (paged && !state.widths) state.widths = measure(all);
+        container.innerHTML = `<div class="table-wrap">${tableHtml(list, paged ? state.widths : null)}</div>${pagerHtml(state.page, limit, all.length, noun, isNarrow(container))}`;
+        if (paged) holdHeight(container.querySelector('.table-wrap'), state);
+    };
+    // Widths depend on the viewport (name columns are narrower on phones).
+    let resizeTimer;
+    const onResize = () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { if (!container.isConnected) return window.removeEventListener('resize', onResize); state.widths = null; state.minHeight = 0; render(); }, 200); };
+    window.addEventListener('resize', onResize);
     onPage(container, () => state, render);
 
     container.addEventListener('click', (e) => {
@@ -312,7 +360,7 @@ export function mountTable(container, { columns, rows, sort, caption, rowClass, 
 
     render();
     return {
-        setRows(rows) { state.rows = rows; state.page = 1; render(); },
+        setRows(rows) { state.rows = rows; state.page = 1; state.widths = null; state.minHeight = 0; render(); },
         getSorted: sorted
     };
 }

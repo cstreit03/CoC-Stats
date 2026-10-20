@@ -448,7 +448,7 @@ a.list-item:hover .li-title { color: var(--accent); }
 .prob-legend b { font-weight: 700; color: var(--text); }
 .prob-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
 
-.war-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 12px 4px; border-bottom: 1px solid var(--line); text-decoration: none; }
+.war-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 12px 4px; border-bottom: 1px solid var(--line); text-decoration: none; min-height: 74px; }
 .war-row:last-child { border-bottom: 0; }
 a.war-row:hover .li-title { color: var(--accent); }
 .war-row .result-col { text-align: right; }
@@ -551,17 +551,20 @@ details.disclosure > div { padding-bottom: 14px; }
 .cap-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 10px; margin-top: 12px; }
 .cap-footer .note { margin-right: 4px; }
 
-.pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-top: 12px; }
-.pager-btns { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-.pager-num {
-    min-width: 38px; height: 38px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--line);
-    background: var(--surface); font-size: 14px; font-weight: 600; color: var(--text-2);
+.pager { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; margin-top: 12px; }
+.pager.narrow { flex-direction: column; align-items: center; }
+.pager-btns { display: flex; align-items: center; gap: 4px; flex: none; }
+.pager-num, .pager-gap {
+    width: 38px; height: 38px; padding: 0; border-radius: 10px; flex: none; display: inline-grid; place-items: center;
+    font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums;
 }
+.pager-num { border: 1px solid var(--line); background: var(--surface); color: var(--text-2); }
 .pager-num:hover:not([disabled]) { border-color: var(--line-strong); color: var(--text); }
 .pager-num[aria-current="page"] { background: var(--accent-solid); border-color: var(--accent-solid); color: #1a1405; }
 .pager-num[disabled] { opacity: 0.4; cursor: default; }
-.pager-gap { padding: 0 2px; color: var(--muted); }
-@media (max-width: 520px) { .pager { justify-content: center; } }
+.pager-gap { color: var(--muted); }
+.pager .note { white-space: nowrap; }
+
 #warList, #roster, [id$="Table"], #standings, #plAttacks, #plRaids, #msEvents, #msTenure, #rdMatrix, #cwlScoreTable { scroll-margin-top: 76px; }
 
 /* ---------- Multi-select ---------- */
