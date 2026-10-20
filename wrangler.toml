@@ -26,3 +26,7 @@ COC_API_BASE = "https://cocproxy.royaleapi.dev/v1"
 
 # Secret (set with `npx wrangler secret put COC_API_TOKEN`):
 #   COC_API_TOKEN  - Clash of Clans API token
+
+[observability.logs]
+enabled = false
+invocation_logs = true
