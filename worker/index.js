@@ -6,6 +6,7 @@
  */
 import { collect } from './collect.js';
 import { ensureSchema } from './schema.js';
+import { getMeta, setMeta } from './store.js';
 import * as api from './api.js';
 
 const json = (body, status = 200, maxAge = 60) => new Response(JSON.stringify(body), {
@@ -35,12 +36,24 @@ async function handleApi(req, env, url) {
     return json({ error: 'not found' }, 404, 0);
 }
 
+/**
+ * A brand-new deployment would otherwise show nothing until the next top of
+ * the hour, so the first request kicks off one collection. After that only
+ * the cron collects.
+ */
+async function bootstrap(env, ctx) {
+    if (await getMeta(env.DB, 'last_collect')) return;
+    await setMeta(env.DB, 'last_collect', { startedAt: new Date().toISOString(), steps: {}, bootstrap: true });
+    ctx.waitUntil(collect(env));
+}
+
 export default {
-    async fetch(req, env) {
+    async fetch(req, env, ctx) {
         const url = new URL(req.url);
         if (url.pathname.startsWith('/api/')) {
             try {
                 await ensureSchema(env.DB);
+                await bootstrap(env, ctx);
                 return await handleApi(req, env, url);
             }
             catch (e) { console.error(e); return json({ error: e.message }, 500, 0); }

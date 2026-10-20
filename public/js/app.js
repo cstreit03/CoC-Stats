@@ -2,7 +2,7 @@
  * Main Application Module
  * Orchestrates the data loading flow, global event listeners, and view switching.
  */
-import { roleWeight, parseCoCDate } from './constants.js';
+import { roleWeight, parseCoCDate, esc } from './constants.js';
 import {
     fetchClanData,
     fetchMemberDates,
@@ -44,6 +44,16 @@ let currentRaidIndex = 0;
 let history = null;            // { clanDaily, events, joinedAt, warlog }
 let cwlSeasons = [];
 let lastCollectAt = null;
+let lastCollectError = null;
+let bootstrapChecks = 0;
+
+/** First error from the latest collection run, if it failed to fetch the clan. */
+function collectError(report) {
+    if (!report) return null;
+    if (report.error) return report.error;
+    const clan = report.steps?.clan;
+    return typeof clan === 'string' && clan.startsWith('error') ? clan.replace(/^error: /, '') : null;
+}
 
 /**
  * UI View Controllers
@@ -131,6 +141,9 @@ function updateFreshness() {
     const el = document.getElementById('lastUpdated');
     const dot = document.querySelector('.live-dot');
     if (!el) return;
+    const pill = el.closest('.refresh-pill');
+    if (pill) pill.title = lastCollectError ? `Last update failed: ${lastCollectError}` : 'Reload the latest data (collected hourly)';
+    if (lastCollectError && !lastCollectAt) { el.innerText = 'Update failed'; dot?.classList.add('error'); return; }
     if (!lastCollectAt) { el.innerText = 'Waiting for first update'; dot?.classList.add('stale'); return; }
     el.innerText = `Updated ${timeAgo(lastCollectAt)}`;
     dot?.classList.toggle('stale', Date.now() - Date.parse(lastCollectAt) > 2 * 3600000);
@@ -188,9 +201,21 @@ async function init() {
     cwlSeasons = ok(cwlRes, 'CWL') || [];
     const status = ok(statusRes, 'status');
     lastCollectAt = status?.lastSuccess || null;
+    lastCollectError = collectError(status?.lastCollect);
     updateFreshness();
+    // A brand-new deployment collects for the first time in the background; re-check until it lands.
+    if (status?.lastCollect && !status.lastCollect.finishedAt && bootstrapChecks++ < 12) {
+        document.getElementById('lastUpdated').innerText = 'Collecting first data…';
+        setTimeout(init, 5000);
+    }
 
     const clanData = ok(clanRes, 'latest clan data');
+    if (!clanData) {
+        const about = document.getElementById('aboutContent');
+        if (about) about.innerHTML = `<div class="panel empty-state">
+            <p class="text-gray-200 font-semibold mb-1">${lastCollectError ? 'Data collection is failing' : 'No data collected yet'}</p>
+            <p>${lastCollectError ? esc(lastCollectError) : status?.lastCollect ? 'Collecting the first data from Clash of Clans…' : 'The first collection runs within the hour.'}</p></div>`;
+    }
     if (clanData) {
         latestClanData = clanData;
         allMembers = clanData.memberList || [];

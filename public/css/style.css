@@ -184,6 +184,7 @@ select.control-base {
     background: var(--good);
     box-shadow: 0 0 0 3px rgba(12, 163, 12, 0.18);
 }
+.live-dot.error { background: var(--critical); box-shadow: 0 0 0 3px rgba(208, 59, 59, 0.2); }
 .live-dot.stale { background: var(--warning); box-shadow: 0 0 0 3px rgba(250, 178, 25, 0.18); }
 
 .meta-chip {

@@ -1,16 +1,27 @@
 /**
- * Data collection: runs on the hourly cron.
+ * Data collection: runs on the hourly cron (and once on a brand-new database).
  * Each step is independent so one failing endpoint doesn't block the rest.
  */
 import { CocApi, encodeTag, parseCocDate } from './coc.js';
 import { storeClan, storeWar, storeRaid, setMeta } from './store.js';
 
 export async function collect(env) {
-    const api = new CocApi(env);
     const db = env.DB;
+    const report = { startedAt: new Date().toISOString(), steps: {} };
+
+    // Configuration problems are recorded too, so /api/status shows why nothing loads.
+    let api;
+    try {
+        if (!env.CLAN_TAG || env.CLAN_TAG.includes('REPLACE')) throw new Error('CLAN_TAG is not set in wrangler.toml');
+        api = new CocApi(env);
+    } catch (e) {
+        report.error = e.message;
+        report.finishedAt = new Date().toISOString();
+        await setMeta(db, 'last_collect', report);
+        return report;
+    }
     const clanTag = env.CLAN_TAG;
     const tag = encodeTag(clanTag);
-    const report = { startedAt: new Date().toISOString(), steps: {} };
 
     const step = async (name, fn) => {
         try { report.steps[name] = (await fn()) ?? 'ok'; }
