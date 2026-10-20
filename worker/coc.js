@@ -4,7 +4,12 @@
 
 export class CocApi {
     constructor(env) {
-        if (!env.COC_API_TOKEN) throw new Error('COC_API_TOKEN secret is not set');
+        if (!env.COC_API_TOKEN) {
+            // Name-only hint for near-miss names (wrong case, stray spaces); values are never exposed.
+            const similar = Object.keys(env).filter(k => /token|coc|api/i.test(k) && !['COC_API_BASE'].includes(k));
+            throw new Error(`COC_API_TOKEN secret is not set` +
+                (similar.length ? ` (the Worker does see: ${similar.map(k => JSON.stringify(k)).join(', ')})` : ' (no similarly named variable found)'));
+        }
         this.base = env.COC_API_BASE || 'https://cocproxy.royaleapi.dev/v1';
         this.token = env.COC_API_TOKEN;
     }
