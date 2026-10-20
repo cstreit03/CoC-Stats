@@ -40,6 +40,9 @@ export function bindSelect(root, name, onChange) {
     root.querySelector(`[data-select="${name}"]`)?.addEventListener('change', (e) => onChange(e.target.value));
 }
 
+/** Up/down chevrons; CSS highlights the active direction from the header's aria-sort. */
+const SORT_ICON = '<svg class="sort-icon" viewBox="0 0 12 16" aria-hidden="true"><path class="s-up" d="M2.5 6.5 6 3l3.5 3.5"/><path class="s-down" d="M2.5 9.5 6 13l3.5-3.5"/></svg>';
+
 let msCount = 0;
 
 /**
@@ -284,7 +287,7 @@ export function mountTable(container, { columns, rows, sort, caption, rowClass, 
                 const ariaSort = state.sort?.key === c.key ? (state.sort.dir === 'asc' ? 'ascending' : 'descending') : 'none';
                 const cls = [c.num ? 'num' : '', c.sticky ? 'sticky-col' : ''].join(' ');
                 return `<th scope="col" class="${cls}" aria-sort="${ariaSort}" ${c.title ? `title="${esc(c.title)}"` : ''}>${c.sortable === false ? esc(c.label)
-                    : `<button type="button" class="sort-btn" data-sort="${c.key}">${esc(c.label)}</button>`}</th>`;
+                    : `<button type="button" class="sort-btn" data-sort="${c.key}">${esc(c.label)}${SORT_ICON}</button>`}</th>`;
             }).join('')}</tr></thead>
             <tbody>${list.length === 0 ? `<tr><td colspan="${columns.length}" class="muted center">No data</td></tr>` : list.map(r =>
                 `<tr class="${rowClass ? rowClass(r) : ''}">${columns.map(c =>

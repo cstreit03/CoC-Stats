@@ -14,7 +14,7 @@ import { scorecardHtml, mountScorecard } from './cwlScorecard.js';
 const pctCell = (v, digits = 0) => v == null ? '—' : `${(v * 100).toFixed(digits)}%`;
 const fix = (v, d = 2) => v == null ? '—' : v.toFixed(d);
 const rangeLabel = (r) => rangeOptions.find(o => o.value === r)?.label || 'All time';
-const playerCell = (r) => `<div class="cell-player"><img src="${thImg(r.th)}" alt="TH${r.th}"><a class="player-link" href="#/members/${encodeURIComponent(r.tag.slice(1))}">${esc(r.name)}</a></div>`;
+const playerCell = (r) => `<div class="cell-player"><img src="${thImg(r.th)}" alt="TH${r.th}"><a class="player-link" href="#/members/${encodeURIComponent(r.tag.slice(1))}" title="${esc(r.name)}">${esc(r.name)}</a></div>`;
 const memo = {};
 
 /* ---------------- Report definitions ---------------- */
@@ -281,7 +281,7 @@ const REPORTS = [
                 { key: 'districts', label: 'Districts destroyed', num: true, value: r => r.enemyDistrictsDestroyed }
             ];
             const mxCols = [
-                { key: 'name', label: 'Player', sticky: true, value: r => r.name, render: r => r.th ? playerCell(r) : esc(r.name) },
+                { key: 'name', label: 'Player', sticky: true, value: r => r.name, render: r => r.th ? playerCell(r) : `<div class="cell-player"><span title="${esc(r.name)}">${esc(r.name)}</span></div>` },
                 ...recent.map((r, i) => ({ key: `w${i}`, label: fmtDay(parseCoc(r.startTime)), num: true, value: p => p.gold[i], render: p => p.gold[i] == null ? '<span class="muted">—</span>' : num(p.gold[i]) })),
                 { key: 'total', label: 'Total', num: true, value: r => r.total, render: r => `<b>${num(r.total)}</b>` }
             ];

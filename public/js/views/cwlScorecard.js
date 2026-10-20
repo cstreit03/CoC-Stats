@@ -31,8 +31,7 @@ export function mountScorecard(root, season) {
     const rounds = Math.max(...season.wars.filter(w => w.ours).map(w => w.round), 0);
 
     const columns = () => [
-        { key: 'rank', label: '#', num: true, value: r => r.rank, sortable: false },
-        { key: 'name', label: 'Player', sticky: true, value: r => r.name, render: r => `<div class="cell-player"><img src="${thImg(r.th)}" alt="TH${r.th}"><a class="player-link" href="#/members/${encodeURIComponent(r.tag.slice(1))}">${esc(r.name)}</a></div>` },
+        { key: 'name', label: 'Player', sticky: true, value: r => r.name, render: r => `<div class="cell-player"><span class="rank" title="Rank by score">${r.rank}</span><img src="${thImg(r.th)}" alt="TH${r.th}"><a class="player-link" href="#/members/${encodeURIComponent(r.tag.slice(1))}" title="${esc(r.name)}">${esc(r.name)}</a></div>` },
         ...Array.from({ length: rounds }, (_, i) => ({
             key: `r${i + 1}`, label: `R${i + 1}`, value: r => r.rounds[i + 1]?.score ?? null,
             render: r => {

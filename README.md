@@ -118,11 +118,11 @@ In `wrangler.toml`, set:
 ### 3. Deploy
 
 **Option A: from GitHub (auto-deploys on every push)**
-1. Cloudflare dashboard → **Workers & Pages → Create → Import a repository** → pick this repo. Keep the deploy command `npx wrangler deploy`.
-2. Add the API token as a **runtime** secret: open the Worker → **Settings → Variables and Secrets → Add** → Type **Secret**, name `COC_API_TOKEN`, paste the token, **Deploy**.
+1. Cloudflare dashboard > **Workers & Pages > Create > Import a repository** > pick this repo. Keep the deploy command `npx wrangler deploy`.
+2. Add the API token as a **runtime** secret: open the Worker > **Settings > Variables and Secrets > Add** > Type **Secret**, name `COC_API_TOKEN`, paste the token, **Deploy**.
 
 > [!WARNING]
-> Don't use the **Variables and secrets** box inside **Settings → Build**. Those are only available while building; the running Worker can't see them, and the site will report "COC_API_TOKEN secret is not set".
+> Don't use the **Variables and secrets** box inside **Settings > Build**. Those are only available while building; the running Worker can't see them, and the site will report "COC_API_TOKEN secret is not set".
 
 **Option B: from your machine**
 ```bash
@@ -133,14 +133,14 @@ npm run deploy
 ```
 
 ### 4. Custom domain (optional)
-Open the Worker → **Settings → Domains & Routes → Add → Custom domain** (e.g. `clash.example.com`). The domain's DNS must be on Cloudflare.
+Open the Worker > **Settings > Domains & Routes > Add > Custom domain** (e.g. `clash.example.com`). The domain's DNS must be on Cloudflare.
 
 ### Checking it works
 Open the site. The header shows when data was last collected, and turns red with **Update failed** if collection is failing; hover over it (or open `/api/status`) to see the error:
 
 | Error | Fix |
 |---|---|
-| `COC_API_TOKEN secret is not set` | Add the secret under **Settings → Variables and Secrets** (not Build) |
+| `COC_API_TOKEN secret is not set` | Add the secret under **Settings > Variables and Secrets** (not Build) |
 | `accessDenied` / `Invalid authorization` | Allow IP `45.79.218.79` on your API key, or check the token |
 | `notFound` on the clan | Check `CLAN_TAG` in `wrangler.toml` |
 

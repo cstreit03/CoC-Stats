@@ -79,7 +79,7 @@ export function render(root, { season: seasonParam, tab = 'standings' }) {
             </div>`;
         const columns = [
             { key: 'rank', label: '#', num: true, value: r => r.rank, sortable: false },
-            { key: 'name', label: 'Clan', value: r => r.name, render: r => `<div class="cell-player"><img src="${r.badgeUrls?.small}" alt=""><span class="${r.tag === ourTag ? 'strong' : ''}">${esc(r.name)}</span></div>` },
+            { key: 'name', label: 'Clan', value: r => r.name, render: r => `<div class="cell-player"><img src="${r.badgeUrls?.small}" alt=""><span class="${r.tag === ourTag ? 'strong' : ''}" title="${esc(r.name)}">${esc(r.name)}</span></div>` },
             { key: 'level', label: 'Level', num: true, value: r => r.clanLevel },
             { key: 'wld', label: 'W-L-D', num: true, value: r => r.win, render: r => `${r.win}-${r.loss}-${r.draw}`, exportValue: r => `${r.win}-${r.loss}-${r.draw}` },
             { key: 'stars', label: 'Stars', num: true, value: r => r.stars, render: r => `<b>${r.stars}</b>` },

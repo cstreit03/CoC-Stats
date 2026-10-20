@@ -349,27 +349,35 @@ a.card:hover { border-color: var(--line-strong); }
     font-size: 12px; font-weight: 700; color: var(--muted); text-transform: none;
 }
 .table tbody tr:last-child td { border-bottom: 0; }
-.table tbody tr:hover td { background: color-mix(in srgb, var(--surface-2) 60%, transparent); }
+/* Solid colours so the sticky name column never shows scrolled cells through it. */
+.table tbody tr:hover td { background: var(--surface-2); }
 .table .num { text-align: right; }
 .table .center { text-align: center; }
 .table td.strong, .table .name { font-weight: 600; color: var(--text); }
 .table .muted { color: var(--muted); }
 .table tr.highlight td { background: var(--accent-bg); }
 .table tr[data-href] { cursor: pointer; }
-.table .sticky-col { position: sticky; left: 0; background: var(--surface); z-index: 1; }
+.table .sticky-col { position: sticky; left: 0; background: var(--surface); z-index: 1; box-shadow: inset -1px 0 0 var(--line); }
 .table thead .sticky-col { background: var(--surface-2); z-index: 2; }
+.table tbody tr:hover td.sticky-col, .table tr.highlight td.sticky-col { background: var(--surface-2); }
 .sort-btn {
     all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 700;
 }
 .sort-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
-.sort-btn::after { content: '↕'; opacity: 0.35; font-size: 11px; }
-th[aria-sort="ascending"] .sort-btn::after { content: '↑'; opacity: 1; }
-th[aria-sort="descending"] .sort-btn::after { content: '↓'; opacity: 1; }
+.sort-icon { width: 9px; height: 12px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sort-icon path { opacity: 0.35; }
+th[aria-sort="ascending"] .sort-icon .s-up, th[aria-sort="descending"] .sort-icon .s-down { opacity: 1; }
+th[aria-sort="ascending"] .sort-icon .s-down, th[aria-sort="descending"] .sort-icon .s-up { opacity: 0.15; }
+th[aria-sort="ascending"], th[aria-sort="descending"] { color: var(--text); }
 .num .sort-btn { flex-direction: row-reverse; }
 .player-link { color: var(--text); font-weight: 600; text-decoration: none; }
 .player-link:hover { color: var(--accent); text-decoration: underline; }
 
-.cell-player { display: flex; align-items: center; gap: 10px; }
+.cell-player { display: flex; align-items: center; gap: 10px; min-width: 0; }
+/* Long usernames are cut with an ellipsis (full name in the tooltip). */
+.cell-player > a, .cell-player > span:not(.rank) { max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 600px) { .cell-player > a, .cell-player > span:not(.rank) { max-width: 120px; } }
+.cell-player .rank { width: 20px; text-align: right; color: var(--muted); font-weight: 600; flex: none; }
 .cell-player img { width: 28px; height: 28px; object-fit: contain; flex: none; }
 
 /* ---------- Lists ---------- */

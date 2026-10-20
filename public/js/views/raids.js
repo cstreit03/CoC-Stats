@@ -57,7 +57,7 @@ export function render(root, { start }) {
         </div>`;
 
     const playerCols = [
-        { key: 'name', label: 'Player', sticky: true, value: r => r.name, render: r => `<div class="cell-player">${r.th ? `<img src="${thImg(r.th)}" alt="TH${r.th}">` : ''}<a class="player-link" href="#/members/${encodeURIComponent(r.tag.slice(1))}">${esc(r.name)}</a></div>` },
+        { key: 'name', label: 'Player', sticky: true, value: r => r.name, render: r => `<div class="cell-player">${r.th ? `<img src="${thImg(r.th)}" alt="TH${r.th}">` : ''}<a class="player-link" href="#/members/${encodeURIComponent(r.tag.slice(1))}" title="${esc(r.name)}">${esc(r.name)}</a></div>` },
         { key: 'attacks', label: 'Attacks', num: true, value: r => r.attacks, render: r => `${r.attacks}/${r.limit}` },
         { key: 'gold', label: 'Capital gold', num: true, value: r => r.capitalResourcesLooted, render: r => `<b>${num(r.capitalResourcesLooted)}</b>` },
         { key: 'stars', label: 'Stars', num: true, value: r => r.stars },
@@ -66,7 +66,7 @@ export function render(root, { start }) {
     ];
     const clanCols = (who) => [
         { key: 'n', label: '#', num: true, value: r => r.n },
-        { key: 'clan', label: who, value: r => r.clan, render: r => `<div class="cell-player">${r.badge ? `<img src="${r.badge}" alt="">` : ''}<span class="strong">${esc(r.clan)}</span></div>` },
+        { key: 'clan', label: who, value: r => r.clan, render: r => `<div class="cell-player">${r.badge ? `<img src="${r.badge}" alt="">` : ''}<span class="strong" title="${esc(r.clan)}">${esc(r.clan)}</span></div>` },
         { key: 'level', label: 'Capital level', num: true, value: r => r.level },
         { key: 'attacks', label: 'Attacks', num: true, value: r => r.attacks },
         { key: 'destroyed', label: 'Districts destroyed', num: true, value: r => r.destroyed, render: r => `${r.destroyed}/${r.districts}${r.done ? ' <span class="badge win">Cleared</span>' : ''}`, exportValue: r => `${r.destroyed}/${r.districts}` }
