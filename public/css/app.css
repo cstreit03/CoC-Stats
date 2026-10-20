@@ -211,7 +211,8 @@ table { border-collapse: collapse; }
     font-size: 13px; font-weight: 500; color: var(--text-2);
 }
 .status-pill:hover { border-color: var(--line-strong); }
-.status-pill svg { width: 15px; height: 15px; }
+.status-pill svg { width: 15px; height: 15px; display: block; }
+#reloadIcon { display: inline-flex; align-items: center; justify-content: center; }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--chart-good); flex: none; }
 .dot.stale { background: var(--warn); }
 .dot.error { background: var(--bad); }
