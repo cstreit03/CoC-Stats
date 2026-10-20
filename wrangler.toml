@@ -1,6 +1,8 @@
 name = "coc-stats"
 main = "worker/index.js"
 compatibility_date = "2026-09-01"
+# Keep variables added in the Cloudflare dashboard when deploying from Git.
+keep_vars = true
 
 # Static dashboard (HTML/CSS/JS). /api/* is handled by the Worker first.
 [assets]
