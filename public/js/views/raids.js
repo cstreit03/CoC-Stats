@@ -32,14 +32,14 @@ const logRows = (log, key) => (log || []).map((c, i) => ({
 export function render(root, { start }) {
     if (!store.clan) { root.innerHTML = `<h1 class="sr-only">Raids</h1>${noDataMessage()}`; return; }
     const raids = store.raids;
-    if (!raids.length) { root.innerHTML = '<div class="page-head"><h1 class="page-title">Raid weekends</h1></div><div class="card empty"><strong>No raid weekends recorded yet</strong></div>'; return; }
+    if (!raids.length) { root.innerHTML = '<div class="page-head"><h1 class="page-title">Raid Weekends</h1></div><div class="card empty"><strong>No raid weekends recorded yet</strong></div>'; return; }
     const raid = raids.find(r => r.startTime === start) || raids[0];
     const players = playerRows(raid);
     const label = (r) => `${fmtDate(parseCoc(r.startTime))}${r.state === 'ongoing' ? ' (ongoing)' : ''}`;
 
     root.innerHTML = `
         <div class="page-head">
-            <div><h1 class="page-title">Raid weekends</h1><p class="page-sub">${label(raid)}</p></div>
+            <div><h1 class="page-title">Raid Weekends</h1><p class="page-sub">${label(raid)}</p></div>
             <div class="controls">
                 ${select('weekend', 'Weekend', raids.map(r => ({ value: r.startTime, label: label(r) })), raid.startTime, { hideLabel: true })}
                 ${exportButtons()}
@@ -86,7 +86,7 @@ export function render(root, { start }) {
     bindSelect(root, 'weekend', v => { location.hash = `#/raids/${v}`; });
     drawTable();
 
-    const title = `Raid weekend ${parseCoc(raid.startTime).toISOString().slice(0, 10)}`;
+    const title = `Raid Weekend ${parseCoc(raid.startTime).toISOString().slice(0, 10)}`;
     const sheets = () => Object.values(views).map(v => ({ name: v.title, ...tableData(v.columns, v.rows) }));
     bindExports(root, {
         xlsx: () => exportExcel(title, sheets()),

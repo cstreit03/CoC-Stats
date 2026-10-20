@@ -54,7 +54,7 @@ Pick a report, view it, export it to **Excel or PDF**:
 | CWL scorecard | The scorecard above, for any recorded season |
 | Membership | Members per day, weekly joins/departures, roster change log, tenure |
 | Donations | Donated, received, net and ratio for any snapshot date |
-| Raid weekends | Capital gold per weekend and a player-by-weekend gold sheet |
+| Raid Weekends | Capital gold per weekend and a player-by-weekend gold sheet |
 | Roster composition | Town Hall levels, roles and leagues |
 
 ![Reports](demo-images/reports.png)
@@ -162,7 +162,7 @@ curl "http://localhost:8787/__scheduled"   # run the hourly job once
 | `GET /api/members/dates` | Days with roster snapshots |
 | `GET /api/wars` | Every tracked war (regular + CWL) |
 | `GET /api/cwl` | CWL seasons with group and all wars |
-| `GET /api/raids` | Raid weekends |
+| `GET /api/raids` | Raid Weekends |
 | `GET /api/history` | Daily clan counters, joins/leaves, war log |
 | `GET /api/players/:tag` | One member's daily history |
 | `GET /api/status` | Result of the last collection |

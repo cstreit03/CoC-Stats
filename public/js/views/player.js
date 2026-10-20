@@ -63,7 +63,7 @@ export function render(root, { tag }) {
                 ${daily.length > 1 ? `<section class="card" aria-labelledby="don-h"><div class="card-head"><div><h2 class="card-title" id="don-h">Donations by day</h2><p class="card-sub">Season totals reset monthly.</p></div></div>
                     <div class="chart-box sm"><canvas id="plDonations" aria-label="Donations by day"></canvas></div></section>` : ''}
                 <section class="card" aria-labelledby="atk-h"><div class="card-head"><div><h2 class="card-title" id="atk-h">War attacks</h2><p class="card-sub">${attacks.length} attacks in tracked wars</p></div></div><div id="plAttacks"></div></section>
-                ${raids.length ? `<section class="card" aria-labelledby="raid-h"><div class="card-head"><div><h2 class="card-title" id="raid-h">Raid weekends</h2></div></div><div id="plRaids"></div></section>` : ''}
+                ${raids.length ? `<section class="card" aria-labelledby="raid-h"><div class="card-head"><div><h2 class="card-title" id="raid-h">Raid Weekends</h2></div></div><div id="plRaids"></div></section>` : ''}
             </div>`;
 
         const atkCols = [
@@ -81,7 +81,7 @@ export function render(root, { tag }) {
             { key: 'attacks', label: 'Attacks', num: true, value: r => r.m.attacks, render: r => `${r.m.attacks}/${r.m.attackLimit + r.m.bonusAttackLimit}` },
             { key: 'gold', label: 'Capital gold', num: true, value: r => r.m.capitalResourcesLooted, render: r => num(r.m.capitalResourcesLooted) }
         ];
-        if (raids.length) mountTable(root.querySelector('#plRaids'), { columns: raidCols, rows: raids, caption: 'Raid weekends', noun: 'weekends' });
+        if (raids.length) mountTable(root.querySelector('#plRaids'), { columns: raidCols, rows: raids, caption: 'Raid Weekends', noun: 'weekends' });
 
         if (daily.length > 1) {
             chart(root.querySelector('#plDonations'), lineConfig(daily.map(d => fmtDay(d.date)), daily.map(d => d.donations), { label: 'Donated', color: cssVar('--series-1') }));
@@ -96,7 +96,7 @@ export function render(root, { tag }) {
             ]),
             pdf: () => exportPdf(title, `${tag} · TH${th}`, [
                 { title: 'War attacks', ...tableData(atkCols, attacks) },
-                { title: 'Raid weekends', ...tableData(raidCols, raids) }
+                { title: 'Raid Weekends', ...tableData(raidCols, raids) }
             ])
         });
         document.title = `${name} · Clan Stats`;

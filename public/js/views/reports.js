@@ -251,7 +251,7 @@ const REPORTS = [
         }
     },
     {
-        id: 'raids', icon: icons.raids, title: 'Raid weekends',
+        id: 'raids', icon: icons.raids, title: 'Raid Weekends',
         desc: 'Capital gold per weekend and a player-by-weekend gold sheet.',
         render(body) {
             const raids = [...store.raids].reverse();
@@ -285,11 +285,11 @@ const REPORTS = [
                 ...recent.map((r, i) => ({ key: `w${i}`, label: fmtDay(parseCoc(r.startTime)), num: true, value: p => p.gold[i], render: p => p.gold[i] == null ? '<span class="muted">—</span>' : num(p.gold[i]) })),
                 { key: 'total', label: 'Total', num: true, value: r => r.total, render: r => `<b>${num(r.total)}</b>` }
             ];
-            mountTable(body.querySelector('#rdTable'), { columns: wkCols, rows: [...raids].reverse(), caption: 'Raid weekends', noun: 'weekends' });
+            mountTable(body.querySelector('#rdTable'), { columns: wkCols, rows: [...raids].reverse(), caption: 'Raid Weekends', noun: 'weekends' });
             const mx = mountTable(body.querySelector('#rdMatrix'), { columns: mxCols, rows: matrix, sort: { key: 'total', dir: 'desc' }, caption: 'Capital gold by player', noun: 'players' });
             return {
-                xlsx: () => exportExcel('Raid weekends', [{ name: 'Weekends', ...tableData(wkCols, [...raids].reverse()) }, { name: 'Gold by player', ...tableData(mxCols, mx.getSorted()) }]),
-                pdf: () => exportPdf('Raid weekends', `${raids.length} weekends`, [{ title: 'Weekends', ...tableData(wkCols, [...raids].reverse()) }, { title: 'Gold by player', ...tableData(mxCols, mx.getSorted()) }], { charts: [body.querySelector('#rdChart')] })
+                xlsx: () => exportExcel('Raid Weekends', [{ name: 'Weekends', ...tableData(wkCols, [...raids].reverse()) }, { name: 'Gold by player', ...tableData(mxCols, mx.getSorted()) }]),
+                pdf: () => exportPdf('Raid Weekends', `${raids.length} weekends`, [{ title: 'Weekends', ...tableData(wkCols, [...raids].reverse()) }, { title: 'Gold by player', ...tableData(mxCols, mx.getSorted()) }], { charts: [body.querySelector('#rdChart')] })
             };
         }
     },
