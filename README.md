@@ -1,69 +1,74 @@
-# CoC War Stats Dashboard
+# CoC Clan Stats Dashboard
 
-A sophisticated dashboard for tracking Clash of Clans performance with advanced analytics and real-time win probability calculations. It runs entirely on Cloudflare's free tier: a Worker serves the dashboard, pulls fresh data from the Clash of Clans API every hour (Cron Trigger), and stores history in a D1 (SQLite) database. No GitHub Actions, no data commits.
+A dashboard for tracking a Clash of Clans clan: roster history, wars, Clan War League, raid weekends and trend reports, with live win-probability analysis for the current war.
 
-See live example: https://clash.kenaz.dev
+It runs entirely on Cloudflare's free tier. A Worker serves the dashboard, pulls fresh data from the Clash of Clans API every hour, and stores the history in a D1 (SQLite) database. There are no GitHub Actions and no data committed to the repo.
+
+Live example: https://clash.kenaz.dev
+
+![Overview](demo-images/overview.png)
 
 ## Features
 
-### Overview Tab
-Headline numbers (members and 30-day change, current/last war, recent form, capital gold) above the clan profile, war performance metrics, league standings, and join requirements.
+### Overview
+Headline numbers (members and 30-day change, current or last war, recent form, capital gold), then the clan profile: description, war record, capital and join requirements.
 
-![Dashboard About Page](demo-images/clan_about_page.png)
+### Members
+The roster filtered by role and sorted by league, trophies, Town Hall, XP or donations. Pick any past date to see the roster as it was that day.
 
-### Members Tab
-Track all clan members with dynamic filtering by role (Leader, Co-Leader, Elder, Member). View donation history and trophy counts with date-based historical snapshots.
+Click a member anywhere on the site to open their **player profile**: how long they've been in the clan, war attacks used and missed, average stars and three-star rate, capital gold, donations over time and recent attacks.
 
-![Members Page](demo-images/clan_members_tracking.png)
+![Members and player profile](demo-images/members.png)
 
-### ⚔️ Wars Tab
-Deep-dive war analysis with:
-- **Advanced Win Probability** - Sophisticated algorithm analyzing:
-  - Player Month-to-Date (MTD) star averages
-  - Town Hall ceiling caps and hard-cap logic (TH14 vs TH18 = 1-2 star max)
-  - Defense insurance calculations
-  - Late-war volatility sensitivity
-  - Score gap vs remaining potential stars
-- War roster comparison (attacks & defenses)
-- Metrics: Avg Stars, Avg %, Win Prob., and Cleanup Needed
-- Full historical archive of past wars (war history will only show wars that take place after you start using this tool due to API restrictions)
+### ⚔️ Wars
+Every tracked war (regular and CWL), filterable by result and date range.
 
-![War Details Page](demo-images/clan_wars_live_reporting.png)
+![War history](demo-images/wars.png)
 
-### 🏆 Raids Tab
-Seasonal raid tracking with comprehensive player performance metrics:
-- Attacks completed and gold earned
-- Total damage and destruction percentage
-- Average stars per attack
-- Summary, Attacks, and Defenses breakdowns
+Each war has a full breakdown:
+- **Win probability** for wars in progress, based on:
+  - each attacker's month-to-date star average for their likely matchup
+  - Town Hall ceiling caps (e.g. TH14 vs TH18 = 1–2 star max)
+  - defense insurance when the opponent lacks high-level threats
+  - late-war volatility and the score gap vs. stars still available
+- Metrics: average stars, average destruction, win probability, cleanup needed
+- Both rosters, attacks and defenses, with filters and sorting
 
-![Raids Page](demo-images/clan_raid_weekends.png)
+![War detail](demo-images/war-detail.png)
 
-### 🛡️ CWL Tab
-Clan War League is captured hourly during league week (the API only exposes the current group):
+### 🛡️ CWL
+Clan War League is captured every hour during league week:
 - **Group standings** with the +10 star war-win bonus, W-L-D and total destruction
-- **Round-by-round results** — click a round for the full war breakdown
-- **Member performance** — attacks used, stars, triples, average destruction, stars conceded
+- **Round-by-round results**; click a round for its full war breakdown
+- **Member performance**: attacks used, stars, triples, average destruction, stars conceded
 
-### 📈 Reports Tab
-- **Membership over time** plus weekly joins/departures, and a log of recent roster changes
-- **War record by month** (from tracked wars and the public war log)
-- **War reliability** — attacks used vs. available and missed attacks per member
+The API only exposes the current season's group, so CWL history starts from the first league after deployment.
+
+![CWL](demo-images/cwl.png)
+
+### 🏆 Raids
+Raid weekend summary (attacks, capital gold, stars, damage per player), plus attack and defense logs per district.
+
+![Raids](demo-images/raids.png)
+
+### 📈 Reports
+- **Membership over time** with weekly joins and departures, and a log of recent roster changes
+- **War record by month** (tracked wars plus the public war log)
+- **Win rate, average stars, three-star rate and missed attacks** for the selected range
+- **War reliability**: attacks used vs. available per member
+- **War stars achieved** per war, **stars earned breakdown** and **star conversion rates**
 - **Top donors** this season with donation ratio
 - **Town Hall spread** of the current roster
-- **Raid weekends** — capital gold per weekend
+- **Raid weekends**: capital gold per weekend
 
-Plus the original war charts:
-- **War Stars Achieved (%)** - Trend line showing clan star performance over time
-- **Stars Earned Breakdown** - Top 25 players with 3★ / 2★ / 1★ / 0★ counts
-- **Stars Conversion Rates** - Star conversion efficiency for top 25 players
+Time ranges: all time, last 90/30/7 days, this month, previous war.
 
-Time range filtering available (All time, 90/30/7 days, This month, Previous war).
+![Reports](demo-images/reports.png)
 
-### 👤 Player profiles
-Click any member anywhere to open their profile: tenure, war attacks/missed, average stars, capital gold, donations over time and recent attacks.
+### 📱 Mobile
+Every view works on phones.
 
-![Stats Page](demo-images/clan_wars_statistics.png)
+<img src="demo-images/mobile.png" alt="Mobile" width="320">
 
 ## How it works
 
@@ -74,34 +79,63 @@ Cloudflare Worker (worker/)
  └─ everything else       ─► static dashboard (public/)
 ```
 
-Each hourly run stores the clan profile and roster (one snapshot per day), the current war, the CWL group and its wars, the latest raid weekends, and the public war log. The war log is also used to finalise wars whose last snapshot was taken before they ended.
+Each hourly run stores:
+- the clan profile and roster (one snapshot per day, so membership and donations can be charted over time)
+- the current war
+- the CWL group and all of its wars
+- the latest raid weekends
+- the public war log, which is also used to finalise wars whose last snapshot was taken before they ended
 
-Only the hourly job talks to the Clash of Clans API. The dashboard's reload buttons just re-read the latest collected data from the Worker.
+Only the hourly job talks to the Clash of Clans API. The reload buttons on the dashboard just re-read the latest collected data.
 
-The database and its tables are created automatically: `wrangler deploy` provisions the D1 database, and the Worker creates its tables on first use.
+Setup is zero-config on the database side: `wrangler deploy` creates the D1 database, and the Worker creates its tables on first use. On a brand-new deployment the Worker also runs a first collection as soon as the site is opened, retrying every 5 minutes until it succeeds, so you don't have to wait for the top of the hour.
 
-## Setup (Cloudflare)
+## Setup
 
-Requires Node 18+ and a free Cloudflare account.
+Requires a free Cloudflare account. Node 18+ if deploying from your own machine.
 
-1. **API key.** Create a key at [developer.clashofclans.com](https://developer.clashofclans.com) with the IP **45.79.218.79** allowed ([RoyaleAPI proxy](https://docs.royaleapi.com/proxy.html)). Cloudflare Workers don't have a fixed IP, so the proxy is what makes the key work.
-2. **Clan tag.** Set `CLAN_TAG` in `wrangler.toml`.
-3. **Deploy.**
-   ```bash
-   npm install
-   npx wrangler login
-   npx wrangler secret put COC_API_TOKEN
-   npm run deploy
-   ```
-   Data appears after the next hourly run.
-4. **Custom domain (optional).** In the Cloudflare dashboard: **Workers & Pages → clash-of-clans-stats → Settings → Domains & Routes → Add → Custom domain**. The domain's DNS must be on Cloudflare; if it currently points at GitHub Pages, remove that record and disable Pages.
-5. **Auto-deploy on push (optional).** **Workers & Pages → clash-of-clans-stats → Settings → Build → Connect** to the GitHub repo. Don't put `COC_API_TOKEN` in the Build variables: the running Worker can't read those. It belongs under **Settings → Variables and Secrets** (or `npx wrangler secret put`).
+### 1. Clash of Clans API key
+Create a key at [developer.clashofclans.com](https://developer.clashofclans.com) with the IP **45.79.218.79** allowed. That's the [RoyaleAPI proxy](https://docs.royaleapi.com/proxy.html); Cloudflare Workers don't have a fixed IP, so the proxy is what makes the key work.
 
-To change the schedule, edit `crons` in `wrangler.toml` and redeploy.
+### 2. Configure
+In `wrangler.toml`, set:
+- `name`: the name of your Cloudflare Worker
+- `CLAN_TAG`: your clan tag, including the `#`
+
+### 3. Deploy
+
+**Option A: from GitHub (auto-deploys on every push)**
+1. Cloudflare dashboard → **Workers & Pages → Create → Import a repository** → pick this repo. Keep the deploy command `npx wrangler deploy`.
+2. Add the API token as a **runtime** secret: open the Worker → **Settings → Variables and Secrets → Add** → Type **Secret**, name `COC_API_TOKEN`, paste the token, **Deploy**.
+
+> ⚠️ Don't use the **Variables and secrets** box inside **Settings → Build**. Those are only available while building; the running Worker can't see them, and the site will report "COC_API_TOKEN secret is not set".
+
+**Option B: from your machine**
+```bash
+npm install
+npx wrangler login
+npx wrangler secret put COC_API_TOKEN    # paste the token when prompted
+npm run deploy
+```
+
+### 4. Custom domain (optional)
+Open the Worker → **Settings → Domains & Routes → Add → Custom domain** (e.g. `clash.example.com`). The domain's DNS must be on Cloudflare.
+
+### Checking it works
+Open the site. The header shows when data was last collected, and turns red with **Update failed** if collection is failing; hover over it (or open `/api/status`) to see the error:
+
+| Error | Fix |
+|---|---|
+| `COC_API_TOKEN secret is not set` | Add the secret under **Settings → Variables and Secrets** (not Build) |
+| `accessDenied` / `Invalid authorization` | Allow IP `45.79.218.79` on your API key, or check the token |
+| `notFound` on the clan | Check `CLAN_TAG` in `wrangler.toml` |
+
+To change how often data is collected, edit `crons` in `wrangler.toml`.
 
 ## Local development
 ```bash
 cp .dev.vars.example .dev.vars             # add your token
+npm install
 npm run dev                                # http://localhost:8787
 curl "http://localhost:8787/__scheduled"   # run the hourly job once
 ```
@@ -110,30 +144,18 @@ curl "http://localhost:8787/__scheduled"   # run the hourly job once
 | Endpoint | Returns |
 |---|---|
 | `GET /api/clan` | Latest clan profile with roster |
-| `GET /api/members?date=YYYY-MM-DD` / `GET /api/members/dates` | Roster on a day / days available |
+| `GET /api/members?date=YYYY-MM-DD` | Roster on a given day |
+| `GET /api/members/dates` | Days with roster snapshots |
 | `GET /api/wars` | Every tracked war (regular + CWL) |
 | `GET /api/cwl` | CWL seasons with group and all wars |
 | `GET /api/raids` | Raid weekends |
 | `GET /api/history` | Daily clan counters, joins/leaves, war log |
 | `GET /api/players/:tag` | One member's daily history |
-| `GET /api/status` | Time of the last collection |
+| `GET /api/status` | Result of the last collection |
 
-## Advanced Analytics
-
-### Win Probability Algorithm
-The dashboard features a sophisticated win probability calculator that goes beyond simple star counting:
-
-- **Terminal Conditions**: Immediate 100% or 0% when war outcomes are mathematically decided
-- **Player-Specific Expected Values**: Uses each attacker's historical MTD star average for their specific matchup
-- **Opponent Sampling**: Calculates opponent threat level based on their average stars per attack
-- **TH Ceiling Caps**: Models realistic star potential based on attacker/target TH level gaps
-  - 4+ TH levels below target: 1-2 star max
-  - 3 TH levels below: 2-3 star realistic
-- **Defense Insurance**: Increases win probability when ahead if opponent lacks high-level threats remaining
-- **Late-War Volatility**: Amplifies sensitivity as attacks decrease (late failures cause larger swings)
-- **Score Gap vs Potential**: Weighs current star difference against total possible remaining stars
-
-### Data Persistence
-- Hourly snapshots stored in Cloudflare D1 (SQLite)
-- One roster snapshot per member per day for membership and donation trends
-- Complete war, CWL and raid history for statistical aggregation
+## Project layout
+```
+public/       Static dashboard (HTML, CSS, JS modules)
+worker/       Cloudflare Worker: API, hourly collector, D1 schema
+wrangler.toml Worker name, clan tag, cron schedule, D1 binding
+```
