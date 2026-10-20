@@ -5,7 +5,7 @@
  * - Collects fresh data from the Clash of Clans API on a cron schedule
  */
 import { collect } from './collect.js';
-import { storeClan, storeWar, storeRaid, getMeta, setMeta } from './store.js';
+import { getMeta, setMeta } from './store.js';
 import * as api from './api.js';
 
 const json = (body, status = 200, maxAge = 60) => new Response(JSON.stringify(body), {
@@ -30,15 +30,6 @@ async function refresh(env) {
     return json({ refreshed: true, report }, 200, 0);
 }
 
-async function adminImport(req, env) {
-    const { type, data, date } = await req.json();
-    if (type === 'clan') await storeClan(env.DB, data, date);
-    else if (type === 'war') await storeWar(env.DB, data, { kind: 'regular', clanTag: env.CLAN_TAG });
-    else if (type === 'raid') await storeRaid(env.DB, data);
-    else return json({ error: `unknown type ${type}` }, 400, 0);
-    return json({ ok: true }, 200, 0);
-}
-
 async function handleApi(req, env, url) {
     const db = env.DB;
     const path = url.pathname.replace(/^\/api\/?/, '');
@@ -48,7 +39,6 @@ async function handleApi(req, env, url) {
         if (path.startsWith('admin/')) {
             if (!isAdmin(req, env)) return json({ error: 'unauthorized' }, 401, 0);
             if (path === 'admin/collect') return json(await collect(env), 200, 0);
-            if (path === 'admin/import') return adminImport(req, env);
         }
         return json({ error: 'not found' }, 404, 0);
     }

@@ -1,5 +1,5 @@
 /**
- * D1 writes shared by the collector and the legacy importer.
+ * D1 writes used by the collector.
  */
 import { normalizeWar, isoDay } from './coc.js';
 

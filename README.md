@@ -99,14 +99,8 @@ npx wrangler secret put ADMIN_TOKEN        # any long random string
 npm run deploy
 ```
 
-### 3. Import existing history (one time)
-The JSON history previously committed under `data/` can be loaded into D1:
-```bash
-node scripts/import-legacy.mjs https://coc-stats.<your-subdomain>.workers.dev <ADMIN_TOKEN>
-```
-After that, `data/` can be deleted from the repo.
-
-To trigger a collection immediately instead of waiting for the next hour:
+### 3. First run
+History starts from the first collection. To trigger it immediately instead of waiting for the next hour:
 ```bash
 curl -X POST -H "Authorization: Bearer <ADMIN_TOKEN>" https://<your-worker>/api/admin/collect
 ```
