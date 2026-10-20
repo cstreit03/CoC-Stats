@@ -28,7 +28,8 @@ function route() {
     const [section = '', a, b] = parts;
     switch (section) {
         case 'members': return a ? { view: player, section, params: { tag: `#${a}` } } : { view: members, section };
-        case 'wars': return a ? { view: war, section, params: { id: a } } : { view: wars, section };
+        // CWL war pages belong to the CWL tab in the navigation.
+        case 'wars': return a ? { view: war, section: a.startsWith('cwl_') ? 'cwl' : section, params: { id: a } } : { view: wars, section };
         case 'cwl': return { view: cwl, section, params: { season: a, tab: b } };
         case 'raids': return { view: raids, section, params: { start: a } };
         case 'reports': return { view: reports, section, params: { id: a } };

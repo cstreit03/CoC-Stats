@@ -452,6 +452,8 @@ a.list-item:hover .li-title { color: var(--accent); }
 .war-row:last-child { border-bottom: 0; }
 a.war-row:hover .li-title { color: var(--accent); }
 .war-row .result-col { text-align: right; }
+/* Win / Loss / Draw pills share one width so scores line up. */
+.war-row .result-col .badge { min-width: 52px; justify-content: center; }
 .war-score { font-weight: 700; font-size: 15px; }
 
 /* Attack chips in war detail */

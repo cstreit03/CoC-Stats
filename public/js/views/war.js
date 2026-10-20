@@ -70,7 +70,9 @@ export function render(root, { id }) {
     const untouched = war.opponent.members.filter(m => !m.bestOpponentAttack).length;
 
     root.innerHTML = `
-        <a class="back-link" href="#/wars">${icons.back}Wars</a>
+        ${war.kind === 'cwl'
+            ? `<a class="back-link" href="#/cwl/${war.season}">${icons.back}CWL</a>`
+            : `<a class="back-link" href="#/wars">${icons.back}Wars</a>`}
         <div class="page-head">
             <div><h1 class="page-title">vs ${esc(war.opponent.name)}</h1>
             <p class="page-sub">${fmtDate(parseCoc(war.startTime))} · ${war.kind === 'cwl' ? `CWL round ${war.round}` : 'Regular war'} · ${war.teamSize} v ${war.teamSize}</p></div>
