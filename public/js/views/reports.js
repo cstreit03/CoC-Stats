@@ -3,7 +3,7 @@
  * Excel/PDF export. Routes: #/reports and #/reports/<id>.
  */
 import { store, members, fetchMembersOn } from '../store.js';
-import { esc, num, thImg, icons, roleNames, fmtDate, fmtDay, fmtMonth, fmtSeason, parseCoc, cocDay } from '../util.js';
+import { esc, num, thImg, icons, roleNames, leagueName, fmtDate, fmtDay, fmtMonth, fmtSeason, parseCoc, cocDay } from '../util.js';
 import { seg, chips, bindToggle, select, bindSelect, kpi, mountTable, tableData, exportButtons, noDataMessage } from '../ui.js';
 import { inRange, rangeOptions, memberWarStats, clanWarTotals, warHistory, record, recordByMonth, weekStart } from '../stats.js';
 import { chart, lineConfig, cssVar } from '../charts.js';
@@ -301,7 +301,7 @@ const REPORTS = [
             const group = (fn) => { const m = new Map(); for (const x of list) { const k = fn(x); m.set(k, (m.get(k) || 0) + 1); } return m; };
             const th = [...group(m => m.townHallLevel)].sort((a, b) => b[0] - a[0]);
             const roles = [...group(m => m.role)].sort((a, b) => b[1] - a[1]);
-            const leagues = [...group(m => (m.leagueTier || m.league)?.name || 'Unranked')].sort((a, b) => b[1] - a[1]);
+            const leagues = [...group(m => leagueName((m.leagueTier || m.league)?.name))].sort((a, b) => b[1] - a[1]);
             const max = Math.max(...th.map(x => x[1]), 1);
             body.innerHTML = `<div class="grid-2">
                 <section class="card"><div class="card-head"><h2 class="card-title">Town Hall levels</h2></div>
@@ -312,7 +312,7 @@ const REPORTS = [
                     <section class="card"><div class="card-head"><h2 class="card-title">Leagues</h2></div><div class="list">${leagues.map(([l, n]) => `<div class="list-item"><span class="li-main">${esc(l)}</span><b>${n}</b></div>`).join('')}</div></section>
                 </div></div>`;
             const header = ['Player', 'Tag', 'Role', 'Town Hall', 'XP', 'League', 'Trophies', 'Donated', 'Received'];
-            const rowsOut = () => list.map(m => [m.name, m.tag, roleNames[m.role], m.townHallLevel, m.expLevel, (m.leagueTier || m.league)?.name || '', m.trophies, m.donations, m.donationsReceived]);
+            const rowsOut = () => list.map(m => [m.name, m.tag, roleNames[m.role], m.townHallLevel, m.expLevel, leagueName((m.leagueTier || m.league)?.name), m.trophies, m.donations, m.donationsReceived]);
             return {
                 xlsx: () => exportExcel('Roster', [
                     { name: 'Roster', header, body: rowsOut() },

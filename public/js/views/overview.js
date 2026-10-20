@@ -2,7 +2,7 @@
  * Overview: headline numbers, the current war, recent results and the clan profile.
  */
 import { store, members } from '../store.js';
-import { esc, num, signed, warPhase, fmtDay } from '../util.js';
+import { esc, num, signed, warPhase, fmtDay, leagueName } from '../util.js';
 import { kpi, noDataMessage } from '../ui.js';
 import { warHistory, record, membershipDelta } from '../stats.js';
 import { chart, lineConfig, cssVar } from '../charts.js';
@@ -62,8 +62,8 @@ export function render(root) {
                 <section class="card" aria-labelledby="req-h">
                     <h2 class="card-title" id="req-h" style="margin-bottom:12px">Clan details</h2>
                     <dl class="dl">
-                        <div><dt>War league</dt><dd>${esc(c.warLeague?.name || '—')}</dd></div>
-                        <div><dt>Capital league</dt><dd>${esc(c.capitalLeague?.name || '—')}</dd></div>
+                        <div><dt>War league</dt><dd>${esc(c.warLeague ? leagueName(c.warLeague.name) : '—')}</dd></div>
+                        <div><dt>Capital league</dt><dd>${esc(c.capitalLeague ? leagueName(c.capitalLeague.name) : '—')}</dd></div>
                         <div><dt>Capital hall</dt><dd>Level ${c.clanCapital?.capitalHallLevel ?? '—'}</dd></div>
                         <div><dt>Clan points</dt><dd>${num(c.clanPoints)}</dd></div>
                         <div><dt>Min. Town Hall</dt><dd>TH${c.requiredTownhallLevel ?? '—'}</dd></div>

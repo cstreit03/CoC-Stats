@@ -6,6 +6,9 @@ export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp
 
 export const thImg = (lv) => `assets/Town_Hall${lv || 1}.webp`;
 
+/** "Electro League 33" -> "Electro 33" (the column or label already says it's a league). */
+export const leagueName = (name) => (name || 'Unranked').replace(/\s*\bLeague\b\s*/i, ' ').trim();
+
 export const roleNames = { leader: 'Leader', coLeader: 'Co-Leader', admin: 'Elder', member: 'Member' };
 export const roleWeight = { leader: 4, coLeader: 3, admin: 2, member: 1 };
 
